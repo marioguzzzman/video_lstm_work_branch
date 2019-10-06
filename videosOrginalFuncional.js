@@ -155,9 +155,9 @@ function preload() { // To add things that take time to load
 
     //SOUND
 
-    sounds[0] = loadSound('background_sounds/drones.wav');
-    // sounds[1] = loadSound('background_sounds/seven.wav');
-    // sounds[2] = loadSound('background_sounds/pulse-modulation.wav');
+    sounds[1] = loadSound('background_sounds/drones.wav');
+    sounds[2] = loadSound('background_sounds/seven.wav');
+    sounds[0] = loadSound('background_sounds/pulse-modulation.wav');
     // sounds[3] = loadSound('background_sound/eyes.wav');
 
 }
@@ -219,7 +219,7 @@ function draw() {
     // console.log('Enter draw...');
     // console.log('video: ' + whichVideo);
 
-    background(0, 50);
+    background(0, 15); //antes 50
     // background(0);
 
 
@@ -266,8 +266,10 @@ function draw() {
     // ------------------ Display TEXT from Model
 
     if (resultsReady) {
-        DoText();
-        talk();
+        // DoText();
+            talk();
+    
+            DoTextHiperpoesia();
 
         // console.log(rnnSub);
     }
@@ -299,7 +301,7 @@ function touchStarted() {
         otherSong = Math.floor(random(0, sounds.length));
 
         sounds[otherSong].play();
-        sounds[otherSong].setVolume(.5);
+        sounds[otherSong].setVolume(.5); //antes 5
 
         // console.log('Entered Frame Song: ' + frameCount);
         // console.log('\nSong: ' + otherSong);
@@ -307,7 +309,7 @@ function touchStarted() {
     } else {
 
         sounds[1].play();
-        sounds[1].setVolume(.7);
+        sounds[1].setVolume(.7); //antes 7
 
         // console.log('First loop song');
 
@@ -324,9 +326,18 @@ function talk() {
     myVoice.setVoice(voice);
     myVoice.speak(rnnSub);
 
-    myVoice.setRate(.8); // speed of speach
-    myVoice.setPitch(.9);
-    myVoice.setVolume(.5);
+    if (keyIsDown(DOWN_ARROW)){
+        myVoice.setRate(.8); // speed of speach
+        myVoice.setPitch(.9);
+        myVoice.setVolume(.4);
+    }else { //shutdown voice
+        myVoice.setRate(.8); // speed of speach
+        myVoice.setPitch(.9);
+        myVoice.setVolume(0);
+
+    }
+
+
 }
 
 
@@ -394,7 +405,20 @@ function renderVideos() {
             noStroke();
             fill(r, g, b);
             //   rectMode(CENTER);
-            rect(x * vScale, y * vScale, w , w );
+            // rect(x * vScale, y * vScale, w , w );
+            var rad = 100;
+
+            ///-----------------just hiperpoesia
+            if (keyIsDown(UP_ARROW)){
+                ellipse(x * vScale, y * vScale, w, w);
+
+            } else 
+            ellipse(x * vScale, y * vScale, mouseX, mouseX);
+
+            ///-----------------just hiperpoesia
+
+
+
         }
     }
 
@@ -406,16 +430,16 @@ function renderVideos() {
 
     // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
     //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
-    //     //   console.log('x' + x);
+        //   console.log('x' + x);
 
-    //     // pixelColor = get(x, y);
+        // pixelColor = get(x, y);
 
-    // //  console.log('pixel' + pixelColor );
+    //  console.log('pixel' + pixelColor );
 
-    // // console.log( 'h: ' + height );
-    // // console.log( 'w: ' + width );
-    // // console.log( 'vh: ' + videos[whichVideo].height );
-    // // console.log( 'vw: ' + videos[whichVideo].width );
+    // console.log( 'h: ' + height );
+    // console.log( 'w: ' + width );
+    // console.log( 'vh: ' + videos[whichVideo].height );
+    // console.log( 'vw: ' + videos[whichVideo].width );
 
 
 
@@ -483,7 +507,8 @@ function videoOver() {
 
 //------------------------------------------------SOUND FOR VIDEO
 function videoSound() {
-    videos[whichVideo].volume(0);
+
+        videos[whichVideo].volume(0); // antes 0
 }
 
 
@@ -584,6 +609,9 @@ function DoText() {
         textSpeed += 0.3;
     }
 
+    // ------------------------------- END OF TERMINAL TEXT
+
+
     //CODE TO SIMULATE WRITING
     // https://creative-coding.decontextualize.com/text-and-type/ 
 
@@ -622,4 +650,111 @@ function DoText() {
 // dynamically adjust the canvas to the window
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+}
+
+
+
+// -----------------------------HIPERPOESIA
+
+
+function DoTextHiperpoesia() {
+
+    // TERMINAL TEXT
+    posXtextT = windowWidth - (windowWidth - 600);
+    posYtextT = windowHeight - 600;
+    w = 400;
+    h = 400;
+
+
+    posXtextTM = windowWidth - (windowWidth - 100);
+    posYtextTM = windowHeight - 200;
+    
+    // color = 255,105,180;
+
+      
+
+  
+    textAlign(LEFT); 
+    textFont("Ubuntu Mono");
+
+    textSize(25);
+    if (keyIsDown(LEFT_ARROW)){
+
+    fill(255);
+    let mario = 'mario guzman (2019)'
+
+    if (textSpeed < mario.length) {
+        textSpeed += 0.1;
+    } else {
+        textSpeed = 0;
+        textSpeed += 0.1;
+    }
+
+    var startWriting = 0;
+    // var left = startWriting - textSpeed ;
+    var right = startWriting + textSpeed;
+    text(mario.substring(startWriting, right + 1), posXtextTM, posYtextTM + 100, w, h);
+
+
+} else {
+        fill(0);
+   
+    noStroke();
+    textLeading(30);
+
+
+    let sourceText = 'Generating narrative...' +
+        '\nElements found: ' +
+        mbNetLabel0 +
+        '. \nSending to narrator.. ' +
+        ' \nAlso found a ' +
+        mbNetLabel1 +
+        ', I am ' +
+        mbNetConfidence +
+        ' sure of that...' +
+        '\nUpdating narrative...';
+
+    // Speed of the text being generated
+
+    if (textSpeed < rnnSub.length) {
+        textSpeed += 0.3;
+    } else {
+        textSpeed = 0;
+        textSpeed += 0.3;
+    }
+
+    // ------------------------------- END OF TERMINAL TEXT
+
+
+    //CODE TO SIMULATE WRITING
+    // https://creative-coding.decontextualize.com/text-and-type/ 
+
+    var startWriting = 0;
+    // var left = startWriting - textSpeed ;
+    var right = startWriting + textSpeed;
+    text(rnnSub.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+}
+
+    //this is static text
+    // text(sourceText, posXtextT, posYtextT + 100, w, h);
+
+    // Add cursor
+    // fill(color + sin(frameCount * 0.1) * 128);
+    // text('_', posXtextT, posYtextT + 100, w, h);
+
+    // SUBTITLE TEXT
+
+    posYtextS = windowHeight - 150;
+    line = 50;
+    textAlign(LEFT);
+    textFont("Ubuntu Mono");
+    textSize(35);
+    textLeading(50); // pixels between each line
+
+    fill(0, 0, 0, 5); //shadow for subtitle
+    // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
+    stroke(0);
+    fill(255, 255, 64);
+
+    // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
 }
