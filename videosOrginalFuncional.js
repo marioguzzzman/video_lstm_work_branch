@@ -76,22 +76,67 @@ let posYtextS;
 let line;
 let color;
 
-//--------------Connectors text
+// //--------------Connectors text XIX CENTURY TRAVELER
+// let entrance = [
+//     'I think this is a ',
+//     'Sometimes when I find a ',
+//     'Later on, I whould think of this ',
+//     'Although I don\'t believe that this is a ',
+//     'But, if you wander through the ',
+//     'Last time I saw a ',
+//     'I couldn\'t believe a ',
+//     'I feel I already saw a ',
+//     'Just after a ',
+//     'Before this ',
+//     'After encountering this ',
+//     'Also, this ',
+//     'Later on, the ',
+//     'Above all, this ',
+
+// ];
+
+// let middle = [
+//     ' ',
+//     ' ',
+//     ' ',
+//     ' ',
+//     ' ',
+//     ' ',
+//     ' ',
+//     '. ',
+//     ', ',
+//     ', but ',
+//     ', moreover, ',
+//     ', however, ',
+//     ', in short,',
+//     ', but also, ',
+//     ', in addition, ',
+//     ', nevertheless, ',
+//     ', I rather think of ',
+//     ' we can discuss about',
+//     ' I doubted my self, but ',
+//     ' was there '
+
+// ];
+
+// //--------------Connectors text XIX CENTURY TRAVELER
+
+//--------------Connectors text LATIN GAMEON
 let entrance = [
-    'I think this is a ',
-    'Sometimes when I find a ',
-    'Later on, I whould think of this ',
-    'Although I don\'t believe that this is a ',
-    'But, if you wander through the ',
-    'Last time I saw a ',
-    'I couldn\'t believe a ',
-    'I feel I already saw a ',
-    'Just after a ',
-    'Before this ',
-    'After encountering this ',
-    'Also, this ',
-    'Later on, the ',
-    'Above all, this ',
+    'Creo que esto es un ',
+    'A veces, cuando encuentro un ',
+    'Más tarde, yo pensaría que un ',
+    'Aunque no crea que esto es un ',
+    'Pero, si recorres el ',
+    'La última vez que ví un ',
+    'No podría crer que un ',
+    'Siento que ya he visto este ',
+    'Justo antes de este ',
+    'Antes de este ',
+    'Después de reconcer este ',
+    'También, este ',
+    'Más tarde, el ',
+    'Sobre todo, este ',
 
 ];
 
@@ -105,19 +150,22 @@ let middle = [
     ' ',
     '. ',
     ', ',
-    ', but ',
-    ', moreover, ',
-    ', however, ',
-    ', in short,',
-    ', but also, ',
-    ', in addition, ',
-    ', nevertheless, ',
-    ', I rather think of ',
-    ' we can discuss about',
-    ' I doubted my self, but ',
-    ' was there '
-
+    '. ',
+    ', ',
+    ', pero ',
+    ', sin embargo, ',
+    ', en resumen,',
+    ', pero también, ',
+    ', además, ',
+    ', me gustaría pensar que ',
+    ' podemos discutir acerca de',
+    ' Dudaba de mi, pero ',
+    ' estaba ahí '
 ];
+
+//--------------Connectors text LATIN GAMEON
+
+
 
 //--------------------------TEXT SEEDS ----------
 let startingSeeds = entrance[0];
@@ -128,7 +176,12 @@ let middleSeeds = middle[0];
 // http://ability.nyu.edu/p5.js-speech/ 
 // https://generative.fm/record
 var myVoice = new p5.Speech(); // new P5.Speech object
-let voice = 'Google UK English Male';
+// let voice = 'Google UK English Male';
+let voice = 'Google español de Estados Unidos';
+
+//List of voices
+// 'Google Deutsch', 'Google US English', 'Google UK English Female', 'Google UK English Male', 'Google español', 'Google español de Estados Unidos', 'Google français', 'Google हिन्दी', 'Google Bahasa Indonesia', 'Google italiano', 'Google 日本語', 'Google 한국의', 'Google Nederlands', 'Google polski', 'Google português do Brasil', 'Google русский', 'Google 普通话（中国大陆）', 'Google 粤語（香港', 'Google 國語（臺灣'
+
 
 //BACKGROUND MUSIC
 
@@ -243,7 +296,7 @@ function draw() {
     // console.log('Enter draw...');
     // console.log('video: ' + whichVideo);
 
-    background(0, 15); //antes 50
+    background(0, 50); //antes 50
     // background(0);
 
 
@@ -349,15 +402,23 @@ function talk() {
     myVoice.setVoice(voice);
     myVoice.speak(rnnSub);
 
-    if (keyIsDown(DOWN_ARROW)){
-        myVoice.setRate(.8); // speed of speach
-        myVoice.setPitch(.9);
-        myVoice.setVolume(.4);
-    }else { //shutdown voice
-        myVoice.setRate(.8); // speed of speach
-        myVoice.setPitch(.9);
-        myVoice.setVolume(0);
-    }
+    // SIEMPRE SUENA LA VOZ
+    myVoice.setRate(.8); // speed of speach
+    myVoice.setPitch(.9);
+    myVoice.setVolume(.4);
+
+    // DOES NOT WORK
+
+    // if (keyIsDown(DOWN_ARROW)){
+    //     myVoice.setRate(.8); // speed of speach
+    //     myVoice.setPitch(.9);
+    //     myVoice.setVolume(.4);
+    // }else { //shutdown voice
+    //     myVoice.setRate(.8); // speed of speach
+    //     myVoice.setPitch(.9);
+    //     myVoice.setVolume(0);
+    // }
+
 }
 
 
@@ -426,9 +487,9 @@ function renderVideos() {
 
             ///----------------- XIX century traveler
 
-            rectMode(CENTER);
+            // rectMode(CENTER);
             rect(x * vScale, y * vScale, w , w );
-            var rad = 100;
+            // var rad = 100;
 
             ///----------------- XIX century traveler
 
@@ -761,7 +822,7 @@ function DoTextHiperpoesia() {
 }
 
     //this is static text
-    text(sourceText, posXtextT, posYtextT + 100, w, h);
+    // text(sourceText, posXtextT, posYtextT + 100, w, h);
 
     // Add cursor
     // fill(color + sin(frameCount * 0.1) * 128);
