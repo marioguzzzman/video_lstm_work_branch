@@ -13,6 +13,15 @@
 //You have to click on the screen to be able to hear the background sounds
 
 
+
+// TODO
+//RECORD TEXT
+//ADD WEBCAM
+//ADD CODE TO CHANGE BETWEEN WEBCAM AND VIDEO WHEN RECOGNIZING A FACE
+//ADD THE TRANSLATOR FROM GOOGLE
+//CHANGE VOICE TO SPANISH
+
+
 /////////--------MOBILE NET VIDEO ----------
 
 //ML5
@@ -21,6 +30,8 @@ let myMobileNet;
 //DIVS
 // let myDiv;
 // let myDivGen;
+
+//--------------------------VIDEO ----------
 
 //VIDEO
 // let myVideo;
@@ -36,11 +47,11 @@ var vScale = 20; // scale of video
 
 let pixelColor;
 
-//TEXT
+//--------------------------TEXT ----------
 
 let resultsReady = false;
 
-//text displayed in "terminal" text
+//text displayed in "TERMINAL" text
 let rnn;
 let mbNetLabel0 = '';
 let mbNetConfidence0 = ''; //i think i am not using this
@@ -65,7 +76,7 @@ let posYtextS;
 let line;
 let color;
 
-//Connectors text
+//--------------Connectors text
 let entrance = [
     'I think this is a ',
     'Sometimes when I find a ',
@@ -108,7 +119,12 @@ let middle = [
 
 ];
 
-//SOUND
+//--------------------------TEXT SEEDS ----------
+let startingSeeds = entrance[0];
+let middleSeeds = middle[0];
+
+//--------------------------SOUND ----------
+
 // http://ability.nyu.edu/p5.js-speech/ 
 // https://generative.fm/record
 var myVoice = new p5.Speech(); // new P5.Speech object
@@ -123,11 +139,11 @@ let otherSong;
 // let sound3;
 // let sound4;
 
-//Text seeds
-let startingSeeds = entrance[0];
-let middleSeeds = middle[0];
+
+//-------------------------WEB SETTINGS ----------
 
 // p5.disableFriendlyErrors = true; // disables FES //to upgrade performance
+
 
 
 function preload() { // To add things that take time to load
@@ -148,12 +164,15 @@ function preload() { // To add things that take time to load
 
 
     //LOAD MODEL LSTM
-    rnn = ml5.charRNN("/test-lstm/model_124/");
+    // rnn = ml5.charRNN("/test-lstm/model_124/"); // XIX century traveler
+    rnn = ml5.charRNN("/test-lstm/model_8_latin/"); // lATIN model for GameOn
 
     //SOUND
     // createConvolver('background_sound/drones.wav', soundReady);
 
     //SOUND
+
+//TODO increse sound length
 
     sounds[1] = loadSound('background_sounds/drones.wav');
     sounds[2] = loadSound('background_sounds/seven.wav');
@@ -173,7 +192,12 @@ function setup() {
 
     // console.log('my Mobile: ', myMobileNet) // to test
 
-    //VIDEO 
+    //-------------VIDEO 
+
+    //TODO add videocamera test this code
+    // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
+
+
     // specify multiple formats for different browsers
     // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
     //variable = createVideo(['PATH/video1.mp4']);
@@ -192,7 +216,7 @@ function setup() {
     // videos[9].size(width / vScale, height / vScale);
 
 
-
+    // 
     videos[0].hide();
     // videos[1].hide();
     // videos[2].hide();
@@ -221,7 +245,6 @@ function draw() {
 
     background(0, 15); //antes 50
     // background(0);
-
 
 
     // if (keyCode == 77) { //letter m
@@ -266,10 +289,10 @@ function draw() {
     // ------------------ Display TEXT from Model
 
     if (resultsReady) {
-        // DoText();
-            talk();
+        DoText();
+        talk();
     
-            DoTextHiperpoesia();
+        // DoTextHiperpoesia();
 
         // console.log(rnnSub);
     }
@@ -334,12 +357,8 @@ function talk() {
         myVoice.setRate(.8); // speed of speach
         myVoice.setPitch(.9);
         myVoice.setVolume(0);
-
     }
-
-
 }
-
 
 
 //----------------------------------------RENDER VIDEOS
@@ -404,16 +423,22 @@ function renderVideos() {
 
             noStroke();
             fill(r, g, b);
-            //   rectMode(CENTER);
-            // rect(x * vScale, y * vScale, w , w );
+
+            ///----------------- XIX century traveler
+
+            rectMode(CENTER);
+            rect(x * vScale, y * vScale, w , w );
             var rad = 100;
 
-            ///-----------------just hiperpoesia
-            if (keyIsDown(UP_ARROW)){
-                ellipse(x * vScale, y * vScale, w, w);
+            ///----------------- XIX century traveler
 
-            } else 
-            ellipse(x * vScale, y * vScale, mouseX, mouseX);
+
+            ///-----------------just hiperpoesia
+            // if (keyIsDown(UP_ARROW)){
+            //     ellipse(x * vScale, y * vScale, w, w);
+
+            // } else 
+            // ellipse(x * vScale, y * vScale, mouseX, mouseX);
 
             ///-----------------just hiperpoesia
 
@@ -538,6 +563,9 @@ function gotResults(err, results) {
 
             // seed: results[1].label, // this is the label result
             // seed: mbNetLabel0, // this is the hole sentence
+
+            //----------------- SEEDS THAT APPEAR ON TEXT
+            
             seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
             length: 90, //length of characters
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
@@ -622,7 +650,8 @@ function DoText() {
 
 
     //this is static text
-    // text(sourceText, posXtextT, posYtextT + 100, w, h);
+    
+    text(sourceText, posXtextT, posYtextT + 100, w, h);
 
     // Add cursor
     // fill(color + sin(frameCount * 0.1) * 128);
@@ -665,15 +694,11 @@ function DoTextHiperpoesia() {
     w = 400;
     h = 400;
 
-
     posXtextTM = windowWidth - (windowWidth - 100);
     posYtextTM = windowHeight - 200;
     
     // color = 255,105,180;
 
-      
-
-  
     textAlign(LEFT); 
     textFont("Ubuntu Mono");
 
@@ -736,7 +761,7 @@ function DoTextHiperpoesia() {
 }
 
     //this is static text
-    // text(sourceText, posXtextT, posYtextT + 100, w, h);
+    text(sourceText, posXtextT, posYtextT + 100, w, h);
 
     // Add cursor
     // fill(color + sin(frameCount * 0.1) * 128);
