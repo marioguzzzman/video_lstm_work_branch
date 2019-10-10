@@ -31,6 +31,14 @@ let myMobileNet;
 // let myDiv;
 // let myDivGen;
 
+/////----------- TRANSLATION MODULE
+
+var entryLang = 'en';
+var exitLang = 'es';
+var translatedRes = '';
+
+var translateAPIKey = 'AIzaSyAGvEzCaMeaL_woHEsCo_w85802jZVuYnI';
+
 
 //--------------------------VIDEO ----------
 
@@ -226,7 +234,7 @@ function preload() { // To add things that take time to load
 
     //SOUND
 
-//TODO increse sound length
+    //TODO increse sound length
 
     sounds[1] = loadSound('background_sounds/drones.wav');
     sounds[2] = loadSound('background_sounds/seven.wav');
@@ -345,7 +353,7 @@ function draw() {
     if (resultsReady) {
         DoText();
         talk();
-    
+
         // DoTextHiperpoesia();
 
         // console.log(rnnSub);
@@ -439,7 +447,7 @@ function renderVideos() {
 
             //pick random video from array
 
-            
+
             let azar = Math.floor(random(0, videos.length));
             whichVideo = azar; //for(random(videos.length));
 
@@ -489,7 +497,7 @@ function renderVideos() {
             ///----------------- XIX century traveler
 
             // rectMode(CENTER);
-            rect(x * vScale, y * vScale, w , w );
+            rect(x * vScale, y * vScale, w, w);
             // var rad = 100;
 
             ///----------------- XIX century traveler
@@ -517,9 +525,9 @@ function renderVideos() {
 
     // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
     //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
-        //   console.log('x' + x);
+    //   console.log('x' + x);
 
-        // pixelColor = get(x, y);
+    // pixelColor = get(x, y);
 
     //  console.log('pixel' + pixelColor );
 
@@ -595,8 +603,25 @@ function videoOver() {
 //------------------------------------------------SOUND FOR VIDEO
 function videoSound() {
 
-        videos[whichVideo].volume(0); // antes 0
+    videos[whichVideo].volume(0); // antes 0
 }
+
+
+//------------------------------------------------TRANSLATION FUNCIONS
+function toTranslate(wordToTranslate) {
+    var full_translation = wordToTranslate;
+  
+    // Translate the result to another language using Google translate API
+    var url = `https://www.googleapis.com/language/translate/v2/?key=${translateAPIKey}&target=${exitLang}&source=${entryLang}&q=${full_translation}`;
+  
+    loadJSON(url, gotTranslation);
+  }
+  
+  function gotTranslation(result) {
+    if (result.data.translations) {
+      translatedRes = result.data.translations[0].translatedText;
+    }
+  }
 
 
 //-------------------- -----------------------MOBILE NET + CRNN MODEL
@@ -617,6 +642,10 @@ function gotResults(err, results) {
         mbNetLabel1 = results[1].label;
         mbNetLabel2 = results[2].label;
 
+
+        toTranslate(mbNetLabel0);
+        console.log("see label: " + translatedRes);
+
         // myDiv.html(mbNetLabel0); //Put sentence in DIV
 
         // -----> CRNN ------> Generate TEXT content
@@ -627,7 +656,7 @@ function gotResults(err, results) {
             // seed: mbNetLabel0, // this is the hole sentence
 
             //----------------- SEEDS THAT APPEAR ON TEXT
-            
+
             seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
             length: 90, //length of characters
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
@@ -638,7 +667,13 @@ function gotResults(err, results) {
 
             // rnnSub = results.sample; // ------> RESULTED SINGLE SEED TEXT
 
-            rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> RESULTED TEXT WITH MULTIPLE ENTRANCES
+
+//--------------------INSERT TRANSLATE -----------------------
+
+
+            rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> RESULTED TEXT WITH MULTIPLE ENTRANCES
+            // rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> RESULTED TEXT WITH MULTIPLE ENTRANCES
+
 
             // console.log('Lstm generated: ' + results.sample);
 
@@ -681,7 +716,7 @@ function DoText() {
 
     let sourceText = 'Generating narrative...' +
         '\nElements found: ' +
-        mbNetLabel0 +
+        translatedRes +
         '. \nSending to narrator.. ' +
         ' \nAlso found a ' +
         mbNetLabel1 +
@@ -712,7 +747,7 @@ function DoText() {
 
 
     //this is static text
-    
+
     text(sourceText, posXtextT, posYtextT + 100, w, h);
 
     // Add cursor
@@ -758,69 +793,69 @@ function DoTextHiperpoesia() {
 
     posXtextTM = windowWidth - (windowWidth - 100);
     posYtextTM = windowHeight - 200;
-    
+
     // color = 255,105,180;
 
-    textAlign(LEFT); 
+    textAlign(LEFT);
     textFont("Ubuntu Mono");
 
     textSize(25);
-    if (keyIsDown(LEFT_ARROW)){
+    if (keyIsDown(LEFT_ARROW)) {
 
-    fill(255);
-    let mario = 'mario guzman (2019)'
+        fill(255);
+        let mario = 'mario guzman (2019)'
 
-    if (textSpeed < mario.length) {
-        textSpeed += 0.1;
+        if (textSpeed < mario.length) {
+            textSpeed += 0.1;
+        } else {
+            textSpeed = 0;
+            textSpeed += 0.1;
+        }
+
+        var startWriting = 0;
+        // var left = startWriting - textSpeed ;
+        var right = startWriting + textSpeed;
+        text(mario.substring(startWriting, right + 1), posXtextTM, posYtextTM + 100, w, h);
+
+
     } else {
-        textSpeed = 0;
-        textSpeed += 0.1;
-    }
-
-    var startWriting = 0;
-    // var left = startWriting - textSpeed ;
-    var right = startWriting + textSpeed;
-    text(mario.substring(startWriting, right + 1), posXtextTM, posYtextTM + 100, w, h);
-
-
-} else {
         fill(0);
-   
-    noStroke();
-    textLeading(30);
+
+        noStroke();
+        textLeading(30);
 
 
-    let sourceText = 'Generating narrative...' +
-        '\nElements found: ' +
-        mbNetLabel0 +
-        '. \nSending to narrator.. ' +
-        ' \nAlso found a ' +
-        mbNetLabel1 +
-        ', I am ' +
-        mbNetConfidence +
-        ' sure of that...' +
-        '\nUpdating narrative...';
+        let sourceText = 'Generating narrative...' +
+            '\nElements found: ' +
+            mbNetLabel0 +
+            '. \nSending to narrator.. ' +
+            ' \nAlso found a ' +
+            mbNetLabel1 +
+            ', I am ' +
+            mbNetConfidence +
+            ' sure of that...' +
+            '\nUpdating narrative...';
 
-    // Speed of the text being generated
+        // Speed of the text being generated
 
-    if (textSpeed < rnnSub.length) {
-        textSpeed += 0.3;
-    } else {
-        textSpeed = 0;
-        textSpeed += 0.3;
+        if (textSpeed < rnnSub.length) {
+            textSpeed += 0.3;
+        } else {
+            textSpeed = 0;
+            textSpeed += 0.3;
+        }
+
+        // ------------------------------- END OF TERMINAL TEXT
+
+
+        //CODE TO SIMULATE WRITING
+        // https://creative-coding.decontextualize.com/text-and-type/ 
+
+        var startWriting = 0;
+        // var left = startWriting - textSpeed ;
+        var right = startWriting + textSpeed;
+        text(rnnSub.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
     }
-
-    // ------------------------------- END OF TERMINAL TEXT
-
-
-    //CODE TO SIMULATE WRITING
-    // https://creative-coding.decontextualize.com/text-and-type/ 
-
-    var startWriting = 0;
-    // var left = startWriting - textSpeed ;
-    var right = startWriting + textSpeed;
-    text(rnnSub.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-}
 
     //this is static text
     // text(sourceText, posXtextT, posYtextT + 100, w, h);
