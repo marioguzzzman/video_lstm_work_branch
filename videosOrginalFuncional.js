@@ -671,7 +671,10 @@ function gotResults(err, results) {
 //--------------------INSERT TRANSLATE -----------------------
 
 
-            rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> RESULTED TEXT WITH MULTIPLE ENTRANCES
+            // rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
+
+            rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
+
             // rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> RESULTED TEXT WITH MULTIPLE ENTRANCES
 
 
@@ -716,7 +719,9 @@ function DoText() {
 
     let sourceText = 'Generating narrative...' +
         '\nElements found: ' +
-        translatedRes +
+        // mbNetLabel0 + // XIX travel model
+
+        translatedRes + //latinamerican model
         '. \nSending to narrator.. ' +
         ' \nAlso found a ' +
         mbNetLabel1 +
