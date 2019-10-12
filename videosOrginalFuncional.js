@@ -39,6 +39,8 @@ var translatedRes = '';
 
 var translateAPIKey = 'AIzaSyAGvEzCaMeaL_woHEsCo_w85802jZVuYnI';
 
+let translate = true;
+
 
 //--------------------------VIDEO ----------
 
@@ -58,6 +60,7 @@ let pixelColor;
 
 //--------------------------TEXT ----------
 
+
 let resultsReady = false;
 
 //text displayed in "TERMINAL" text
@@ -72,6 +75,7 @@ let confidence = '';
 let rnnSub = '';
 
 //parameters for "terminal" text
+let sourceText = ' ';
 let terminalF;
 let subtitleF;
 let posXte
@@ -610,18 +614,18 @@ function videoSound() {
 //------------------------------------------------TRANSLATION FUNCIONS
 function toTranslate(wordToTranslate) {
     var full_translation = wordToTranslate;
-  
+
     // Translate the result to another language using Google translate API
     var url = `https://www.googleapis.com/language/translate/v2/?key=${translateAPIKey}&target=${exitLang}&source=${entryLang}&q=${full_translation}`;
-  
+
     loadJSON(url, gotTranslation);
-  }
-  
-  function gotTranslation(result) {
+}
+
+function gotTranslation(result) {
     if (result.data.translations) {
-      translatedRes = result.data.translations[0].translatedText;
+        translatedRes = result.data.translations[0].translatedText;
     }
-  }
+}
 
 
 //-------------------- -----------------------MOBILE NET + CRNN MODEL
@@ -668,14 +672,13 @@ function gotResults(err, results) {
             // rnnSub = results.sample; // ------> RESULTED SINGLE SEED TEXT
 
 
-//--------------------INSERT TRANSLATE -----------------------
+            //--------------------INSERT TRANSLATE -----------------------
 
-
-            // rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
-
-            rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
-
-            // rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> RESULTED TEXT WITH MULTIPLE ENTRANCES
+           if (translate){
+                rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
+            } else {
+                rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
+            }
 
 
             // console.log('Lstm generated: ' + results.sample);
@@ -716,19 +719,30 @@ function DoText() {
     noStroke();
     textLeading(30);
 
+    if (translate) {
+        sourceText = 'Generando narrativa...' +
+            '\nElemento encontrado: ' +
+            translatedRes + //latinamerican model
+            '. \nEnviando a narrador.. ' +
+            ' \nTambién he encontrado un ' +
+            mbNetLabel1 +
+            ', creo estar ' +
+            mbNetConfidence +
+            ' seguro...' +
+            '\nActualizando narrativa...';
 
-    let sourceText = 'Generating narrative...' +
-        '\nElements found: ' +
-        // mbNetLabel0 + // XIX travel model
-
-        translatedRes + //latinamerican model
-        '. \nSending to narrator.. ' +
-        ' \nAlso found a ' +
-        mbNetLabel1 +
-        ', I am ' +
-        mbNetConfidence +
-        ' sure of that...' +
-        '\nUpdating narrative...';
+    } else {
+        sourceText = 'Generating narrative...' +
+            '\nElements found: ' +
+            mbNetLabel0 + // XIX travel model
+            '. \nSending to narrator.. ' +
+            ' \nAlso found a ' +
+            mbNetLabel1 +
+            ', I am ' +
+            mbNetConfidence +
+            ' sure of that...' +
+            '\nUpdating narrative...';
+    }
 
     // Speed of the text being generated
 
