@@ -14,15 +14,22 @@
 
 
 
-// TODO
+// ------------------------------------------------------ TODO
 //RECORD TEXT
 //ADD WEBCAM
 //ADD CODE TO CHANGE BETWEEN WEBCAM AND VIDEO WHEN RECOGNIZING A FACE
-//ADD THE TRANSLATOR FROM GOOGLE
-//CHANGE VOICE TO SPANISH
+//MODULATE SPANISH VOICE
+//ADD MENU
+//TODO increse sound length
 
 
-/////////--------MOBILE NET VIDEO ----------
+//------------------------------------------------------- TESTING 
+
+let offline = false; // disable text to test video
+let menu = true;
+
+
+/////////------------------------------------------------- MOBILE NET VIDEO ----------
 
 //ML5
 let myMobileNet;
@@ -31,7 +38,7 @@ let myMobileNet;
 // let myDiv;
 // let myDivGen;
 
-/////----------- TRANSLATION MODULE
+/////----------------------------------------------------- TRANSLATION MODULE
 
 var entryLang = 'en';
 var exitLang = 'es';
@@ -42,24 +49,22 @@ var translateAPIKey = 'AIzaSyAGvEzCaMeaL_woHEsCo_w85802jZVuYnI';
 let translate = true;
 
 
-//--------------------------VIDEO ----------
+//----------------------------------------------------------- VIDEO ----------
 
 //VIDEO
-// let myVideo;
+// let myCamera; //WEB CAM
+
 let playing = false;
 
 let stage = 1;
 let videos = [];
 let whichVideo = 0;
 
-
 var vScale = 20; // scale of video
-
 
 let pixelColor;
 
-//--------------------------TEXT ----------
-
+//------------------------------------------------------------- TEXT ----------
 
 let resultsReady = false;
 
@@ -176,7 +181,7 @@ let middle = [
     ' estaba ahí '
 ];
 
-//--------------Connectors text LATIN GAMEON
+//--------------Connectors text LATIN GAMEON ------ END
 
 
 
@@ -184,11 +189,11 @@ let middle = [
 let startingSeeds = entrance[0];
 let middleSeeds = middle[0];
 
-//--------------------------SOUND ----------
+//----------------------------------------------------------------  SOUND ----------
 
 // http://ability.nyu.edu/p5.js-speech/ 
 // https://generative.fm/record
-var myVoice = new p5.Speech(); // new P5.Speech object
+// var myVoice = new p5.Speech(); // new P5.Speech object // OFFLINE 
 // let voice = 'Google UK English Male';
 let voice = 'Google español de Estados Unidos';
 
@@ -206,16 +211,20 @@ let otherSong;
 // let sound4;
 
 
-//-------------------------WEB SETTINGS ----------
+//------------------------------------------------------------- WEB SETTINGS ----------
 
 // p5.disableFriendlyErrors = true; // disables FES //to upgrade performance
 
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------- PRE LOAD  ------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
 
 
 function preload() { // To add things that take time to load
-    myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model a the end
+    myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
 
-    // myVideo = createCapture(VIDEO);  //captures video from webcam
+    //CAMERA
+    // myCamera = createCapture(VIDEO);  //captures video from webcam
 
     videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
     // videos[1] = createVideo("videos/2.mp4");
@@ -230,15 +239,14 @@ function preload() { // To add things that take time to load
 
 
     //LOAD MODEL LSTM
-    // rnn = ml5.charRNN("/test-lstm/model_124/"); // XIX century traveler
-    rnn = ml5.charRNN("/test-lstm/model_8_latin/"); // lATIN model for GameOn
+    if (translate) {
+        rnn = ml5.charRNN("/test-lstm/model_8_latin/"); // lATIN model for GameOn
+    } else {
+        rnn = ml5.charRNN("/test-lstm/model_124/"); // XIX century traveler
+    }
 
     //SOUND
     // createConvolver('background_sound/drones.wav', soundReady);
-
-    //SOUND
-
-    //TODO increse sound length
 
     sounds[1] = loadSound('background_sounds/drones.wav');
     sounds[2] = loadSound('background_sounds/seven.wav');
@@ -247,12 +255,15 @@ function preload() { // To add things that take time to load
 
 }
 
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------- SET UP ---------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+
+
 function setup() {
 
     createCanvas(windowWidth, windowHeight);
-
     frameRate(30);
-
     pixelDensity(1);
 
 
@@ -261,6 +272,7 @@ function setup() {
     //-------------VIDEO 
 
     //TODO add videocamera test this code
+    // CAMERA
     // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
 
 
@@ -281,7 +293,6 @@ function setup() {
     // videos[8].size(width / vScale, height / vScale);
     // videos[9].size(width / vScale, height / vScale);
 
-
     // 
     videos[0].hide();
     // videos[1].hide();
@@ -294,16 +305,25 @@ function setup() {
     // videos[8].hide();
     // videos[9].hide();
 
-    //---------ML5
+    //-------------  ML5
     // myMobileNet.classify(myVideo, callback);
-    myMobileNet.classify(videos[0], gotResults);
+
+    if (offline) {
+        // Don't use any model to classify any video
+    } else {
+        myMobileNet.classify(videos[0], gotResults);
+    }
 
     // DO SOME DIVS
     // myDiv = createDiv('...'); //create only one Div so we can see only one result
     // // myDiv.parent('#wraper');
     // myDivGen = createDiv('...'); //create only one Div so we can see only one result
-
 }
+
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------- DRAW -----------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+
 
 function draw() {
     // console.log('Enter draw...');
@@ -313,19 +333,19 @@ function draw() {
     // background(0);
 
 
-    // if (keyCode == 77) { //letter m
-    //     textSize(18);
-    //     fill(255);
-    //     noStroke();
-    //     textLeading(30);
-    //     textAlign(LEFT);
-    //     let menu = "Menu: \n Render Video =  space bar \n Set random Video = Enter \n Black Screen-random-number = Up arrow \n Talk =s ";
-    //     text(menu, windowWidth / 2, windowHeight / 2 + 100, 350, 400);
+    if (keyCode == 77) { //letter m
+        textSize(18);
+        fill(255);
+        noStroke();
+        textLeading(30);
+        textAlign(LEFT);
+        let menu = "Menu: \n Render Video =  space bar \n Set random Video = Enter \n Black Screen-random-number = Up arrow \n Talk =s ";
+        text(menu, windowWidth / 2, windowHeight / 2 + 100, 350, 400);
 
-    // } else {
+    } else {
 
 
-    // }
+    }
 
 
     // ------------------ Display VIDEOS 
@@ -364,11 +384,16 @@ function draw() {
     }
 
 
-} //--------------END DRAW
+} 
 
-//--------------------------------------BACKGROUND SOUND
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------- END DRAW -------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------- BACKGROUND SOUND
 //Use this function to enable sound in chrome.
 // https://p5js.org/reference/#/p5.sound/getAudioContext
+
 function touchStarted() {
 
     // //Simple code
@@ -396,21 +421,17 @@ function touchStarted() {
         // console.log('\nSong: ' + otherSong);
 
     } else {
-
         sounds[1].play();
         sounds[1].setVolume(.7); //antes 7
-
         // console.log('First loop song');
-
     }
-
-
     // sound1.loop();
 }
 
 
 
-//-----------------------------------------TALK
+//--------------------------------------------------------- TALK
+
 function talk() {
     myVoice.setVoice(voice);
     myVoice.speak(rnnSub);
@@ -435,7 +456,7 @@ function talk() {
 }
 
 
-//----------------------------------------RENDER VIDEOS
+//--------------------------------------------------------- RENDER VIDEOS
 
 function renderVideos() {
 
@@ -463,7 +484,6 @@ function renderVideos() {
             // console.log('playTheVideoPATH');
         }
     }
-
 
 
     // -------- to load pixels
@@ -500,24 +520,21 @@ function renderVideos() {
 
             ///----------------- XIX century traveler
 
-            // rectMode(CENTER);
+            // rectMode(CENTER); // not use, scrambles de visuals
             rect(x * vScale, y * vScale, w, w);
             // var rad = 100;
 
-            ///----------------- XIX century traveler
+            ///----------------- XIX century traveler -- END
 
 
-            ///-----------------just hiperpoesia
+            ///----------------- just hiperpoesia
             // if (keyIsDown(UP_ARROW)){
             //     ellipse(x * vScale, y * vScale, w, w);
 
             // } else 
             // ellipse(x * vScale, y * vScale, mouseX, mouseX);
 
-            ///-----------------just hiperpoesia
-
-
-
+            ///----------------- just hiperpoesia -- END
         }
     }
 
@@ -541,7 +558,6 @@ function renderVideos() {
     // console.log( 'vw: ' + videos[whichVideo].width );
 
 
-
     //     const i = (y * videos[whichVideo].width + x * 4);
 
     //     const darkness = (255 - videos[whichVideo].pixels[i * 4]) / 255;
@@ -562,9 +578,9 @@ function renderVideos() {
 
     // }
 
-    // / finish loading pixels
+    /// finish loading pixels
 
-    // -------------------FIX THIS
+    // -------------------FIX THIS TO RUN RANDOM VIDEOS
 
     //Plays random position based in framecount  
     // if (frameCount % 120 == 0 || keyCode == UP_ARROW) {
@@ -581,10 +597,9 @@ function renderVideos() {
 
 }
 
-//----------------------------------------VIDEO FUNCTIONS
+//--------------------------------------------------------- VIDEO FUNCTIONS
 
 // plays or pauses the video depending on current state
-
 
 function playTheVideo() {
     console.log('playing video');
@@ -604,14 +619,14 @@ function videoOver() {
 }
 
 
-//------------------------------------------------SOUND FOR VIDEO
-function videoSound() {
+//--------------------------------------------------------- SOUND FOR VIDEO
 
+function videoSound() {
     videos[whichVideo].volume(0); // antes 0
 }
 
+//--------------------------------------------------------- TRANSLATION FUNCIONS
 
-//------------------------------------------------TRANSLATION FUNCIONS
 function toTranslate(wordToTranslate) {
     var full_translation = wordToTranslate;
 
@@ -628,14 +643,13 @@ function gotTranslation(result) {
 }
 
 
-//-------------------- -----------------------MOBILE NET + CRNN MODEL
+//--------------------------------------------------------- MOBILE NET + CRNN MODEL
 
 function gotResults(err, results) {
 
     if (err) console.log(err); //just tell errors
 
     if (results) {
-
         resultsReady = true;
 
         console.log('Results ready: ' + results); // see results 
@@ -647,7 +661,7 @@ function gotResults(err, results) {
         mbNetLabel2 = results[2].label;
 
 
-        toTranslate(mbNetLabel0);
+        toTranslate(mbNetLabel0); //--------------------------------> Translate main label 
         console.log("see label: " + translatedRes);
 
         // myDiv.html(mbNetLabel0); //Put sentence in DIV
@@ -674,32 +688,31 @@ function gotResults(err, results) {
 
             //--------------------INSERT TRANSLATE -----------------------
 
-           if (translate){
+            if (translate) {
                 rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
             } else {
                 rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
             }
 
-
             // console.log('Lstm generated: ' + results.sample);
 
-            startingSeeds = entrance[Math.floor(random(0, entrance.length))];
-            middleSeeds = middle[Math.floor(random(0, middle.length))];
+            startingSeeds = entrance[Math.floor(random(0, entrance.length))]; // select random seed form text
+            middleSeeds = middle[Math.floor(random(0, middle.length))]; // select random seed form text
             // startingSeeds = startingSeeds + mbNetLabel0 + results.sample + 'I can see a ';
+
             //DIV FOR TEXT
             // myDivGen.html(rnnSub); // just create a div.  
 
-            //VIDEO
+            // ------------- VIDEO
+            // ------------- clasiffy video with mobile net
             setTimeout(() => myMobileNet.classify(videos[whichVideo], gotResults), 5000); //setTimeout to slow the results. we also added an arow function
             // 3000 is too slowed to be read
             // 5000 was kind of ok
-
-        });
-
-    }
+        }); // end of generate
+    } // end of results
 } //end of gotResults
 
-//-------------------------------------------------TEXT DISPLAY
+//--------------------------------------------------------- TEXT DISPLAY
 
 function DoText() {
 
@@ -710,9 +723,12 @@ function DoText() {
     h = 400;
     color = 250;
 
-
     textAlign(LEFT);
-    textFont("Ubuntu Mono");
+    if (offline) {
+        textFont("Arial");
+    } else {
+        textFont("Ubuntu Mono");
+    }
 
     textSize(17);
     fill(color);
@@ -730,7 +746,6 @@ function DoText() {
             mbNetConfidence +
             ' seguro...' +
             '\nActualizando narrativa...';
-
     } else {
         sourceText = 'Generating narrative...' +
             '\nElements found: ' +
