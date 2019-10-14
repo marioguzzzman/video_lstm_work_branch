@@ -372,8 +372,8 @@ function talk() {
    
 
     if (translate){
-        myVoice.setRate(.8); // speed of speach
-        myVoice.setPitch(.9);
+        myVoice.setRate(.73); // speed of speach
+        myVoice.setPitch(.8);
         myVoice.setVolume(.4);
     } else {
         voice = 'Google UK English Male';
