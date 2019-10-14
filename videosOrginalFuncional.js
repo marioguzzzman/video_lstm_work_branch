@@ -54,9 +54,13 @@ var vScale = 20; // scale of video
 let pixelColor;
 
 //------------------------------------------------------------- TEXT ----------
-
+//To merge all text files
+// cat * > merged-file
 let writingOutput = true;
 let writer;
+let linesInPage = 5; // amount of lines in page
+let page = []; // text file writen
+
 
 let resultsReady = false;
 
@@ -308,7 +312,7 @@ function draw() {
     if (resultsReady) {
         DoText();
 
-        writer = createWriter('latinBook.txt'); // texto en donde escribir
+        writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinBook' + "_" + ".txt"); // texto en donde escribir
 
 
         // if (resultsReady & writingOutput) {
@@ -651,7 +655,7 @@ function gotResults(err, results) {
 
             //--------------------INSERT TRANSLATE -----------------------
 
-            if (resultsReady & translate) {
+            if (translate) {
                 rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
             } else {
                 rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
@@ -659,19 +663,18 @@ function gotResults(err, results) {
 
             if (writingOutput) {
 
-                writer.print('- ' + translatedRes + "  " + month() + "/" + day() + "/" + year() + "  " + hour() + ":" + minute() + "\n");
-                // if (translate) {
-                writer.print(translatedRes + results.sample + "\n");
-                // } else {
-                //     writer.print(mbNetLabel0 + results.sample + "\n");
-                // }
+                page.push(results.sample + "\n");
+                console.log('lineas x pagina:' + page.length);
 
-                if (frameCount % 100 || keyCode === DOWN_ARROW) {
-                    console.log('writing count:' + frameCount)
+                // writer.write(results.sample + "\n"); // wors to print just one text
+
+                if (page.length == linesInPage) {
+                    writer.print(page);
                     writer.close();
+                    page.length = 0;
+                    linesInPage = 0;
                 }
 
-                //    writer.clear();
             } else {
                 // do nothing 
             }
