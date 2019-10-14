@@ -193,7 +193,7 @@ let middleSeeds = middle[0];
 
 // http://ability.nyu.edu/p5.js-speech/ 
 // https://generative.fm/record
-// var myVoice = new p5.Speech(); // new P5.Speech object // OFFLINE 
+var myVoice = new p5.Speech(); // new P5.Speech object // OFFLINE 
 // let voice = 'Google UK English Male';
 let voice = 'Google español de Estados Unidos';
 
@@ -348,7 +348,7 @@ function draw() {
     }
 
 
-    // ------------------ Display VIDEOS 
+    // ------------------ Display VIDEOMandar mail a la universidad 
 
     // if (keyCode == 32) { //space
 
@@ -437,9 +437,18 @@ function talk() {
     myVoice.speak(rnnSub);
 
     // SIEMPRE SUENA LA VOZ
-    myVoice.setRate(.8); // speed of speach
-    myVoice.setPitch(.9);
-    myVoice.setVolume(.4);
+   
+
+    if (translate){
+        myVoice.setRate(.8); // speed of speach
+        myVoice.setPitch(.9);
+        myVoice.setVolume(.4);
+    } else {
+        voice = 'Google UK English Male';
+        myVoice.setRate(.8); // speed of speach
+        myVoice.setPitch(.9);
+        myVoice.setVolume(.4);
+    }
 
     // DOES NOT WORK
 
@@ -740,11 +749,11 @@ function DoText() {
             '\nElemento encontrado: ' +
             translatedRes + //latinamerican model
             '. \nEnviando a narrador.. ' +
-            ' \nTambién he encontrado un ' +
-            mbNetLabel1 +
-            ', creo estar ' +
+            // ' \nTambién he encontrado un ' +
+            // mbNetLabel1 +
+            '\nCreo estar ' +
             mbNetConfidence +
-            ' seguro...' +
+            ' segure...' +
             '\nActualizando narrativa...';
     } else {
         sourceText = 'Generating narrative...' +
@@ -780,7 +789,7 @@ function DoText() {
     text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
 
 
-    //this is static text
+    //this is static textMandar mail a la universidad
 
     text(sourceText, posXtextT, posYtextT + 100, w, h);
 
