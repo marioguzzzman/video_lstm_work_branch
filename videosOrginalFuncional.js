@@ -1,26 +1,15 @@
-// GENERAL WORKING AND TESTING BRANCH 
-
+// ------------------------------------------------------ TODO
 //CURRENTLY WORKING ON:
 //Setting random video play
 //Managing different efects for videos
 
-//Instructions to run
-// https://ml5js.org/reference/api-ImageClassifier/
-// In terminal enter the folder in which the code is hosted
-// python3 -m http.server
-// http://localhost:8000/  //works best with this. Does not work with Firefox
-
-//You have to click on the screen to be able to hear the background sounds
-
-
-
-// ------------------------------------------------------ TODO
 //RECORD TEXT
 //ADD WEBCAM
 //ADD CODE TO CHANGE BETWEEN WEBCAM AND VIDEO WHEN RECOGNIZING A FACE
 //MODULATE SPANISH VOICE
 //ADD MENU
 //TODO increse sound length
+//AGREGAR RELOAD FUNCTION EVERY X SECONDS
 
 
 //------------------------------------------------------- TESTING 
@@ -68,6 +57,9 @@ let pixelColor;
 
 let resultsReady = false;
 
+
+let inputTexts;
+
 //text displayed in "TERMINAL" text
 let rnn;
 let mbNetLabel0 = '';
@@ -95,95 +87,17 @@ let line;
 let color;
 
 // //--------------Connectors text XIX CENTURY TRAVELER
-// let entrance = [
-//     'I think this is a ',
-//     'Sometimes when I find a ',
-//     'Later on, I whould think of this ',
-//     'Although I don\'t believe that this is a ',
-//     'But, if you wander through the ',
-//     'Last time I saw a ',
-//     'I couldn\'t believe a ',
-//     'I feel I already saw a ',
-//     'Just after a ',
-//     'Before this ',
-//     'After encountering this ',
-//     'Also, this ',
-//     'Later on, the ',
-//     'Above all, this ',
+// let entrance = [ 'I think this is a ', 'Sometimes when I find a ', 'Later on, I whould think of this ', 'Although I don\'t believe that this is a ', 'But, if you wander through the ', 'Last time I saw a ', 'I couldn\'t believe a ', 'I feel I already saw a ', 'Just after a ', 'Before this ', 'After encountering this ', 'Also, this ', 'Later on, the ', 'Above all, this ', ];
 
-// ];
 
-// let middle = [
-//     ' ',
-//     ' ',
-//     ' ',
-//     ' ',
-//     ' ',
-//     ' ',
-//     ' ',
-//     '. ',
-//     ', ',
-//     ', but ',
-//     ', moreover, ',
-//     ', however, ',
-//     ', in short,',
-//     ', but also, ',
-//     ', in addition, ',
-//     ', nevertheless, ',
-//     ', I rather think of ',
-//     ' we can discuss about',
-//     ' I doubted my self, but ',
-//     ' was there '
-
-// ];
+// let middle = [ ' ', ' ', ' ', ' ', ' ', ' ', ' ', '. ', ', ', ', but ', ', moreover, ', ', however, ', ', in short,', ', but also, ', ', in addition, ', ', nevertheless, ', ', I rather think of ', ' we can discuss about', ' I doubted my self, but ', ' was there ', ];
 
 // //--------------Connectors text XIX CENTURY TRAVELER
 
 //--------------Connectors text LATIN GAMEON
-let entrance = [
-    'Creo que esto es un ',
-    'A veces, cuando encuentro un ',
-    'Más tarde, yo pensaría que un ',
-    'Aunque no crea que esto es un ',
-    'Pero, si recorres el ',
-    'La última vez que ví un ',
-    'No podría crer que un ',
-    'Siento que ya he visto este ',
-    'Justo antes de este ',
-    'Antes de este ',
-    'Después de reconcer este ',
-    'También, este ',
-    'Más tarde, el ',
-    'Sobre todo, este ',
+let entrance = [ 'Creo que esto es un ', 'A veces, cuando encuentro un ', 'Más tarde, yo pensaría que un ', 'Aunque no crea que esto es un ', 'Pero, si recorres el ', 'La última vez que ví un ', 'No podría crer que un ', 'Siento que ya he visto este ', 'Justo antes de este ', 'Antes de este ', 'Después de reconcer este ', 'También, este ', 'Más tarde, el ', 'Sobre todo, este ', ];
 
-];
-
-let middle = [
-    ' ',
-    ' ',
-    ' ',
-    ' ',
-    ' ',
-    ' ',
-    ' ',
-    '. ',
-    ', ',
-    '. ',
-    ', ',
-    ', pero ',
-    ', sin embargo, ',
-    ', en resumen,',
-    ', pero también, ',
-    ', además, ',
-    ', me gustaría pensar que ',
-    ' podemos discutir acerca de',
-    ' Dudaba de mi, pero ',
-    ' estaba ahí '
-];
-
-//--------------Connectors text LATIN GAMEON ------ END
-
-
+let middle = [ ' ', ' ', ' ', ' ', ' ', ' ', ' ', '. ', ', ', '. ', ', ', ', pero ', ', sin embargo, ', ', en resumen,', ', pero también, ', ', además, ', ', me gustaría pensar que ', ' podemos discutir acerca de', ' Dudaba de mi, pero ', ' estaba ahí ', ];
 
 //--------------------------TEXT SEEDS ----------
 let startingSeeds = entrance[0];
@@ -213,6 +127,7 @@ let otherSong;
 
 //------------------------------------------------------------- WEB SETTINGS ----------
 
+
 // p5.disableFriendlyErrors = true; // disables FES //to upgrade performance
 
 // ------------------------------------------------------------------------------------------------------------
@@ -221,6 +136,23 @@ let otherSong;
 
 
 function preload() { // To add things that take time to load
+
+
+
+    inputTexts = loadStrings('subTexts.txt');
+
+    // inputTexts = getItem('subTexts.txt');
+    // if (inputTexts === null) {
+    //     inputTexts = '';
+    // }
+
+    inputTexts = inputTexts[Math.floor(random(0, middle.length))];
+
+    console.log('entrance: ' +  entrance);
+    console.log('middle: ' + inputTexts); // not working
+    console.log(inputTexts);
+    
+
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
 
     //CAMERA
@@ -259,8 +191,8 @@ function preload() { // To add things that take time to load
 // ------------------------------------------------- SET UP ---------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
 
-
 function setup() {
+    noCursor();
 
     createCanvas(windowWidth, windowHeight);
     frameRate(30);
@@ -923,3 +855,19 @@ function DoTextHiperpoesia() {
 
     // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
 }
+
+
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------- INSTRUCTIONS ---------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+
+
+// GENERAL WORKING AND TESTING BRANCH 
+
+//Instructions to run
+// https://ml5js.org/reference/api-ImageClassifier/
+// In terminal enter the folder in which the code is hosted
+// python3 -m http.server
+// http://localhost:8000/  //works best with this. Does not work with Firefox
+
+//You have to click on the screen to be able to hear the background sounds
