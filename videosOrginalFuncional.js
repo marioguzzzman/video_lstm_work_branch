@@ -308,7 +308,7 @@ function draw() {
 
     if (resultsReady) {
         DoText();
-        talk();
+        // talk();
 
         // DoTextHiperpoesia();
 
@@ -656,6 +656,7 @@ function gotResults(err, results) {
 //--------------------------------------------------------- TEXT DISPLAY
 
 function DoText() {
+console.log('enter text');
 
     // TERMINAL TEXT
     posXtextT = windowWidth - (windowWidth - 100);
@@ -721,9 +722,9 @@ function DoText() {
     text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
 
 
-    //this is static textMandar mail a la universidad
+    //this is static text
 
-    text(sourceText, posXtextT, posYtextT + 100, w, h);
+    // text(sourceText, posXtextT, posYtextT + 100, w, h);
 
     // Add cursor
     // fill(color + sin(frameCount * 0.1) * 128);
