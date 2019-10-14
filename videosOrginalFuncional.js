@@ -64,7 +64,7 @@ let page = []; // text file writen
 
 let resultsReady = false;
 
-let inputTexts;
+// let inputTexts; // does not work
 
 //text displayed in "TERMINAL" text
 let rnn;
@@ -143,18 +143,22 @@ let otherSong;
 
 function preload() { // To add things that take time to load
 
-    inputTexts = loadStrings('subTexts.txt'); // texto en donde leer
+    // -------- DOES NOT WORK INPUT TEXTS
 
-    // inputTexts = getItem('subTexts.txt');
-    // if (inputTexts === null) {
-    //     inputTexts = '';
-    // }
+    // inputTexts = loadStrings('subTexts.txt'); // texto en donde leer
 
-    inputTexts = inputTexts[Math.floor(random(0, middle.length))];
+    // // inputTexts = getItem('subTexts.txt');
+    // // if (inputTexts === null) {
+    // //     inputTexts = '';
+    // // }
 
-    console.log('entrance: ' + entrance);
-    console.log('middle: ' + inputTexts); // not working
-    console.log(inputTexts);
+    // inputTexts = inputTexts[Math.floor(random(0, middle.length))];
+
+    // console.log('entrance: ' + entrance);
+    // console.log('middle: ' + inputTexts); // not working
+    // console.log(inputTexts);
+
+    // -------- DOES NOT WORK INPUT TEXTS
 
 
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
@@ -312,14 +316,12 @@ function draw() {
     if (resultsReady) {
         DoText();
 
-        writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinBook' + "_" + ".txt"); // texto en donde escribir
 
-
-        // if (resultsReady & writingOutput) {
-        // writeWrite();
-        // } else {
-
-        // }
+        if (writingOutput) {
+            writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
+        } else {
+            //nothing
+        }
         // talk();
 
         // DoTextHiperpoesia();
@@ -661,17 +663,18 @@ function gotResults(err, results) {
                 rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
             }
 
+            //-------------------- WRITE INTO PAGE -----------------------
+
             if (writingOutput) {
+                // writer.write(results.sample + "\n"); // writes to print just one text
 
                 page.push(results.sample + "\n");
-                console.log('lineas x pagina:' + page.length);
-
-                // writer.write(results.sample + "\n"); // wors to print just one text
+                // console.log('lineas x pagina:' + page.length);
 
                 if (page.length == linesInPage) {
                     writer.print(page);
                     writer.close();
-                    page.length = 0;
+                    page.length = 0; // to clear array
                     linesInPage = 0;
                 }
 
