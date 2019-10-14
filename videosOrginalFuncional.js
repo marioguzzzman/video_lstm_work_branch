@@ -55,8 +55,10 @@ let pixelColor;
 
 //------------------------------------------------------------- TEXT ----------
 
-let resultsReady = false;
+let writingOutput = true;
+let writer;
 
+let resultsReady = false;
 
 let inputTexts;
 
@@ -95,9 +97,9 @@ let color;
 // //--------------Connectors text XIX CENTURY TRAVELER
 
 //--------------Connectors text LATIN GAMEON
-let entrance = [ 'Creo que esto es un ', 'A veces, cuando encuentro un ', 'Más tarde, yo pensaría que un ', 'Aunque no crea que esto es un ', 'Pero, si recorres el ', 'La última vez que ví un ', 'No podría crer que un ', 'Siento que ya he visto este ', 'Justo antes de este ', 'Antes de este ', 'Después de reconcer este ', 'También, este ', 'Más tarde, el ', 'Sobre todo, este ', ];
+let entrance = ['Creo que esto es un ', 'A veces, cuando encuentro un ', 'Más tarde, yo pensaría que un ', 'Aunque no crea que esto es un ', 'Pero, si recorres el ', 'La última vez que ví un ', 'No podría crer que un ', 'Siento que ya he visto este ', 'Justo antes de este ', 'Antes de este ', 'Después de reconcer este ', 'También, este ', 'Más tarde, el ', 'Sobre todo, este ', ];
 
-let middle = [ ' ', ' ', ' ', ' ', ' ', ' ', ' ', '. ', ', ', '. ', ', ', ', pero ', ', sin embargo, ', ', en resumen,', ', pero también, ', ', además, ', ', me gustaría pensar que ', ' podemos discutir acerca de', ' Dudaba de mi, pero ', ' estaba ahí ', ];
+let middle = [' ', ' ', ' ', ' ', ' ', ' ', ' ', '. ', ', ', '. ', ', ', ', pero ', ', sin embargo, ', ', en resumen,', ', pero también, ', ', además, ', ', me gustaría pensar que ', ' podemos discutir acerca de', ' Dudaba de mi, pero ', ' estaba ahí ', ];
 
 //--------------------------TEXT SEEDS ----------
 let startingSeeds = entrance[0];
@@ -137,9 +139,7 @@ let otherSong;
 
 function preload() { // To add things that take time to load
 
-
-
-    inputTexts = loadStrings('subTexts.txt');
+    inputTexts = loadStrings('subTexts.txt'); // texto en donde leer
 
     // inputTexts = getItem('subTexts.txt');
     // if (inputTexts === null) {
@@ -148,10 +148,10 @@ function preload() { // To add things that take time to load
 
     inputTexts = inputTexts[Math.floor(random(0, middle.length))];
 
-    console.log('entrance: ' +  entrance);
+    console.log('entrance: ' + entrance);
     console.log('middle: ' + inputTexts); // not working
     console.log(inputTexts);
-    
+
 
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
 
@@ -197,7 +197,6 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     frameRate(30);
     pixelDensity(1);
-
 
     // console.log('my Mobile: ', myMobileNet) // to test
 
@@ -308,6 +307,15 @@ function draw() {
 
     if (resultsReady) {
         DoText();
+
+        writer = createWriter('latinBook.txt'); // texto en donde escribir
+
+
+        // if (resultsReady & writingOutput) {
+        // writeWrite();
+        // } else {
+
+        // }
         // talk();
 
         // DoTextHiperpoesia();
@@ -316,11 +324,24 @@ function draw() {
     }
 
 
-} 
+}
 
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------- END DRAW -------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
+
+function writeWrite() {
+
+    writer.print('- ' + translatedRes + "  " + month() + "/" + day() + "/" + year() + "  " + hour() + ":" + minute() + "\n");
+    // if (translate) {
+    writer.print(translatedRes + results.sample + "\n");
+    // } else {
+    //     writer.print(mbNetLabel0 + results.sample + "\n");
+    // }
+
+    writer.close();
+
+}
 
 //--------------------------------------------------------- BACKGROUND SOUND
 //Use this function to enable sound in chrome.
@@ -369,9 +390,9 @@ function talk() {
     myVoice.speak(rnnSub);
 
     // SIEMPRE SUENA LA VOZ
-   
 
-    if (translate){
+
+    if (translate) {
         myVoice.setRate(.73); // speed of speach
         myVoice.setPitch(.8);
         myVoice.setVolume(.4);
@@ -620,6 +641,7 @@ function gotResults(err, results) {
             length: 90, //length of characters
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
 
+
         }, (err, results) => {
 
             // console.log(results);
@@ -629,11 +651,31 @@ function gotResults(err, results) {
 
             //--------------------INSERT TRANSLATE -----------------------
 
-            if (translate) {
+            if (resultsReady & translate) {
                 rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
             } else {
                 rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
             }
+
+            if (writingOutput) {
+
+                writer.print('- ' + translatedRes + "  " + month() + "/" + day() + "/" + year() + "  " + hour() + ":" + minute() + "\n");
+                // if (translate) {
+                writer.print(translatedRes + results.sample + "\n");
+                // } else {
+                //     writer.print(mbNetLabel0 + results.sample + "\n");
+                // }
+
+                if (frameCount % 100 || keyCode === DOWN_ARROW) {
+                    console.log('writing count:' + frameCount)
+                    writer.close();
+                }
+
+                //    writer.clear();
+            } else {
+                // do nothing 
+            }
+
 
             // console.log('Lstm generated: ' + results.sample);
 
@@ -656,8 +698,6 @@ function gotResults(err, results) {
 //--------------------------------------------------------- TEXT DISPLAY
 
 function DoText() {
-console.log('enter text');
-
     // TERMINAL TEXT
     posXtextT = windowWidth - (windowWidth - 100);
     posYtextT = windowHeight - 600;
