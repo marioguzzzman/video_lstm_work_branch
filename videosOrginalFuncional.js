@@ -46,7 +46,7 @@ let translate = true;
 let playing = false;
 
 let stage = 1;
-let videos = [];
+let videos = [ ];
 let whichVideo = 0;
 
 var vScale = 20; // scale of video
@@ -79,18 +79,8 @@ let rnnSub = '';
 
 //parameters for "terminal" text
 let sourceText = ' ';
-let terminalF;
-let subtitleF;
-let posXte
-let posYtextT;
-let w;
-let h;
-
 let textSpeed = 0;
 
-let posYtextS;
-let line;
-let color;
 
 // //--------------Connectors text XIX CENTURY TRAVELER
 // let entrance = [ 'I think this is a ', 'Sometimes when I find a ', 'Later on, I whould think of this ', 'Although I don\'t believe that this is a ', 'But, if you wander through the ', 'Last time I saw a ', 'I couldn\'t believe a ', 'I feel I already saw a ', 'Just after a ', 'Before this ', 'After encountering this ', 'Also, this ', 'Later on, the ', 'Above all, this ', ];
@@ -299,7 +289,7 @@ function draw() {
 
     //     renderVideos();
     // }
-    renderVideos();
+    // renderVideos();
 
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
@@ -335,19 +325,6 @@ function draw() {
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------- END DRAW -------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
-
-function writeWrite() {
-
-    writer.print('- ' + translatedRes + "  " + month() + "/" + day() + "/" + year() + "  " + hour() + ":" + minute() + "\n");
-    // if (translate) {
-    writer.print(translatedRes + results.sample + "\n");
-    // } else {
-    //     writer.print(mbNetLabel0 + results.sample + "\n");
-    // }
-
-    writer.close();
-
-}
 
 //--------------------------------------------------------- BACKGROUND SOUND
 //Use this function to enable sound in chrome.
@@ -644,15 +621,48 @@ function gotResults(err, results) {
             //----------------- SEEDS THAT APPEAR ON TEXT
 
             seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
-            length: 90, //length of characters
+            // length: 90, //length of characters
+            length: 100,
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
 
 
         }, (err, results) => {
 
-            // console.log(results);
+            console.log("rnnSub: " + rnnSub);
 
             // rnnSub = results.sample; // ------> RESULTED SINGLE SEED TEXT
+
+            //-------------------- CREATE CONTEXT -----------------------
+
+            //NOTE:
+            // Seed needs to be the reading of the elements in an array. 
+            //After 3 tuns the array starts again
+
+            var initRegx = rnnSub; // The String the search in
+            // var regex = /(\W+)/; // The regex  
+            // var resultsRegx = initRegx.match(regex); // Execute the search
+            var regex = initRegx.replace(/\b[a-z]{4,6}\b/gi, replacer);
+
+            var words = initRegx.split(regex);
+            console.log('Total words: ' + words.length);
+            // console.log('resultRegx: ' + resultsRegx);
+            console.log('words in regx: ' + words);
+            console.log('outputRegx: ' + regex);
+
+            // let savedContext = 3; // amount of lines in page
+            // let savedContext = []; // text file writen
+
+            // context.push(results.sample + "\n");
+            // console.log('lineas x pagina:' + savedContext.length);
+
+            // if (savedContext.length == savedContext) {
+            //     writer.print(page);
+            //     writer.close();
+            //     savedContext.length = 0; // to clear array
+            //     savedContext = 0;
+            // }
+
+            //-------------------- CREATE CONTEXT -----------------------
 
 
             //--------------------INSERT TRANSLATE -----------------------
@@ -662,6 +672,7 @@ function gotResults(err, results) {
             } else {
                 rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
             }
+
 
             //-------------------- WRITE INTO PAGE -----------------------
 
@@ -701,15 +712,37 @@ function gotResults(err, results) {
     } // end of results
 } //end of gotResults
 
+//--------------------------------------------------------- REPLACER ARTIFICAL EDITOR
+
+function replacer(match) {
+    var len = match.length;
+    // Four letter words become uppercase
+    if (len == 1) {
+        //   return match.toUpperCase();
+        // Five letter words become "five"
+        return "five";
+    } else if (len == 5) {
+        return "five";
+        // Six letter words turn into today's date
+    } else if (len == 6) {
+        return Date();
+    }
+
+    console.log('match: ' + match);
+}
+
+
+
+
 //--------------------------------------------------------- TEXT DISPLAY
 
 function DoText() {
     // TERMINAL TEXT
-    posXtextT = windowWidth - (windowWidth - 100);
-    posYtextT = windowHeight - 600;
-    w = 325;
-    h = 400;
-    color = 250;
+    let posXtextT = windowWidth - (windowWidth - 100);
+    let posYtextT = windowHeight - 600;
+    let w = 325;
+    let h = 400;
+    let color = 250;
 
     textAlign(LEFT);
     if (offline) {
