@@ -16,8 +16,9 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = false;
+let videoEffects = true;
 let randomFrameEffect = true;
+let playSimpleVideo = false;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -237,6 +238,8 @@ function setup() {
     // videos[8].hide();
     // videos[9].hide();
 
+
+
     //-------------  ML5
     // myMobileNet.classify(myVideo, callback);
 
@@ -264,7 +267,9 @@ function draw() {
     background(0, 50); //antes 50
     // background(0);
 
-// MENU
+
+
+    // MENU
     if (keyCode == 77) { //letter m
         textSize(18);
         fill(255);
@@ -296,7 +301,7 @@ function draw() {
 
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
-   
+
     if (getAudioContext().state !== 'running') {
         text('click to start audio', width / 2, height / 2);
     } else {
@@ -333,41 +338,50 @@ function draw() {
 
 function renderVideos() {
 
-    // videos[0].playTheVideo(); //estaba comentado
-
-    //PLAY VIDEOS IN RANDOM
-    if (stage === 1) {
-
-        console.log('Stage 1');
-
-        if (frameCount % 50 || keyCode === ENTER) {
-            console.log('pressing enter');
-
-            //pick random video from array
-
-
-            let azar = Math.floor(random(0, videos.length)); // esto funciona
-            whichVideo = azar; //for(random(videos.length)); //esto funciona
-
-            // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
-
-            console.log('video number: ' + whichVideo);
-
-            stage = 2;
-            playTheVideo();
-
-            // console.log('playTheVideoPATH');
-        }
-    }
-
-    if (videoEffects) {
-        pixelEffect();
+    if (playSimpleVideo) {
+        image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        videos[0].volume(0.3);
     } else {
-        if (randomFrameEffect) {
-            randomFrame();
+        //PLAY VIDEOS IN RANDOM
+        if (stage === 1) {
+
+            console.log('Stage 1');
+
+            if (frameCount % 50 || keyCode === ENTER) {
+                console.log('pressing enter');
+
+                //pick random video from array
+
+
+                let azar = Math.floor(random(0, videos.length)); // esto funciona
+                whichVideo = azar; //for(random(videos.length)); //esto funciona
+
+                // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
+
+                console.log('video number: ' + whichVideo);
+
+                stage = 2;
+                playTheVideo();
+
+                // console.log('playTheVideoPATH');
+            }
         }
-        // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
-        image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+
+        if (videoEffects) {
+            if (randomFrameEffect) { // plays pixel + random
+                pixelEffect();
+                randomFrame();
+            } else {
+                pixelEffect();
+            }
+        } else {
+            if (randomFrameEffect) {
+                randomFrame();
+            }
+            // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
+            image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        }
+
     }
 }
 
@@ -484,7 +498,7 @@ function randomFrame() {
     // Plays random position based in framecount  
 
     if (!playing) {
-        let timeToChangeFrame = Math.floor(random(videos[whichVideo].duration(), videos[whichVideo].duration() * 20)); // esto funciona //for(random(videos.length));
+        let timeToChangeFrame = Math.floor(random(videos[whichVideo].duration(), videos[whichVideo].duration() * 10)); // esto funciona //for(random(videos.length));
 
         if (frameCount % timeToChangeFrame == 0 || keyCode == UP_ARROW) {
 
@@ -504,7 +518,6 @@ function playTheVideo() {
     // https://forum.processing.org/two/discussion/23870/p5js-problem-with-asynchronous-video-loading-playing
     videoSound(); // now is set to 0
 
-
     if (!randomFrameEffect) {
         console.log('looping video');
 
@@ -514,15 +527,10 @@ function playTheVideo() {
     } else {
         console.log('playing video with random Frame');
 
-
         // videos[whichVideo].time(random() * videos[whichVideo].duration() - 2);
 
         videos[whichVideo].loop().time(5); // time sets a place for the video to be played. it is expressed in seconds
-
-
     }
-
-
 }
 
 function videoOver() {
