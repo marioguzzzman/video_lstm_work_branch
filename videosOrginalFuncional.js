@@ -16,9 +16,10 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = true;
-let randomFrameEffect = true;
+let videoEffects = false;
+let randomFrameEffect = false;
 let playSimpleVideo = false;
+let oneVideo = false;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -253,6 +254,9 @@ function setup() {
     // myDiv = createDiv('...'); //create only one Div so we can see only one result
     // // myDiv.parent('#wraper');
     // myDivGen = createDiv('...'); //create only one Div so we can see only one result
+
+    console.log('x Videos: ' + videos.length);
+
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -347,12 +351,10 @@ function renderVideos() {
 
             console.log('Stage 1');
 
-            if (frameCount % 50 || keyCode === ENTER) {
+            if (frameCount % 50) {
                 console.log('pressing enter');
 
                 //pick random video from array
-
-
                 let azar = Math.floor(random(0, videos.length)); // esto funciona
                 whichVideo = azar; //for(random(videos.length)); //esto funciona
 
@@ -519,16 +521,20 @@ function playTheVideo() {
     videoSound(); // now is set to 0
 
     if (!randomFrameEffect) {
-        console.log('looping video');
+        console.log('normal video effect');
 
-        videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
-        // videos[whichVideo].play();
-        // videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
+        if (oneVideo) {
+            videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
+
+        } else {
+            console.log('multiple videos');
+            videos[whichVideo].play();
+            videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
+        }
+
     } else {
-        console.log('playing video with random Frame');
-
+        console.log('playing random Frame');
         // videos[whichVideo].time(random() * videos[whichVideo].duration() - 2);
-
         videos[whichVideo].loop().time(5); // time sets a place for the video to be played. it is expressed in seconds
     }
 }
@@ -536,8 +542,10 @@ function playTheVideo() {
 function videoOver() {
     console.log("Pausing video now VIDEO OVER / Stage 1");
     // videos[whichVideo].stop();// esto estaba comentado
-    //videos[whichVideo].rewind();
+    // videos[whichVideo].rewind();
     // videos[whichVideo].hide(); // esto estaba comentado
+    videos[whichVideo].pause(); // esto estaba comentado
+
     stage = 1;
 }
 
