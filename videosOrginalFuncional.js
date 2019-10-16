@@ -385,38 +385,11 @@ function draw() {
 // ------------------------------------------------- END DRAW -------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
 
-//--------------------------------------------------------- 
-//--------------------------------------------------------- RENDER VIDEOS
-
-function renderVideos() {
-
-    // if (OnlyCamera) {
-
-    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
-
-    // } else if (cameraVideo) {
-    //     image(myCamera, 0, 0, 300, 300); //size and position of video 
-    // }
-
-    if (cameraVideo) {
-        // console.log('camera VIdeo');
-        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-        filter(INVERT);
-        // myCamera.loadPixels();
-        // const stepSize = round(constrain(mouseX / 8, 6, 32));
-        // for (let y = 0; y < height; y += stepSize) {
-        //     for (let x = 0; x < width; x += stepSize) {
-        //         const i = y * width + x;
-        //         const darkness = (255 - myCamera.pixels[i * 4]) / 255;
-        //         const radius = stepSize * darkness;
-        //         ellipse(x, y, radius, radius);
-        //     }
-        // }
-
-
-        // OLD CODE WITH CIRCLES
+function effectForCamera(){
+    // OLD CODE WITH CIRCLES
         // https://p5js.org/examples/dom-video-pixels.html
 
+     
         myCamera.loadPixels();
 
 
@@ -464,6 +437,27 @@ function renderVideos() {
         // / finish loading pixels
 
 
+}
+
+//--------------------------------------------------------- 
+//--------------------------------------------------------- RENDER VIDEOS
+
+function renderVideos() {
+
+    // if (OnlyCamera) {
+
+    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
+
+    // } else if (cameraVideo) {
+    //     image(myCamera, 0, 0, 300, 300); //size and position of video 
+    // }
+
+    if (cameraVideo) {
+        // console.log('camera VIdeo');
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        filter(INVERT);
+
+        // effectForCamera();
 
     }
 
