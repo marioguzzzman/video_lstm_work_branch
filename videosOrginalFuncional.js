@@ -269,6 +269,10 @@ function setup() {
             videos[0].size(width / vScale, height / vScale);
             videos[0].hide();
         }
+
+        if (cameraVideo) {
+            myCamera.hide(); //captures video from webcam
+        }
     }
 
 
@@ -397,56 +401,119 @@ function renderVideos() {
     if (cameraVideo) {
         // console.log('camera VIdeo');
         image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        filter(INVERT);
+        // myCamera.loadPixels();
+        // const stepSize = round(constrain(mouseX / 8, 6, 32));
+        // for (let y = 0; y < height; y += stepSize) {
+        //     for (let x = 0; x < width; x += stepSize) {
+        //         const i = y * width + x;
+        //         const darkness = (255 - myCamera.pixels[i * 4]) / 255;
+        //         const radius = stepSize * darkness;
+        //         ellipse(x, y, radius, radius);
+        //     }
+        // }
+
+
+        // OLD CODE WITH CIRCLES
+        // https://p5js.org/examples/dom-video-pixels.html
+
+        myCamera.loadPixels();
+
+
+        let stepSize = 30;
+        // const stepSize = round(constrain(mouseX / 8, 6, 32));
+
+        for (var y = 0; y < myCamera.height; y++) {
+
+            for (var x = 0; x < myCamera.width; x++) {
+
+                // var index = (myCamera.width - x + 1 + (y * myCamera.width)) * 4;
+                const i = (y * myCamera.width + x * 4);
+
+
+
+                // var r = myCamera.pixels[index + 0];
+                // var g = myCamera.pixels[index + 1];
+                // var b = myCamera.pixels[index + 2];
+                // let a = myCamera.pixels[index + 3];
+
+                // var bright = (r + g + b) / 3;
+                // var w = map(bright, 0, 255, 0, stepSize);
+
+
+                const darkness = (255 - myCamera.pixels[i * 4]) / 255;
+
+                // const radius = stepSize * darkness;
+                const radius = stepSize;
+
+
+                let r1 = myCamera.pixels[0 + i];
+                let g1 = myCamera.pixels[1 + i];
+                let b1 = myCamera.pixels[2 + i];
+                let a1 = myCamera.pixels[3 + i];
+
+                noStroke();
+                fill(r1, g1, b1, a1);
+
+                // rectMode(CENTER); // not use, scrambles de visuals
+                ellipse(x * stepSize, y * stepSize, radius, radius);
+                // var rad = 100;
+            }
+        }
+
+        // / finish loading pixels
+
+
 
     }
 
-        if (playSimpleVideo) {
-            // console.log('playing simple video');
-            image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-            videos[0].volume(0.3);
-        } else {
-            //PLAY VIDEOS IN RANDOM
-            if (stage === 1) {
+    if (playSimpleVideo) {
+        // console.log('playing simple video');
+        image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        videos[0].volume(0.3);
+    } else {
+        //PLAY VIDEOS IN RANDOM
+        if (stage === 1) {
 
-                console.log('Stage 1');
+            console.log('Stage 1');
 
-                if (frameCount % 50) {
-                    console.log('pressing enter');
+            if (frameCount % 50) {
+                console.log('pressing enter');
 
-                    //pick random video from array
-                    let azar = Math.floor(random(0, videos.length)); // esto funciona
-                    whichVideo = azar; //for(random(videos.length)); //esto funciona
+                //pick random video from array
+                let azar = Math.floor(random(0, videos.length)); // esto funciona
+                whichVideo = azar; //for(random(videos.length)); //esto funciona
 
-                    // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
+                // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
 
-                    console.log('video number: ' + whichVideo);
+                console.log('video number: ' + whichVideo);
 
-                    stage = 2;
-                    playTheVideo();
+                stage = 2;
+                playTheVideo();
 
-                    // console.log('playTheVideoPATH');
-                }
+                // console.log('playTheVideoPATH');
             }
+        }
 
-            if (videoEffects) {
-                if (randomFrameEffect) { // plays pixel + random
-                    pixelEffect();
-                    randomFrame();
-                } else {
-                    pixelEffect();
-                }
+        if (videoEffects) {
+            if (randomFrameEffect) { // plays pixel + random
+                pixelEffect();
+                randomFrame();
             } else {
-                if (randomFrameEffect) {
-                    randomFrame();
-                }
-                // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
-                image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-               
+                pixelEffect();
             }
+        } else {
+            if (randomFrameEffect) {
+                randomFrame();
+            }
+            // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
+            image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
 
         }
 
     }
+
+}
 
 
 
