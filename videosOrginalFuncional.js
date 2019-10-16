@@ -185,6 +185,7 @@ function preload() { // To add things that take time to load
             // videos[8] = createVideo("videos/9.mp4");
             // videos[9] = createVideo("videos/10.mp4");
         }
+
         if (cameraVideo) {
             myCamera = createCapture(VIDEO); //captures video from webcam
         }
@@ -234,7 +235,9 @@ function setup() {
     // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
     //variable = createVideo(['PATH/video1.mp4']);
 
-    if (OnlyCamera) {} else {
+    if (OnlyCamera) {
+        //on;y camera
+    } else {
         if (!oneVideo) {
             vScale = 1;
 
@@ -274,8 +277,8 @@ function setup() {
 
     if (offline) {
         // Don't use any model to classify any video
-    } 
-    
+    }
+
     if (OnlyCamera) {
         myMobileNet.classify(myCamera, gotResults);
     } else {
@@ -332,17 +335,17 @@ function draw() {
     //     renderVideos();
     // }
 
-    if (OnlyCamera) {
-        //camera 
-        console.log('only camera');
-        image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
+    // if (OnlyCamera) {
+    //     //camera 
+    //     console.log('only camera');
+    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
 
 
-    } else {
-        renderVideos();
-        console.log('render video');
+    // } else {
+    renderVideos();
+    console.log('render video');
 
-    }
+    // }
 
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
@@ -383,39 +386,48 @@ function draw() {
 
 function renderVideos() {
 
-    if (cameraVideo){
+    // if (OnlyCamera) {
 
+    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
+
+    // } else if (cameraVideo) {
+    //     image(myCamera, 0, 0, 300, 300); //size and position of video 
+    // }
+
+    if (cameraVideo) {
+        // console.log('camera VIdeo');
         image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
 
-    } else {
+    }
 
         if (playSimpleVideo) {
+            // console.log('playing simple video');
             image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
             videos[0].volume(0.3);
         } else {
             //PLAY VIDEOS IN RANDOM
             if (stage === 1) {
-    
+
                 console.log('Stage 1');
-    
+
                 if (frameCount % 50) {
                     console.log('pressing enter');
-    
+
                     //pick random video from array
                     let azar = Math.floor(random(0, videos.length)); // esto funciona
                     whichVideo = azar; //for(random(videos.length)); //esto funciona
-    
+
                     // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
-    
+
                     console.log('video number: ' + whichVideo);
-    
+
                     stage = 2;
                     playTheVideo();
-    
+
                     // console.log('playTheVideoPATH');
                 }
             }
-    
+
             if (videoEffects) {
                 if (randomFrameEffect) { // plays pixel + random
                     pixelEffect();
@@ -429,14 +441,15 @@ function renderVideos() {
                 }
                 // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
                 image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+               
             }
-    
+
         }
 
     }
 
 
-}
+
 
 //--------------------------------------------------------- VIDEO FUNCTIONS
 
@@ -743,7 +756,7 @@ function gotResults(err, results) {
             // ------------- VIDEO
             // ------------- clasiffy video with mobile net
 
-            if (OnlyCamera){
+            if (OnlyCamera) {
                 setTimeout(() => myMobileNet.classify(cameraVideo, gotResults), 5000); //setTimeout to slow the results. we also added an arow function
                 // 3000 is too slowed to be read
                 // 5000 was kind of ok
@@ -752,7 +765,7 @@ function gotResults(err, results) {
                 // 3000 is too slowed to be read
                 // 5000 was kind of ok
             }
-           
+
         }); // end of generate
     } // end of results
 } //end of gotResults
