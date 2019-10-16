@@ -16,7 +16,7 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = false;
+let videoEffects = true;
 let randomFrameEffect = true;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -435,8 +435,24 @@ function renderVideos() {
         }
     }
 
+    if (videoEffects) {
+        pixelEfect();
+    } else {
+        if (randomFrameEffect) {
+            randomFrame();
+        }
+        // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
+        image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+    }
+}
 
-    // -------- to load pixels
+//--------------------------------------------------------- VIDEO FUNCTIONS
+
+function pixelEfect(){
+
+
+
+        // / -------- to load pixels
 
     // vid.loadPixels();
     // for (var y = 0; y < height; y += 8) {
@@ -449,45 +465,44 @@ function renderVideos() {
     //   }
     // }
 
-    if (videoEffects) {
-
+        
         // PIXELS // THIS WORKS
-        // videos[whichVideo].loadPixels();
+        videos[whichVideo].loadPixels();
 
-        // for (var y = 0; y < videos[whichVideo].height; y++) {
+        for (var y = 0; y < videos[whichVideo].height; y++) {
 
-        //     for (var x = 0; x < videos[whichVideo].width; x++) {
+            for (var x = 0; x < videos[whichVideo].width; x++) {
 
-        //         var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
+                var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
 
-        //         var r = videos[whichVideo].pixels[index + 0];
-        //         var g = videos[whichVideo].pixels[index + 1];
-        //         var b = videos[whichVideo].pixels[index + 2];
-        //         var bright = (r + g + b) / 3;
-        //         var w = map(bright, 0, 255, 0, vScale);
+                var r = videos[whichVideo].pixels[index + 0];
+                var g = videos[whichVideo].pixels[index + 1];
+                var b = videos[whichVideo].pixels[index + 2];
+                var bright = (r + g + b) / 3;
+                var w = map(bright, 0, 255, 0, vScale);
 
-        //         noStroke();
-        //         fill(r, g, b);
+                noStroke();
+                fill(r, g, b);
 
-        //         ///----------------- XIX century traveler
+                ///----------------- XIX century traveler
 
-        //         // rectMode(CENTER); // not use, scrambles de visuals
-        //         rect(x * vScale, y * vScale, w, w);
-        //         // var rad = 100;
+                // rectMode(CENTER); // not use, scrambles de visuals
+                rect(x * vScale, y * vScale, w, w);
+                // var rad = 100;
 
-        //         ///----------------- XIX century traveler -- END
+                ///----------------- XIX century traveler -- END
 
 
-        //         ///----------------- just hiperpoesia
-        //         // if (keyIsDown(UP_ARROW)){
-        //         //     ellipse(x * vScale, y * vScale, w, w);
+                ///----------------- just hiperpoesia
+                // if (keyIsDown(UP_ARROW)){
+                //     ellipse(x * vScale, y * vScale, w, w);
 
-        //         // } else 
-        //         // ellipse(x * vScale, y * vScale, mouseX, mouseX);
+                // } else 
+                // ellipse(x * vScale, y * vScale, mouseX, mouseX);
 
-        //         ///----------------- just hiperpoesia -- END
-        //     }
-        // }
+                ///----------------- just hiperpoesia -- END
+            }
+        }
 
         //-------------------- THIS WORKS
 
@@ -533,23 +548,7 @@ function renderVideos() {
 
         /// finish loading pixels
 
-
-    } else {
-
-        if (randomFrameEffect) {
-            randomFrame();
-        }
-
-        // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
-        image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-
-    }
-
-
-
 }
-
-//--------------------------------------------------------- VIDEO FUNCTIONS
 
 // plays or pauses the video depending on current state
 
