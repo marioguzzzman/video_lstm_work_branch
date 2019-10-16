@@ -16,7 +16,7 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = true;
+let videoEffects = false;
 let randomFrameEffect = true;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -262,9 +262,10 @@ function draw() {
     // console.log('video: ' + whichVideo);
 
     background(0, 50); //antes 50
-    // background(0);
+    textAlign(CENTER);
+    fill(0);
 
-
+// MENU
     if (keyCode == 77) { //letter m
         textSize(18);
         fill(255);
@@ -280,7 +281,7 @@ function draw() {
     }
 
 
-    // ------------------ Display VIDEOMandar mail a la universidad 
+    // ------------------ Display VIDEO 
 
     // if (keyCode == 32) { //space
 
@@ -296,8 +297,7 @@ function draw() {
 
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
-    textAlign(CENTER);
-    fill(0);
+   
     if (getAudioContext().state !== 'running') {
         text('click to start audio', width / 2, height / 2);
     } else {
@@ -308,14 +308,12 @@ function draw() {
 
     if (resultsReady) {
         DoText();
-
+         // talk();
 
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
-        } else {
-            //nothing
-        }
-        // talk();
+        } 
+       
 
         // DoTextHiperpoesia();
 
