@@ -448,11 +448,11 @@ function renderVideos() {
 
 //--------------------------------------------------------- VIDEO FUNCTIONS
 
-function pixelEffect(){
+function pixelEffect() {
 
 
 
-        // / -------- to load pixels
+    // / -------- to load pixels
 
     // vid.loadPixels();
     // for (var y = 0; y < height; y += 8) {
@@ -465,88 +465,88 @@ function pixelEffect(){
     //   }
     // }
 
-        
-        // PIXELS // THIS WORKS
-        videos[whichVideo].loadPixels();
 
-        for (var y = 0; y < videos[whichVideo].height; y++) {
+    // PIXELS // THIS WORKS
+    videos[whichVideo].loadPixels();
 
-            for (var x = 0; x < videos[whichVideo].width; x++) {
+    for (var y = 0; y < videos[whichVideo].height; y++) {
 
-                var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
+        for (var x = 0; x < videos[whichVideo].width; x++) {
 
-                var r = videos[whichVideo].pixels[index + 0];
-                var g = videos[whichVideo].pixels[index + 1];
-                var b = videos[whichVideo].pixels[index + 2];
-                var bright = (r + g + b) / 3;
-                var w = map(bright, 0, 255, 0, vScale);
+            var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
 
-                noStroke();
-                fill(r, g, b);
+            var r = videos[whichVideo].pixels[index + 0];
+            var g = videos[whichVideo].pixels[index + 1];
+            var b = videos[whichVideo].pixels[index + 2];
+            var bright = (r + g + b) / 3;
+            var w = map(bright, 0, 255, 0, vScale);
 
-                ///----------------- XIX century traveler
+            noStroke();
+            fill(r, g, b);
 
-                // rectMode(CENTER); // not use, scrambles de visuals
-                rect(x * vScale, y * vScale, w, w);
-                // var rad = 100;
+            ///----------------- XIX century traveler
 
-                ///----------------- XIX century traveler -- END
+            // rectMode(CENTER); // not use, scrambles de visuals
+            rect(x * vScale, y * vScale, w, w);
+            // var rad = 100;
+
+            ///----------------- XIX century traveler -- END
 
 
-                ///----------------- just hiperpoesia
-                // if (keyIsDown(UP_ARROW)){
-                //     ellipse(x * vScale, y * vScale, w, w);
+            ///----------------- just hiperpoesia
+            // if (keyIsDown(UP_ARROW)){
+            //     ellipse(x * vScale, y * vScale, w, w);
 
-                // } else 
-                // ellipse(x * vScale, y * vScale, mouseX, mouseX);
+            // } else 
+            // ellipse(x * vScale, y * vScale, mouseX, mouseX);
 
-                ///----------------- just hiperpoesia -- END
-            }
+            ///----------------- just hiperpoesia -- END
         }
+    }
 
-        //-------------------- THIS WORKS
+    //-------------------- THIS WORKS
 
-        // OLD CODE WITH CIRCLES
-        // https://p5js.org/examples/dom-video-pixels.html
+    // OLD CODE WITH CIRCLES
+    // https://p5js.org/examples/dom-video-pixels.html
 
-        // const stepSize = 30;
-        // // const stepSize = round(constrain(mouseX / 8, 6, 32));
+    // const stepSize = 30;
+    // // const stepSize = round(constrain(mouseX / 8, 6, 32));
 
-        // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
-        //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
-        //   console.log('x' + x);
+    // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
+    //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
+    //   console.log('x' + x);
 
-        // pixelColor = get(x, y);
+    // pixelColor = get(x, y);
 
-        //  console.log('pixel' + pixelColor );
+    //  console.log('pixel' + pixelColor );
 
-        // console.log( 'h: ' + height );
-        // console.log( 'w: ' + width );
-        // console.log( 'vh: ' + videos[whichVideo].height );
-        // console.log( 'vw: ' + videos[whichVideo].width );
-
-
-        //     const i = (y * videos[whichVideo].width + x * 4);
-
-        //     const darkness = (255 - videos[whichVideo].pixels[i * 4]) / 255;
-
-        //     const radius = stepSize * darkness;
-        //     // const radius = stepSize;
+    // console.log( 'h: ' + height );
+    // console.log( 'w: ' + width );
+    // console.log( 'vh: ' + videos[whichVideo].height );
+    // console.log( 'vw: ' + videos[whichVideo].width );
 
 
-        //     let r =  videos[whichVideo].pixels[0 + i];
-        //     let g =  videos[whichVideo].pixels[1 + i];
-        //     let b =  videos[whichVideo].pixels[2 + i];
-        //     let a =  videos[whichVideo].pixels[3 + i];
+    //     const i = (y * videos[whichVideo].width + x * 4);
 
-        //     fill(r, g, b, a);
-        //     noStroke();
-        //     ellipse(x, y, radius, radius);
-        //   }
+    //     const darkness = (255 - videos[whichVideo].pixels[i * 4]) / 255;
 
-        // }
+    //     const radius = stepSize * darkness;
+    //     // const radius = stepSize;
 
-        /// finish loading pixels
+
+    //     let r =  videos[whichVideo].pixels[0 + i];
+    //     let g =  videos[whichVideo].pixels[1 + i];
+    //     let b =  videos[whichVideo].pixels[2 + i];
+    //     let a =  videos[whichVideo].pixels[3 + i];
+
+    //     fill(r, g, b, a);
+    //     noStroke();
+    //     ellipse(x, y, radius, radius);
+    //   }
+
+    // }
+
+    /// finish loading pixels
 
 }
 
@@ -566,11 +566,11 @@ function randomFrame() {
             console.log('Enter play random position');
             videos[whichVideo].time(random() * videos[whichVideo].duration() - 2); //solo el random del cuadro
 
-            console.log('Video: ' + whichVideo + 'frame: ' + frameCount);  
+            console.log('Video: ' + whichVideo + 'frame: ' + frameCount);
 
             playing = true;
 
-        } 
+        }
     }
 
 }
@@ -580,7 +580,7 @@ function playTheVideo() {
     videoSound(); // now is set to 0
 
 
-    if (!randomFrameEffect){
+    if (!randomFrameEffect) {
         console.log('looping video');
 
         videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
@@ -591,7 +591,7 @@ function playTheVideo() {
 
 
         // videos[whichVideo].time(random() * videos[whichVideo].duration() - 2);
-       
+
         videos[whichVideo].loop().time(5); // time sets a place for the video to be played. it is expressed in seconds
 
 
