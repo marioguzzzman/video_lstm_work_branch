@@ -21,7 +21,7 @@ let randomFrameEffect = false;
 let playSimpleVideo = false;
 let oneVideo = true;
 let cameraVideo = false;
-let OnlyCamera = true; // GETS ERROR FROM GENERATOR
+let OnlyCamera = false; // GETS ERROR FROM GENERATOR
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
