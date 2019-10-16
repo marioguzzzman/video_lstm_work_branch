@@ -271,9 +271,12 @@ function setup() {
         }
 
         if (cameraVideo) {
+
+            vScale = 1;
+
             // myCamera.hide(); //captures video from webcam
 
-            // myCamera.size(320, 240);
+            myCamera.size(width / vScale, height / vScale);
             myCamera.hide();
             // Assuming a 640 * 480 pixels camera
             // myCamera = 640;
