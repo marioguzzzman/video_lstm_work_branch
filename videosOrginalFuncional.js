@@ -20,7 +20,7 @@ let videoEffects = true;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
 let oneVideo = true;
-let cameraVideo = false;
+let cameraVideo = true;
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
