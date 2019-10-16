@@ -16,7 +16,7 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = true;
+let videoEffects = false;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
 let oneVideo = true;
@@ -271,7 +271,13 @@ function setup() {
         }
 
         if (cameraVideo) {
-            myCamera.hide(); //captures video from webcam
+            // myCamera.hide(); //captures video from webcam
+
+            // myCamera.size(320, 240);
+            myCamera.hide();
+            // Assuming a 640 * 480 pixels camera
+            // myCamera = 640;
+            // myCamera = 480;
         }
     }
 
@@ -345,9 +351,12 @@ function draw() {
     //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
 
 
+
+
     // } else {
-    renderVideos();
-    console.log('render video');
+    // renderVideos();
+    renderCamera();
+    // console.log('render video');
 
     // }
 
@@ -385,58 +394,153 @@ function draw() {
 // ------------------------------------------------- END DRAW -------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
 
-function effectForCamera(){
-    // OLD CODE WITH CIRCLES
-        // https://p5js.org/examples/dom-video-pixels.html
-
-     
-        myCamera.loadPixels();
-
-
-        let stepSize = 30;
-        // const stepSize = round(constrain(mouseX / 8, 6, 32));
-
-        for (var y = 0; y < myCamera.height; y++) {
-
-            for (var x = 0; x < myCamera.width; x++) {
-
-                // var index = (myCamera.width - x + 1 + (y * myCamera.width)) * 4;
-                const i = (y * myCamera.width + x * 4);
-
-
-
-                // var r = myCamera.pixels[index + 0];
-                // var g = myCamera.pixels[index + 1];
-                // var b = myCamera.pixels[index + 2];
-                // let a = myCamera.pixels[index + 3];
-
-                // var bright = (r + g + b) / 3;
-                // var w = map(bright, 0, 255, 0, stepSize);
+function anotheEffectForCamera() {
+    // // https://github.com/processing/p5.js/issues/926
+    // var x, y;
+    // myCamera.loadPixels();
+    // // Divide by 2 and multiply index by 8 is to reduce the final resolution
+    // for (y = 0; y < height / 2; y++) {
+    //     for (x = 0; x < width / 2; x++) {
+    //         var idx = 4 * (y * width + x);
+    //         stroke([myCamera.pixels[idx],
+    //             myCamera.pixels[idx + 1],
+    //             myCamera.pixels[idx + 2],
+    //             myCamera.pixels[idx + 3]
+    //         ]);
+    //         point(x, y);
+    //     }
+    // }
+    myCamera.loadPixels();
 
 
-                const darkness = (255 - myCamera.pixels[i * 4]) / 255;
+    var stepSize = 20;
+    for (var x = 0; x < myCamera.width; x += stepSize) {
+        for (var y = 0; y < myCamera.height; y += stepSize) {
+            var index = ((y * myCamera.width) + x) * 4;
 
-                // const radius = stepSize * darkness;
-                const radius = stepSize;
-
-
-                let r1 = myCamera.pixels[0 + i];
-                let g1 = myCamera.pixels[1 + i];
-                let b1 = myCamera.pixels[2 + i];
-                let a1 = myCamera.pixels[3 + i];
-
-                noStroke();
-                fill(r1, g1, b1, a1);
-
-                // rectMode(CENTER); // not use, scrambles de visuals
-                ellipse(x * stepSize, y * stepSize, radius, radius);
-                // var rad = 100;
-            }
+            // for (var x = 0; x < myCamera.width; x += stepSize) {
+            //     for (var y = 0; y < myCamera.heigt; y += stepSize) {
+            //         var index = ((y * myCamera.width) + x) * 4;
+            // The code for your filter will go here!
+            var redVal = myCamera.pixels[index];
+            var greenVal = myCamera.pixels[index + 1];
+            var blueVal = myCamera.pixels[index + 2];
+            fill(redVal * 2, greenVal, blueVal);
+            ellipse(x, y, stepSize, stepSize);
         }
+    }
+}
 
-        // / finish loading pixels
+
+function effectForCamera() {
 
 
+    // PIXELS // THIS WORKS
+    myCamera.loadPixels();
+
+    for (var y = 0; y < myCamera.height; y++) {
+
+        for (var x = 0; x < myCamera.width; x++) {
+
+            var index = (myCamera.width - x + 1 + (y * myCamera.width)) * 4;
+
+            var r = myCamera.pixels[index + 0];
+            var g = myCamera.pixels[index + 1];
+            var b = myCamera.pixels[index + 2];
+            var bright = (r + g + b) / 3;
+            var w = map(bright, 0, 255, 0, vScale);
+
+            noStroke();
+            fill(r, g, b);
+
+            ///----------------- XIX century traveler
+
+            // rectMode(CENTER); // not use, scrambles de visuals
+            rect(x * vScale, y * vScale, w, w);
+            // var rad = 100;
+
+            ///----------------- XIX century traveler -- END
+
+
+            ///----------------- just hiperpoesia
+            // if (keyIsDown(UP_ARROW)){
+            //     ellipse(x * vScale, y * vScale, w, w);
+
+            // } else 
+            // ellipse(x * vScale, y * vScale, mouseX, mouseX);
+
+            ///----------------- just hiperpoesia -- END
+        }
+    }
+
+
+    // OLD CODE WITH CIRCLES
+    // https://p5js.org/examples/dom-video-pixels.html
+
+
+    // myCamera.loadPixels();
+
+
+    // let stepSize = 30;
+    // // const stepSize = round(constrain(mouseX / 8, 6, 32));
+
+    // for (var y = 0; y < myCamera.height; y++) {
+
+    //     for (var x = 0; x < myCamera.width; x++) {
+
+    //         // var index = (myCamera.width - x + 1 + (y * myCamera.width)) * 4;
+    //         const i = (y * myCamera.width + x * 4);
+
+
+
+    //         // var r = myCamera.pixels[index + 0];
+    //         // var g = myCamera.pixels[index + 1];
+    //         // var b = myCamera.pixels[index + 2];
+    //         // let a = myCamera.pixels[index + 3];
+
+    //         // var bright = (r + g + b) / 3;
+    //         // var w = map(bright, 0, 255, 0, stepSize);
+
+
+    //         const darkness = (255 - myCamera.pixels[i * 4]) / 255;
+
+    //         // const radius = stepSize * darkness;
+    //         const radius = stepSize;
+
+
+    //         let r1 = myCamera.pixels[0 + i];
+    //         let g1 = myCamera.pixels[1 + i];
+    //         let b1 = myCamera.pixels[2 + i];
+    //         let a1 = myCamera.pixels[3 + i];
+
+    //         noStroke();
+    //         fill(r1, g1, b1, a1);
+
+    //         // rectMode(CENTER); // not use, scrambles de visuals
+    //         ellipse(x * stepSize, y * stepSize, radius, radius);
+    //         // var rad = 100;
+    //     }
+    // }
+
+    // / finish loading pixels
+
+
+}
+
+function renderCamera() {
+
+    if (cameraVideo) { //under video
+        // console.log('camera VIdeo');
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        // filter(INVERT);
+        // filter(POSTERIZE, 3);
+        // filter(BLUR, 3);
+
+
+        // effectForCamera();
+        anotheEffectForCamera();
+
+    }
 }
 
 //--------------------------------------------------------- 
@@ -451,13 +555,17 @@ function renderVideos() {
     // } else if (cameraVideo) {
     //     image(myCamera, 0, 0, 300, 300); //size and position of video 
     // }
-
-    if (cameraVideo) {
+    // if (cameraVideo) { //under video
+    if (cameraVideo) { //under video
         // console.log('camera VIdeo');
         image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-        filter(INVERT);
+        // filter(INVERT);
+        // filter(POSTERIZE, 3);
+        // filter(BLUR, 3);
+
 
         // effectForCamera();
+        anotheEffectForCamera();
 
     }
 
@@ -485,6 +593,9 @@ function renderVideos() {
                 stage = 2;
                 playTheVideo();
 
+
+
+
                 // console.log('playTheVideoPATH');
             }
         }
@@ -495,6 +606,8 @@ function renderVideos() {
                 randomFrame();
             } else {
                 pixelEffect();
+                //camera video positioned here is also behind video
+
             }
         } else {
             if (randomFrameEffect) {
@@ -530,6 +643,8 @@ function pixelEffect() {
     //     rect(x, y, 8, 8); 
     //   }
     // }
+
+
 
 
     // PIXELS // THIS WORKS
@@ -645,10 +760,13 @@ function playTheVideo() {
     // https://forum.processing.org/two/discussion/23870/p5js-problem-with-asynchronous-video-loading-playing
     videoSound(); // now is set to 0
 
+
     if (!randomFrameEffect) {
         console.log('normal video effect');
 
         if (oneVideo) {
+
+
             videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
 
         } else {
