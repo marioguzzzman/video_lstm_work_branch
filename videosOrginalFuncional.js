@@ -16,7 +16,8 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-
+let videoEffects = false;
+let randomFrameEffect = false;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -46,7 +47,7 @@ let translate = true;
 let playing = false;
 
 let stage = 1;
-let videos = [ ];
+let videos = [];
 let whichVideo = 0;
 
 var vScale = 20; // scale of video
@@ -289,7 +290,7 @@ function draw() {
 
     //     renderVideos();
     // }
-    // renderVideos();
+    renderVideos();
 
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
@@ -405,7 +406,7 @@ function talk() {
 
 function renderVideos() {
 
-    // videos[0].playTheVideo();
+    // videos[0].playTheVideo(); //estaba comentado
 
     //PLAY VIDEOS IN RANDOM
     if (stage === 1) {
@@ -418,8 +419,10 @@ function renderVideos() {
             //pick random video from array
 
 
-            let azar = Math.floor(random(0, videos.length));
-            whichVideo = azar; //for(random(videos.length));
+            let azar = Math.floor(random(0, videos.length)); // esto funciona
+            whichVideo = azar; //for(random(videos.length)); //esto funciona
+
+            // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
 
             console.log('video number: ' + whichVideo);
 
@@ -444,101 +447,102 @@ function renderVideos() {
     //   }
     // }
 
+    if (videoEffects) {
 
-    // PIXELS
-    videos[whichVideo].loadPixels();
+        // PIXELS // THIS WORKS
+        // videos[whichVideo].loadPixels();
 
-    for (var y = 0; y < videos[whichVideo].height; y++) {
+        // for (var y = 0; y < videos[whichVideo].height; y++) {
 
-        for (var x = 0; x < videos[whichVideo].width; x++) {
+        //     for (var x = 0; x < videos[whichVideo].width; x++) {
 
-            var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
+        //         var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
 
-            var r = videos[whichVideo].pixels[index + 0];
-            var g = videos[whichVideo].pixels[index + 1];
-            var b = videos[whichVideo].pixels[index + 2];
-            var bright = (r + g + b) / 3;
-            var w = map(bright, 0, 255, 0, vScale);
+        //         var r = videos[whichVideo].pixels[index + 0];
+        //         var g = videos[whichVideo].pixels[index + 1];
+        //         var b = videos[whichVideo].pixels[index + 2];
+        //         var bright = (r + g + b) / 3;
+        //         var w = map(bright, 0, 255, 0, vScale);
 
-            noStroke();
-            fill(r, g, b);
+        //         noStroke();
+        //         fill(r, g, b);
 
-            ///----------------- XIX century traveler
+        //         ///----------------- XIX century traveler
 
-            // rectMode(CENTER); // not use, scrambles de visuals
-            rect(x * vScale, y * vScale, w, w);
-            // var rad = 100;
+        //         // rectMode(CENTER); // not use, scrambles de visuals
+        //         rect(x * vScale, y * vScale, w, w);
+        //         // var rad = 100;
 
-            ///----------------- XIX century traveler -- END
+        //         ///----------------- XIX century traveler -- END
 
 
-            ///----------------- just hiperpoesia
-            // if (keyIsDown(UP_ARROW)){
-            //     ellipse(x * vScale, y * vScale, w, w);
+        //         ///----------------- just hiperpoesia
+        //         // if (keyIsDown(UP_ARROW)){
+        //         //     ellipse(x * vScale, y * vScale, w, w);
 
-            // } else 
-            // ellipse(x * vScale, y * vScale, mouseX, mouseX);
+        //         // } else 
+        //         // ellipse(x * vScale, y * vScale, mouseX, mouseX);
 
-            ///----------------- just hiperpoesia -- END
+        //         ///----------------- just hiperpoesia -- END
+        //     }
+        // }
+
+        //-------------------- THIS WORKS
+
+        // OLD CODE WITH CIRCLES
+
+        // const stepSize = 30;
+        // // const stepSize = round(constrain(mouseX / 8, 6, 32));
+
+        // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
+        //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
+        //   console.log('x' + x);
+
+        // pixelColor = get(x, y);
+
+        //  console.log('pixel' + pixelColor );
+
+        // console.log( 'h: ' + height );
+        // console.log( 'w: ' + width );
+        // console.log( 'vh: ' + videos[whichVideo].height );
+        // console.log( 'vw: ' + videos[whichVideo].width );
+
+
+        //     const i = (y * videos[whichVideo].width + x * 4);
+
+        //     const darkness = (255 - videos[whichVideo].pixels[i * 4]) / 255;
+
+        //     const radius = stepSize * darkness;
+        //     // const radius = stepSize;
+
+
+        //     let r =  videos[whichVideo].pixels[0 + i];
+        //     let g =  videos[whichVideo].pixels[1 + i];
+        //     let b =  videos[whichVideo].pixels[2 + i];
+        //     let a =  videos[whichVideo].pixels[3 + i];
+
+        //     fill(r, g, b, a);
+        //     noStroke();
+        //     ellipse(x, y, radius, radius);
+        //   }
+
+        // }
+
+        /// finish loading pixels
+
+
+    } else {
+
+        if (randomFrameEffect) {
+            randomFrame();
         }
+
+        // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
+        image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+
     }
 
 
-    // OLD CODE WITH CIRCLES
-
-    // const stepSize = 30;
-    // // const stepSize = round(constrain(mouseX / 8, 6, 32));
-
-    // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
-    //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
-    //   console.log('x' + x);
-
-    // pixelColor = get(x, y);
-
-    //  console.log('pixel' + pixelColor );
-
-    // console.log( 'h: ' + height );
-    // console.log( 'w: ' + width );
-    // console.log( 'vh: ' + videos[whichVideo].height );
-    // console.log( 'vw: ' + videos[whichVideo].width );
-
-
-    //     const i = (y * videos[whichVideo].width + x * 4);
-
-    //     const darkness = (255 - videos[whichVideo].pixels[i * 4]) / 255;
-
-    //     const radius = stepSize * darkness;
-    //     // const radius = stepSize;
-
-
-    //     let r =  videos[whichVideo].pixels[0 + i];
-    //     let g =  videos[whichVideo].pixels[1 + i];
-    //     let b =  videos[whichVideo].pixels[2 + i];
-    //     let a =  videos[whichVideo].pixels[3 + i];
-
-    //     fill(r, g, b, a);
-    //     noStroke();
-    //     ellipse(x, y, radius, radius);
-    //   }
-
-    // }
-
-    /// finish loading pixels
-
-    // -------------------FIX THIS TO RUN RANDOM VIDEOS
-
-    //Plays random position based in framecount  
-    // if (frameCount % 120 == 0 || keyCode == UP_ARROW) {
-
-    //     console.log('Enter play random position');
-    //     videos[whichVideo].time(random() * videos[whichVideo].duration() - 2); //solo el random del cuadro
-
-    //     console.log('Video: ' + whichVideo + 'frame: ' + frameCount);
-
-    // }
-
-    // ----->>>>>>> VIDEO HERE!
-    // image(videos[whichVideo], 0, 0, width, height); //size and position of video
 
 }
 
@@ -546,20 +550,46 @@ function renderVideos() {
 
 // plays or pauses the video depending on current state
 
+function randomFrame() {
+
+    let playing = false;
+    // -------------------FIX THIS TO RUN RANDOM VIDEOS
+    // Plays random position based in framecount  
+
+    if (!playing) {
+        let timeToChangeFrame = Math.floor(random(videos[whichVideo].duration(), videos[whichVideo].duration() * 30)); // esto funciona //for(random(videos.length));
+
+        if (frameCount % timeToChangeFrame == 0 || keyCode == UP_ARROW) {
+
+            console.log('Enter play random position');
+            videos[whichVideo].time(random() * videos[whichVideo].duration() - 2); //solo el random del cuadro
+
+            console.log('Video: ' + whichVideo + 'frame: ' + frameCount);  
+
+            playing = true;
+
+        } 
+    }
+
+}
+
 function playTheVideo() {
+    // https://forum.processing.org/two/discussion/23870/p5js-problem-with-asynchronous-video-loading-playing
+
     console.log('playing video');
 
-    videos[whichVideo].loop();
-    videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
+    videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
+    // videos[whichVideo].play();
+    // videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
     videoSound(); // now is set to 0
 
 }
 
 function videoOver() {
     console.log("Pausing video now VIDEO OVER / Stage 1");
-    // videos[whichVideo].stop();
+    // videos[whichVideo].stop();// esto estaba comentado
     //videos[whichVideo].rewind();
-    // videos[whichVideo].hide();
+    // videos[whichVideo].hide(); // esto estaba comentado
     stage = 1;
 }
 
