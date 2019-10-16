@@ -16,10 +16,12 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = false;
+let videoEffects = true;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
-let oneVideo = false;
+let oneVideo = true;
+let cameraVideo = true;
+let OnlyCamera = false;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -40,13 +42,19 @@ var translateAPIKey = 'AIzaSyAGvEzCaMeaL_woHEsCo_w85802jZVuYnI';
 
 let translate = true;
 
+//----------------------------------------------------------- CAMERA --------
+
+// https://ml5js.github.io/ml5-examples/javascript/ImageClassification_Video/ // REVIEW
+
+let myCamera; //WEB CAM
+
+
 
 //----------------------------------------------------------- VIDEO ----------
 
 //VIDEO
 // https://p5js.org/reference/#/p5.MediaElement
 // https://creative-coding.decontextualize.com/video/
-// let myCamera; //WEB CAM
 
 let playing = false;
 
@@ -159,24 +167,27 @@ function preload() { // To add things that take time to load
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
 
     //CAMERA
-    // myCamera = createCapture(VIDEO);  //captures video from webcam
 
-    if (oneVideo) {
-        videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
-
-
+    if (OnlyCamera) {
+        myCamera = createCapture(VIDEO); //captures video from webcam
     } else {
-        videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
-        videos[1] = createVideo("videos/2.mp4");
-        videos[2] = createVideo("videos/3.mp4");
-        // videos[3] = createVideo("videos/4.mp4");
-        // videos[4] = createVideo("videos/5.mp4");
-        // videos[5] = createVideo("videos/6.mp4");
-        // videos[6] = createVideo("videos/7.mp4");
-        // videos[7] = createVideo("videos/8.mp4");
-        // videos[8] = createVideo("videos/9.mp4");
-        // videos[9] = createVideo("videos/10.mp4");
-
+        if (oneVideo) {
+            videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
+        } else {
+            videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
+            videos[1] = createVideo("videos/2.mp4");
+            videos[2] = createVideo("videos/3.mp4");
+            // videos[3] = createVideo("videos/4.mp4");
+            // videos[4] = createVideo("videos/5.mp4");
+            // videos[5] = createVideo("videos/6.mp4");
+            // videos[6] = createVideo("videos/7.mp4");
+            // videos[7] = createVideo("videos/8.mp4");
+            // videos[8] = createVideo("videos/9.mp4");
+            // videos[9] = createVideo("videos/10.mp4");
+        }
+        if (cameraVideo) {
+            myCamera = createCapture(VIDEO); //captures video from webcam
+        }
     }
 
 
@@ -223,40 +234,39 @@ function setup() {
     // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
     //variable = createVideo(['PATH/video1.mp4']);
 
-    if (!oneVideo) {
-        vScale = 1;
+    if (OnlyCamera) {} else {
+        if (!oneVideo) {
+            vScale = 1;
 
-        //Adjust video size // actually increses the accuracy of the prediction model
-        videos[0].size(width / vScale, height / vScale);
-        videos[1].size(width / vScale, height / vScale);
-        videos[2].size(width / vScale, height / vScale);
-        // videos[3].size(width / vScale, height / vScale);
-        // videos[4].size(width / vScale, height / vScale);
-        // videos[5].size(width / vScale, height / vScale);
-        // videos[6].size(width / vScale, height / vScale);
-        // videos[7].size(width / vScale, height / vScale);
-        // videos[8].size(width / vScale, height / vScale);
-        // videos[9].size(width / vScale, height / vScale);
+            //Adjust video size // actually increses the accuracy of the prediction model
+            videos[0].size(width / vScale, height / vScale);
+            videos[1].size(width / vScale, height / vScale);
+            videos[2].size(width / vScale, height / vScale);
+            // videos[3].size(width / vScale, height / vScale);
+            // videos[4].size(width / vScale, height / vScale);
+            // videos[5].size(width / vScale, height / vScale);
+            // videos[6].size(width / vScale, height / vScale);
+            // videos[7].size(width / vScale, height / vScale);
+            // videos[8].size(width / vScale, height / vScale);
+            // videos[9].size(width / vScale, height / vScale);
 
-        // 
-        videos[0].hide();
-        videos[1].hide();
-        videos[2].hide();
-        // videos[3].hide();
-        // videos[4].hide();
-        // videos[5].hide();
-        // videos[6].hide();
-        // videos[7].hide();
-        // videos[8].hide();
-        // videos[9].hide();
-
-
-    } else {
-        vScale = 20;
-        videos[0].size(width / vScale, height / vScale);
-        videos[0].hide();
+            // 
+            videos[0].hide();
+            videos[1].hide();
+            videos[2].hide();
+            // videos[3].hide();
+            // videos[4].hide();
+            // videos[5].hide();
+            // videos[6].hide();
+            // videos[7].hide();
+            // videos[8].hide();
+            // videos[9].hide();
+        } else {
+            vScale = 20;
+            videos[0].size(width / vScale, height / vScale);
+            videos[0].hide();
+        }
     }
-
 
 
     //-------------  ML5
@@ -264,6 +274,10 @@ function setup() {
 
     if (offline) {
         // Don't use any model to classify any video
+    } 
+    
+    if (OnlyCamera) {
+        myMobileNet.classify(myCamera, gotResults);
     } else {
         myMobileNet.classify(videos[0], gotResults);
     }
@@ -288,8 +302,6 @@ function draw() {
 
     background(0, 50); //antes 50
     // background(0);
-
-
 
     // MENU
     if (keyCode == 77) { //letter m
@@ -319,7 +331,13 @@ function draw() {
 
     //     renderVideos();
     // }
-    renderVideos();
+
+    if (OnlyCamera) {
+        //camera 
+    } else {
+        renderVideos();
+
+    }
 
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
@@ -709,9 +727,17 @@ function gotResults(err, results) {
 
             // ------------- VIDEO
             // ------------- clasiffy video with mobile net
-            setTimeout(() => myMobileNet.classify(videos[whichVideo], gotResults), 5000); //setTimeout to slow the results. we also added an arow function
-            // 3000 is too slowed to be read
-            // 5000 was kind of ok
+
+            if (OnlyCamera){
+                setTimeout(() => myMobileNet.classify(cameraVideo, gotResults), 5000); //setTimeout to slow the results. we also added an arow function
+                // 3000 is too slowed to be read
+                // 5000 was kind of ok
+            } else {
+                setTimeout(() => myMobileNet.classify(videos[whichVideo], gotResults), 5000); //setTimeout to slow the results. we also added an arow function
+                // 3000 is too slowed to be read
+                // 5000 was kind of ok
+            }
+           
         }); // end of generate
     } // end of results
 } //end of gotResults
