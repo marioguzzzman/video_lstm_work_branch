@@ -436,7 +436,7 @@ function renderVideos() {
     }
 
     if (videoEffects) {
-        pixelEfect();
+        pixelEffect();
     } else {
         if (randomFrameEffect) {
             randomFrame();
@@ -448,7 +448,7 @@ function renderVideos() {
 
 //--------------------------------------------------------- VIDEO FUNCTIONS
 
-function pixelEfect(){
+function pixelEffect(){
 
 
 
