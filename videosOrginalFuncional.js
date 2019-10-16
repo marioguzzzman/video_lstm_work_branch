@@ -17,7 +17,7 @@
 let offline = false; // disable text to test video
 let menu = true;
 let videoEffects = false;
-let randomFrameEffect = false;
+let randomFrameEffect = true;
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -42,6 +42,8 @@ let translate = true;
 //----------------------------------------------------------- VIDEO ----------
 
 //VIDEO
+// https://p5js.org/reference/#/p5.MediaElement
+// https://creative-coding.decontextualize.com/video/
 // let myCamera; //WEB CAM
 
 let playing = false;
@@ -490,6 +492,7 @@ function renderVideos() {
         //-------------------- THIS WORKS
 
         // OLD CODE WITH CIRCLES
+        // https://p5js.org/examples/dom-video-pixels.html
 
         // const stepSize = 30;
         // // const stepSize = round(constrain(mouseX / 8, 6, 32));
@@ -557,7 +560,7 @@ function randomFrame() {
     // Plays random position based in framecount  
 
     if (!playing) {
-        let timeToChangeFrame = Math.floor(random(videos[whichVideo].duration(), videos[whichVideo].duration() * 30)); // esto funciona //for(random(videos.length));
+        let timeToChangeFrame = Math.floor(random(videos[whichVideo].duration(), videos[whichVideo].duration() * 20)); // esto funciona //for(random(videos.length));
 
         if (frameCount % timeToChangeFrame == 0 || keyCode == UP_ARROW) {
 
@@ -575,13 +578,26 @@ function randomFrame() {
 
 function playTheVideo() {
     // https://forum.processing.org/two/discussion/23870/p5js-problem-with-asynchronous-video-loading-playing
-
-    console.log('playing video');
-
-    videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
-    // videos[whichVideo].play();
-    // videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
     videoSound(); // now is set to 0
+
+
+    if (!randomFrameEffect){
+        console.log('looping video');
+
+        videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
+        // videos[whichVideo].play();
+        // videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
+    } else {
+        console.log('playing video with random Frame');
+
+
+        // videos[whichVideo].time(random() * videos[whichVideo].duration() - 2);
+       
+        videos[whichVideo].loop().time(5); // time sets a place for the video to be played. it is expressed in seconds
+
+
+    }
+
 
 }
 
