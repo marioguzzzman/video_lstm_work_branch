@@ -20,8 +20,8 @@ let videoEffects = true;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
 let oneVideo = true;
-let cameraVideo = true;
-let OnlyCamera = false;
+let cameraVideo = false;
+let OnlyCamera = true; // GETS ERROR FROM GENERATOR
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -334,8 +334,13 @@ function draw() {
 
     if (OnlyCamera) {
         //camera 
+        console.log('only camera');
+        image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
+
+
     } else {
         renderVideos();
+        console.log('render video');
 
     }
 
@@ -378,49 +383,59 @@ function draw() {
 
 function renderVideos() {
 
-    if (playSimpleVideo) {
-        image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-        videos[0].volume(0.3);
+    if (cameraVideo){
+
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+
     } else {
-        //PLAY VIDEOS IN RANDOM
-        if (stage === 1) {
 
-            console.log('Stage 1');
-
-            if (frameCount % 50) {
-                console.log('pressing enter');
-
-                //pick random video from array
-                let azar = Math.floor(random(0, videos.length)); // esto funciona
-                whichVideo = azar; //for(random(videos.length)); //esto funciona
-
-                // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
-
-                console.log('video number: ' + whichVideo);
-
-                stage = 2;
-                playTheVideo();
-
-                // console.log('playTheVideoPATH');
-            }
-        }
-
-        if (videoEffects) {
-            if (randomFrameEffect) { // plays pixel + random
-                pixelEffect();
-                randomFrame();
-            } else {
-                pixelEffect();
-            }
+        if (playSimpleVideo) {
+            image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+            videos[0].volume(0.3);
         } else {
-            if (randomFrameEffect) {
-                randomFrame();
+            //PLAY VIDEOS IN RANDOM
+            if (stage === 1) {
+    
+                console.log('Stage 1');
+    
+                if (frameCount % 50) {
+                    console.log('pressing enter');
+    
+                    //pick random video from array
+                    let azar = Math.floor(random(0, videos.length)); // esto funciona
+                    whichVideo = azar; //for(random(videos.length)); //esto funciona
+    
+                    // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
+    
+                    console.log('video number: ' + whichVideo);
+    
+                    stage = 2;
+                    playTheVideo();
+    
+                    // console.log('playTheVideoPATH');
+                }
             }
-            // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
-            image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+    
+            if (videoEffects) {
+                if (randomFrameEffect) { // plays pixel + random
+                    pixelEffect();
+                    randomFrame();
+                } else {
+                    pixelEffect();
+                }
+            } else {
+                if (randomFrameEffect) {
+                    randomFrame();
+                }
+                // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
+                image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+            }
+    
         }
 
     }
+
+
 }
 
 //--------------------------------------------------------- VIDEO FUNCTIONS
