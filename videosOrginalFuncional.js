@@ -1,12 +1,9 @@
 // ------------------------------------------------------ TODO
 //CURRENTLY WORKING ON:
-//Setting random video play
-//Managing different efects for videos
 
-//RECORD TEXT
-//ADD WEBCAM
 //ADD CODE TO CHANGE BETWEEN WEBCAM AND VIDEO WHEN RECOGNIZING A FACE
 //MODULATE SPANISH VOICE
+// adding and taking out the voice and modulationg the tone and volume
 //ADD MENU
 //TODO increse sound length
 //AGREGAR RELOAD FUNCTION EVERY X SECONDS
@@ -19,8 +16,8 @@ let menu = true;
 let videoEffects = false;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
-let oneVideo = true;
-let cameraVideo = true;
+let oneVideo = false;
+let cameraVideo = false;
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -49,7 +46,6 @@ let translate = true;
 let myCamera; //WEB CAM
 
 
-
 //----------------------------------------------------------- VIDEO ----------
 
 //VIDEO
@@ -61,8 +57,9 @@ let playing = false;
 let stage = 1;
 let videos = [];
 let whichVideo = 0;
+let amountVideos = 3;
 
-var vScale; // scale of video // chech set up to adjust vscale acording to tipe of video effect
+var vScale = 1; // scale of video // chech set up to adjust vscale acording to tipe of video effect
 
 let pixelColor;
 
@@ -73,7 +70,6 @@ let writingOutput = true;
 let writer;
 let linesInPage = 5; // amount of lines in page
 let page = []; // text file writen
-
 
 let resultsReady = false;
 
@@ -128,6 +124,7 @@ let voice = 'Google español de Estados Unidos';
 
 let sounds = [];
 let otherSong;
+let amountOfSounds = 3;
 // let sound1;
 // let sound2;
 // let sound3;
@@ -163,36 +160,22 @@ function preload() { // To add things that take time to load
 
     // -------- DOES NOT WORK INPUT TEXTS
 
-
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
-
-    //CAMERA
 
     if (OnlyCamera) {
         myCamera = createCapture(VIDEO); //captures video from webcam
     } else {
         if (oneVideo) {
-            videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
+            videos[whichVideo] = createVideo("videos/1.mp4"); //captures video from videofile
         } else {
-            videos[0] = createVideo("videos/1.mp4"); //captures video from videofile
-            videos[1] = createVideo("videos/2.mp4");
-            videos[2] = createVideo("videos/3.mp4");
-            // videos[3] = createVideo("videos/4.mp4");
-            // videos[4] = createVideo("videos/5.mp4");
-            // videos[5] = createVideo("videos/6.mp4");
-            // videos[6] = createVideo("videos/7.mp4");
-            // videos[7] = createVideo("videos/8.mp4");
-            // videos[8] = createVideo("videos/9.mp4");
-            // videos[9] = createVideo("videos/10.mp4");
+            for (i = 0; i < amountVideos; i++) {
+                videos[i] = createVideo(`videos/${i + 1}.mp4`); //captures video from videofile
+            }
         }
-
         if (cameraVideo) {
             myCamera = createCapture(VIDEO); //captures video from webcam
         }
     }
-
-
-
 
     //LOAD MODEL LSTM
     if (translate) {
@@ -202,13 +185,12 @@ function preload() { // To add things that take time to load
     }
 
     //SOUND
-    // createConvolver('background_sound/drones.wav', soundReady);
-
-    sounds[1] = loadSound('background_sounds/drones.wav');
-    sounds[2] = loadSound('background_sounds/seven.wav');
-    sounds[0] = loadSound('background_sounds/pulse-modulation.wav');
-    // sounds[3] = loadSound('background_sound/eyes.wav');
-
+    for (i = 0; i < amountOfSounds; i++) {
+        sounds[i] = loadSound('background_sounds/drones.wav');
+        sounds[i] = loadSound('background_sounds/seven.wav');
+        sounds[i] = loadSound('background_sounds/pulse-modulation.wav');
+        // sounds[3] = loadSound('background_sound/eyes.wav');
+    }
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -242,41 +224,26 @@ function setup() {
             vScale = 1;
 
             //Adjust video size // actually increses the accuracy of the prediction model
-            videos[0].size(width / vScale, height / vScale);
-            videos[1].size(width / vScale, height / vScale);
-            videos[2].size(width / vScale, height / vScale);
-            // videos[3].size(width / vScale, height / vScale);
-            // videos[4].size(width / vScale, height / vScale);
-            // videos[5].size(width / vScale, height / vScale);
-            // videos[6].size(width / vScale, height / vScale);
-            // videos[7].size(width / vScale, height / vScale);
-            // videos[8].size(width / vScale, height / vScale);
-            // videos[9].size(width / vScale, height / vScale);
 
-            // 
-            videos[0].hide();
-            videos[1].hide();
-            videos[2].hide();
-            // videos[3].hide();
-            // videos[4].hide();
-            // videos[5].hide();
-            // videos[6].hide();
-            // videos[7].hide();
-            // videos[8].hide();
-            // videos[9].hide();
+            for (i = 0; i < videos.length; i++) {
+                videos[i].size(width / vScale, height / vScale);
+                videos[i].hide();
+            }
         } else {
             vScale = 20;
-            videos[0].size(width / vScale, height / vScale);
-            videos[0].hide();
+            videos[whichVideo].size(width / vScale, height / vScale);
+            videos[whichVideo].hide();
         }
 
         if (cameraVideo) {
 
-            vScale = 1;
+            vScale = 1000;
 
             // myCamera.hide(); //captures video from webcam
 
             myCamera.size(width / vScale, height / vScale);
+            // myCamera.size(width, height);
+
             myCamera.hide();
             // Assuming a 640 * 480 pixels camera
             // myCamera = 640;
@@ -353,16 +320,8 @@ function draw() {
     //     console.log('only camera');
     //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
 
-
-
-
-    // } else {
-    // renderVideos();
-    renderCamera();
-    // console.log('render video');
-
-    // }
-
+    renderVideos();
+    // renderCamera();
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
 
@@ -398,21 +357,7 @@ function draw() {
 // ------------------------------------------------------------------------------------------------------------
 
 function anotheEffectForCamera() {
-    // // https://github.com/processing/p5.js/issues/926
-    // var x, y;
-    // myCamera.loadPixels();
-    // // Divide by 2 and multiply index by 8 is to reduce the final resolution
-    // for (y = 0; y < height / 2; y++) {
-    //     for (x = 0; x < width / 2; x++) {
-    //         var idx = 4 * (y * width + x);
-    //         stroke([myCamera.pixels[idx],
-    //             myCamera.pixels[idx + 1],
-    //             myCamera.pixels[idx + 2],
-    //             myCamera.pixels[idx + 3]
-    //         ]);
-    //         point(x, y);
-    //     }
-    // }
+
     myCamera.loadPixels();
 
 
@@ -534,7 +479,7 @@ function renderCamera() {
 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
@@ -561,14 +506,17 @@ function renderVideos() {
     // if (cameraVideo) { //under video
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
 
+        renderCamera();
+
+
 
         // effectForCamera();
-        anotheEffectForCamera();
+        // anotheEffectForCamera();
 
     }
 
