@@ -1,9 +1,12 @@
 // ------------------------------------------------------ TODO
 //CURRENTLY WORKING ON:
+//Setting random video play
+//Managing different efects for videos
 
+//RECORD TEXT
+//ADD WEBCAM
 //ADD CODE TO CHANGE BETWEEN WEBCAM AND VIDEO WHEN RECOGNIZING A FACE
 //MODULATE SPANISH VOICE
-// adding and taking out the voice and modulationg the tone and volume
 //ADD MENU
 //TODO increse sound length
 //AGREGAR RELOAD FUNCTION EVERY X SECONDS
@@ -13,11 +16,11 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = false;
+let videoEffects = true;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
-let oneVideo = false;
-let cameraVideo = false;
+let oneVideo = true;
+let cameraVideo = true;
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -46,6 +49,7 @@ let translate = true;
 let myCamera; //WEB CAM
 
 
+
 //----------------------------------------------------------- VIDEO ----------
 
 //VIDEO
@@ -59,7 +63,7 @@ let videos = [];
 let whichVideo = 0;
 let amountVideos = 3;
 
-var vScale = 1; // scale of video // chech set up to adjust vscale acording to tipe of video effect
+var vScale = 20; // scale of video // chech set up to adjust vscale acording to tipe of video effect
 
 let pixelColor;
 
@@ -70,6 +74,7 @@ let writingOutput = true;
 let writer;
 let linesInPage = 5; // amount of lines in page
 let page = []; // text file writen
+
 
 let resultsReady = false;
 
@@ -124,7 +129,6 @@ let voice = 'Google español de Estados Unidos';
 
 let sounds = [];
 let otherSong;
-let amountOfSounds = 3;
 // let sound1;
 // let sound2;
 // let sound3;
@@ -160,21 +164,27 @@ function preload() { // To add things that take time to load
 
     // -------- DOES NOT WORK INPUT TEXTS
 
+
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
 
-    if (OnlyCamera) {
+    //CAMERAS
+    if (OnlyCamera || cameraVideo) {
         myCamera = createCapture(VIDEO); //captures video from webcam
+        console.log('CAMERA ON');
+    }
+
+    // VIDEOS
+    if (oneVideo) {
+        videos[whichVideo] = createVideo("videos/1.mp4"); //captures video from videofile
+        console.log('ONE VIDEO ON');
     } else {
-        if (oneVideo) {
-            videos[whichVideo] = createVideo("videos/1.mp4"); //captures video from videofile
-        } else {
-            for (i = 0; i < amountVideos; i++) {
-                videos[i] = createVideo(`videos/${i + 1}.mp4`); //captures video from videofile
-            }
+        console.log('MULTI VIDEO ON');
+
+        for (i = 0; i < amountVideos; i++) {
+            videos[i] = createVideo(`videos/random_narrative_videos/${i + 1}.mp4`); //captures video from videofile
         }
-        if (cameraVideo) {
-            myCamera = createCapture(VIDEO); //captures video from webcam
-        }
+        console.log('x Videos: ' + videos.length);
+
     }
 
     //LOAD MODEL LSTM
@@ -185,12 +195,13 @@ function preload() { // To add things that take time to load
     }
 
     //SOUND
-    for (i = 0; i < amountOfSounds; i++) {
-        sounds[i] = loadSound('background_sounds/drones.wav');
-        sounds[i] = loadSound('background_sounds/seven.wav');
-        sounds[i] = loadSound('background_sounds/pulse-modulation.wav');
-        // sounds[3] = loadSound('background_sound/eyes.wav');
-    }
+    // createConvolver('background_sound/drones.wav', soundReady);
+
+    sounds[1] = loadSound('background_sounds/drones.wav');
+    sounds[2] = loadSound('background_sounds/seven.wav');
+    sounds[0] = loadSound('background_sounds/pulse-modulation.wav');
+    // sounds[3] = loadSound('background_sound/eyes.wav');
+
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -208,48 +219,30 @@ function setup() {
 
     //-------------VIDEO 
 
-    //TODO add videocamera test this code
-    // CAMERA
-    // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
-
-
-    // specify multiple formats for different browsers
-    // variable = createVideo(['PATH/video.mov', 'PATH/variable.webm']); //from p5js -> just plays the video
-    //variable = createVideo(['PATH/video1.mp4']);
-
-    if (OnlyCamera) {
+    if (OnlyCamera || cameraVideo) {
         //on;y camera
+        // vScale = 1;
+
+        myCamera.size(width / vScale, height / vScale);
+        myCamera.hide();
+    }
+
+
+    if (oneVideo) {
+        vScale = 20;
+        videos[whichVideo].size(width / vScale, height / vScale);
+        videos[whichVideo].hide();
     } else {
-        if (!oneVideo) {
-            vScale = 1;
+        // vScale = 1;
 
+        for (i = 0; i < videos.length; i++) {
             //Adjust video size // actually increses the accuracy of the prediction model
-
-            for (i = 0; i < videos.length; i++) {
-                videos[i].size(width / vScale, height / vScale);
-                videos[i].hide();
-            }
-        } else {
-            vScale = 20;
-            videos[whichVideo].size(width / vScale, height / vScale);
-            videos[whichVideo].hide();
-        }
-
-        if (cameraVideo) {
-
-            vScale = 1000;
-
-            // myCamera.hide(); //captures video from webcam
-
-            myCamera.size(width / vScale, height / vScale);
-            // myCamera.size(width, height);
-
-            myCamera.hide();
-            // Assuming a 640 * 480 pixels camera
-            // myCamera = 640;
-            // myCamera = 480;
+            videos[i].size(width / vScale, height / vScale);
+            videos[i].hide();
         }
     }
+
+
 
 
     //-------------  ML5
@@ -269,9 +262,6 @@ function setup() {
     // myDiv = createDiv('...'); //create only one Div so we can see only one result
     // // myDiv.parent('#wraper');
     // myDivGen = createDiv('...'); //create only one Div so we can see only one result
-
-    console.log('x Videos: ' + videos.length);
-
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -280,48 +270,8 @@ function setup() {
 
 
 function draw() {
-    // console.log('Enter draw...');
-    // console.log('video: ' + whichVideo);
-
     background(0, 50); //antes 50
-    // background(0);
-
-    // MENU
-    if (keyCode == 77) { //letter m
-        textSize(18);
-        fill(255);
-        noStroke();
-        textLeading(30);
-        textAlign(LEFT);
-        let menu = "Menu: \n Render Video =  space bar \n Set random Video = Enter \n Black Screen-random-number = Up arrow \n Talk =s ";
-        text(menu, windowWidth / 2, windowHeight / 2 + 100, 350, 400);
-
-    } else {
-
-
-    }
-
-
-    // ------------------ Display VIDEO 
-
-    // if (keyCode == 32) { //space
-
-    //     //Draw something especial
-    //     //  renderVideos();
-
-    // } else {
-    //     //  draw by default
-
-    //     renderVideos();
-    // }
-
-    // if (OnlyCamera) {
-    //     //camera 
-    //     console.log('only camera');
-    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
-
-    renderVideos();
-    // renderCamera();
+    menuComands();
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
 
@@ -331,17 +281,22 @@ function draw() {
         // text('audio is enabled', width/2, height/2);
     }
 
+    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
+    renderCamera();
+
+    renderVideos();
+
     // ------------------ Display TEXT from Model
 
     if (resultsReady) {
         DoText();
-
 
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
         } else {
             //nothing
         }
+
         // talk();
 
         // DoTextHiperpoesia();
@@ -357,7 +312,21 @@ function draw() {
 // ------------------------------------------------------------------------------------------------------------
 
 function anotheEffectForCamera() {
-
+    // // https://github.com/processing/p5.js/issues/926
+    // var x, y;
+    // myCamera.loadPixels();
+    // // Divide by 2 and multiply index by 8 is to reduce the final resolution
+    // for (y = 0; y < height / 2; y++) {
+    //     for (x = 0; x < width / 2; x++) {
+    //         var idx = 4 * (y * width + x);
+    //         stroke([myCamera.pixels[idx],
+    //             myCamera.pixels[idx + 1],
+    //             myCamera.pixels[idx + 2],
+    //             myCamera.pixels[idx + 3]
+    //         ]);
+    //         point(x, y);
+    //     }
+    // }
     myCamera.loadPixels();
 
 
@@ -479,7 +448,7 @@ function renderCamera() {
 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
@@ -506,17 +475,14 @@ function renderVideos() {
     // if (cameraVideo) { //under video
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
 
-        renderCamera();
-
-
 
         // effectForCamera();
-        // anotheEffectForCamera();
+        anotheEffectForCamera();
 
     }
 
@@ -599,6 +565,7 @@ function pixelEffect() {
 
 
     // PIXELS // THIS WORKS
+    vScale = 20;
     videos[whichVideo].loadPixels();
 
     for (var y = 0; y < videos[whichVideo].height; y++) {
@@ -1199,6 +1166,20 @@ function DoTextHiperpoesia() {
     fill(255, 255, 64);
 
     // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
+}
+
+// ------------------------------- MENU
+
+function menuComands() {
+    if (keyCode == 77) { //letter m
+        textSize(18);
+        fill(255);
+        noStroke();
+        textLeading(30);
+        textAlign(LEFT);
+        let menu = "Menu: \n Render Video =  space bar \n Set random Video = Enter \n Black Screen-random-number = Up arrow \n Talk =s ";
+        text(menu, windowWidth / 2, windowHeight / 2 + 100, 350, 400);
+    }
 }
 
 
