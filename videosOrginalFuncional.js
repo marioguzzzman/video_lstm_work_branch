@@ -15,11 +15,12 @@
 //------------------------------------------------------- TESTING 
 
 let offline = false; // disable text to test video
+
 let menu = true;
 let videoEffects = false;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
-let oneVideo = true;
+let oneVideo = true; // efects wonk work when false
 
 
 let bothCameraAndVideo = true;
@@ -264,42 +265,28 @@ function draw() {
     menuComands();
 
     // ENABLE AUDIOCONTEXT REQUIREMENT FOR BROWSER
-
     if (getAudioContext().state !== 'running') {
         text('click to start audio', width / 2, height / 2);
-    } else {
-        // text('audio is enabled', width/2, height/2);
     }
-
-    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
 
     if (OnlyCamera) {
         renderCamera();
-
     } else {
         renderVideos();
     }
 
-
     // ------------------ Display TEXT from Model
-
     if (resultsReady) {
+        // DoTextHiperpoesia();
+        // console.log(rnnSub);
         DoText();
 
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
-        } else {
-            //nothing
         }
 
         // talk();
-
-        // DoTextHiperpoesia();
-
-        // console.log(rnnSub);
     }
-
-
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -310,8 +297,8 @@ function anotheEffectForCamera() {
     // https://codeburst.io/instagram-filters-with-javascript-p5-js-83f28c9f7fda
     myCamera.loadPixels();
 
-
     var stepSize = 20; //stepSize = number of pixels to print.
+    var pixelSize = 20;
     for (var x = 0; x < myCamera.width; x += stepSize) {
         for (var y = 0; y < myCamera.height; y += stepSize) {
             var index = ((y * myCamera.width) + x) * 4; //  get the index of the current pixel using its (x, y) coordinates.
@@ -323,8 +310,16 @@ function anotheEffectForCamera() {
             var redVal = myCamera.pixels[index];
             var greenVal = myCamera.pixels[index + 1];
             var blueVal = myCamera.pixels[index + 2];
-            fill(redVal * 2, greenVal, blueVal);
-            ellipse(x, y, stepSize, stepSize);
+
+            var bright = (redVal + greenVal + blueVal) / 3;
+            var w = map(bright, 0, 255, 0, stepSize);
+
+            noStroke();
+
+            fill(redVal, greenVal, blueVal, 150); // face becomes lit up, the rest is transparent
+            // tint(255, 255, 255, 100);
+
+            ellipse(x, y, w, w);
         }
     }
 }
@@ -333,13 +328,10 @@ function renderCamera() {
 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
-
-
-        // effectForCamera();
 
         if (cameraEffect) {
             anotheEffectForCamera();
@@ -357,18 +349,6 @@ function gotResultsCam() {
 
 function renderVideos() {
 
-    // if (OnlyCamera) {
-
-    //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
-
-    // } else if (cameraVideo) {
-    //     image(myCamera, 0, 0, 300, 300); //size and position of video 
-    // }
-    // if (cameraVideo) { //under video
-    if (cameraVideo) { //under video
-        // console.log('camera VIdeo');
-        renderCamera()
-    }
 
     if (playSimpleVideo) {
         // console.log('playing simple video');
@@ -393,11 +373,6 @@ function renderVideos() {
 
                 stage = 2;
                 playTheVideo();
-
-
-
-
-                // console.log('playTheVideoPATH');
             }
         }
 
@@ -408,14 +383,28 @@ function renderVideos() {
             } else {
                 pixelEffect();
                 //camera video positioned here is also behind video
-
             }
         } else {
             if (randomFrameEffect) {
                 randomFrame();
             }
+
+            if (cameraVideo) { //under video
+                // console.log('camera VIdeo');
+                renderCamera()
+            }
+            // * Camera gets in the back of video
             // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
             image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+            tint(255, 255, 255); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
+
+            // * Camera gets in front of video
+            if (cameraVideo) { //under video
+                // console.log('camera VIdeo');
+                renderCamera()
+            }
+
+
 
         }
 
@@ -434,7 +423,6 @@ function pixelEffect() {
     videos[whichVideo].loadPixels();
 
     for (var y = 0; y < videos[whichVideo].height; y++) {
-
         for (var x = 0; x < videos[whichVideo].width; x++) {
 
             var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
