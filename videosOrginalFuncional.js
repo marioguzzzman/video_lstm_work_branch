@@ -16,12 +16,18 @@
 
 let offline = false; // disable text to test video
 let menu = true;
-let videoEffects = true;
+let videoEffects = false;
 let randomFrameEffect = false;
 let playSimpleVideo = false;
 let oneVideo = true;
+
+
+let bothCameraAndVideo = true;
+
 let cameraVideo = true;
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
+let cameraEffect = true;
+
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
@@ -49,7 +55,6 @@ let translate = true;
 let myCamera; //WEB CAM
 
 
-
 //----------------------------------------------------------- VIDEO ----------
 
 //VIDEO
@@ -63,7 +68,8 @@ let videos = [];
 let whichVideo = 0;
 let amountVideos = 3;
 
-var vScale = 20; // scale of video // chech set up to adjust vscale acording to tipe of video effect
+var vScale = 1; // scale of video // chech set up to adjust vscale acording to tipe of video effect  //Adjust video size // actually increses the accuracy of the prediction model
+
 
 let pixelColor;
 
@@ -126,14 +132,8 @@ let voice = 'Google español de Estados Unidos';
 
 
 //BACKGROUND MUSIC
-
 let sounds = [];
 let otherSong;
-// let sound1;
-// let sound2;
-// let sound3;
-// let sound4;
-
 
 //------------------------------------------------------------- WEB SETTINGS ----------
 
@@ -219,30 +219,26 @@ function setup() {
 
     //-------------VIDEO 
 
-    if (OnlyCamera || cameraVideo) {
-        //on;y camera
-        // vScale = 1;
+    if (videoEffects) {
+        vScale = 20;
+    } else {
+        vScale = 1;
+    }
 
+    if (OnlyCamera || cameraVideo) {
         myCamera.size(width / vScale, height / vScale);
         myCamera.hide();
     }
 
-
     if (oneVideo) {
-        vScale = 20;
         videos[whichVideo].size(width / vScale, height / vScale);
         videos[whichVideo].hide();
     } else {
-        // vScale = 1;
-
         for (i = 0; i < videos.length; i++) {
-            //Adjust video size // actually increses the accuracy of the prediction model
             videos[i].size(width / vScale, height / vScale);
             videos[i].hide();
         }
     }
-
-
 
 
     //-------------  ML5
@@ -252,16 +248,10 @@ function setup() {
         // Don't use any model to classify any video
     }
 
-    if (OnlyCamera) {
-        myMobileNet.classify(myCamera, gotResults);
-    } else {
-        myMobileNet.classify(videos[0], gotResults);
+    if (OnlyCamera || cameraVideo) {
+        myMobileNet.classify(myCamera, gotResultsCam);
     }
-
-    // DO SOME DIVS
-    // myDiv = createDiv('...'); //create only one Div so we can see only one result
-    // // myDiv.parent('#wraper');
-    // myDivGen = createDiv('...'); //create only one Div so we can see only one result
+    myMobileNet.classify(videos[0], gotResults);
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -282,9 +272,14 @@ function draw() {
     }
 
     //     image(myCamera, 0, 0, width, height); // GETS ERROR WHEN DOING THIS //  GETS ERROR FROM GENERATOR
-    renderCamera();
 
-    renderVideos();
+    if (OnlyCamera) {
+        renderCamera();
+
+    } else {
+        renderVideos();
+    }
+
 
     // ------------------ Display TEXT from Model
 
@@ -312,28 +307,14 @@ function draw() {
 // ------------------------------------------------------------------------------------------------------------
 
 function anotheEffectForCamera() {
-    // // https://github.com/processing/p5.js/issues/926
-    // var x, y;
-    // myCamera.loadPixels();
-    // // Divide by 2 and multiply index by 8 is to reduce the final resolution
-    // for (y = 0; y < height / 2; y++) {
-    //     for (x = 0; x < width / 2; x++) {
-    //         var idx = 4 * (y * width + x);
-    //         stroke([myCamera.pixels[idx],
-    //             myCamera.pixels[idx + 1],
-    //             myCamera.pixels[idx + 2],
-    //             myCamera.pixels[idx + 3]
-    //         ]);
-    //         point(x, y);
-    //     }
-    // }
+    // https://codeburst.io/instagram-filters-with-javascript-p5-js-83f28c9f7fda
     myCamera.loadPixels();
 
 
-    var stepSize = 20;
+    var stepSize = 20; //stepSize = number of pixels to print.
     for (var x = 0; x < myCamera.width; x += stepSize) {
         for (var y = 0; y < myCamera.height; y += stepSize) {
-            var index = ((y * myCamera.width) + x) * 4;
+            var index = ((y * myCamera.width) + x) * 4; //  get the index of the current pixel using its (x, y) coordinates.
 
             // for (var x = 0; x < myCamera.width; x += stepSize) {
             //     for (var y = 0; y < myCamera.heigt; y += stepSize) {
@@ -348,102 +329,6 @@ function anotheEffectForCamera() {
     }
 }
 
-
-function effectForCamera() {
-
-
-    // PIXELS // THIS WORKS
-    myCamera.loadPixels();
-
-    for (var y = 0; y < myCamera.height; y++) {
-
-        for (var x = 0; x < myCamera.width; x++) {
-
-            var index = (myCamera.width - x + 1 + (y * myCamera.width)) * 4;
-
-            var r = myCamera.pixels[index + 0];
-            var g = myCamera.pixels[index + 1];
-            var b = myCamera.pixels[index + 2];
-            var bright = (r + g + b) / 3;
-            var w = map(bright, 0, 255, 0, vScale);
-
-            noStroke();
-            fill(r, g, b);
-
-            ///----------------- XIX century traveler
-
-            // rectMode(CENTER); // not use, scrambles de visuals
-            rect(x * vScale, y * vScale, w, w);
-            // var rad = 100;
-
-            ///----------------- XIX century traveler -- END
-
-
-            ///----------------- just hiperpoesia
-            // if (keyIsDown(UP_ARROW)){
-            //     ellipse(x * vScale, y * vScale, w, w);
-
-            // } else 
-            // ellipse(x * vScale, y * vScale, mouseX, mouseX);
-
-            ///----------------- just hiperpoesia -- END
-        }
-    }
-
-
-    // OLD CODE WITH CIRCLES
-    // https://p5js.org/examples/dom-video-pixels.html
-
-
-    // myCamera.loadPixels();
-
-
-    // let stepSize = 30;
-    // // const stepSize = round(constrain(mouseX / 8, 6, 32));
-
-    // for (var y = 0; y < myCamera.height; y++) {
-
-    //     for (var x = 0; x < myCamera.width; x++) {
-
-    //         // var index = (myCamera.width - x + 1 + (y * myCamera.width)) * 4;
-    //         const i = (y * myCamera.width + x * 4);
-
-
-
-    //         // var r = myCamera.pixels[index + 0];
-    //         // var g = myCamera.pixels[index + 1];
-    //         // var b = myCamera.pixels[index + 2];
-    //         // let a = myCamera.pixels[index + 3];
-
-    //         // var bright = (r + g + b) / 3;
-    //         // var w = map(bright, 0, 255, 0, stepSize);
-
-
-    //         const darkness = (255 - myCamera.pixels[i * 4]) / 255;
-
-    //         // const radius = stepSize * darkness;
-    //         const radius = stepSize;
-
-
-    //         let r1 = myCamera.pixels[0 + i];
-    //         let g1 = myCamera.pixels[1 + i];
-    //         let b1 = myCamera.pixels[2 + i];
-    //         let a1 = myCamera.pixels[3 + i];
-
-    //         noStroke();
-    //         fill(r1, g1, b1, a1);
-
-    //         // rectMode(CENTER); // not use, scrambles de visuals
-    //         ellipse(x * stepSize, y * stepSize, radius, radius);
-    //         // var rad = 100;
-    //     }
-    // }
-
-    // / finish loading pixels
-
-
-}
-
 function renderCamera() {
 
     if (cameraVideo) { //under video
@@ -455,13 +340,20 @@ function renderCamera() {
 
 
         // effectForCamera();
-        anotheEffectForCamera();
+
+        if (cameraEffect) {
+            anotheEffectForCamera();
+        }
 
     }
 }
 
 //--------------------------------------------------------- 
 //--------------------------------------------------------- RENDER VIDEOS
+
+function gotResultsCam() {
+
+}
 
 function renderVideos() {
 
@@ -475,15 +367,7 @@ function renderVideos() {
     // if (cameraVideo) { //under video
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-        // filter(INVERT);
-        // filter(POSTERIZE, 3);
-        // filter(BLUR, 3);
-
-
-        // effectForCamera();
-        anotheEffectForCamera();
-
+        renderCamera()
     }
 
     if (playSimpleVideo) {
@@ -546,26 +430,7 @@ function renderVideos() {
 
 function pixelEffect() {
 
-
-
-    // / -------- to load pixels
-
-    // vid.loadPixels();
-    // for (var y = 0; y < height; y += 8) {
-    //   for (var x = 0; x < width; x += 8) {
-    //     var offset = ((y*width)+x)*4;
-    //     fill(vid.pixels[offset],
-    //       vid.pixels[offset+1],
-    //       vid.pixels[offset+2]);
-    //     rect(x, y, 8, 8); 
-    //   }
-    // }
-
-
-
-
     // PIXELS // THIS WORKS
-    vScale = 20;
     videos[whichVideo].loadPixels();
 
     for (var y = 0; y < videos[whichVideo].height; y++) {
@@ -646,6 +511,17 @@ function pixelEffect() {
     // }
 
     /// finish loading pixels
+
+
+
+    // / -------- CODE to load pixels
+    // vid.loadPixels();
+    // for (var y = 0; y < height; y += 8) {
+    //   for (var x = 0; x < width; x += 8) {
+    //     var offset = ((y*width)+x)*4;
+    // * code for effect
+    //   }
+    // }
 
 }
 
