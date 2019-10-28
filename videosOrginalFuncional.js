@@ -18,16 +18,16 @@ let offline = false; // disable text to test video
 
 let menu = true;
 let videoEffects = false;
-let randomFrameEffect = false;
+let randomFrameEffect = true;
 let playSimpleVideo = false;
 let oneVideo = true; // efects wonk work when false
 
 
-let bothCameraAndVideo = true;
+let bothCameraAndVideo = false;
 
-let cameraVideo = true;
+let cameraVideo = false; //estaba true
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
-let cameraEffect = true;
+let cameraEffect = false; // estaba true
 
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -103,6 +103,15 @@ let sourceText = ' ';
 let textSpeed = 0;
 
 
+//TEXTS 
+let textToLoad;
+let txt;
+var count = 0;
+var totalSentences;
+
+
+
+
 // //--------------Connectors text XIX CENTURY TRAVELER
 // let entrance = [ 'I think this is a ', 'Sometimes when I find a ', 'Later on, I whould think of this ', 'Although I don\'t believe that this is a ', 'But, if you wander through the ', 'Last time I saw a ', 'I couldn\'t believe a ', 'I feel I already saw a ', 'Just after a ', 'Before this ', 'After encountering this ', 'Also, this ', 'Later on, the ', 'Above all, this ', ];
 
@@ -150,18 +159,7 @@ function preload() { // To add things that take time to load
 
     // -------- DOES NOT WORK INPUT TEXTS
 
-    // inputTexts = loadStrings('subTexts.txt'); // texto en donde leer
-
-    // // inputTexts = getItem('subTexts.txt');
-    // // if (inputTexts === null) {
-    // //     inputTexts = '';
-    // // }
-
-    // inputTexts = inputTexts[Math.floor(random(0, middle.length))];
-
-    // console.log('entrance: ' + entrance);
-    // console.log('middle: ' + inputTexts); // not working
-    // console.log(inputTexts);
+    textToLoad = loadStrings('subTexts.txt', txtLoaded);
 
     // -------- DOES NOT WORK INPUT TEXTS
 
@@ -275,12 +273,14 @@ function draw() {
         renderVideos();
     }
 
+    extraText();
+
+
     // ------------------ Display TEXT from Model
     if (resultsReady) {
         // DoTextHiperpoesia();
         // console.log(rnnSub);
-        DoText();
-
+        // DoText();
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
         }
@@ -303,9 +303,6 @@ function anotheEffectForCamera() {
         for (var y = 0; y < myCamera.height; y += stepSize) {
             var index = ((y * myCamera.width) + x) * 4; //  get the index of the current pixel using its (x, y) coordinates.
 
-            // for (var x = 0; x < myCamera.width; x += stepSize) {
-            //     for (var y = 0; y < myCamera.heigt; y += stepSize) {
-            //         var index = ((y * myCamera.width) + x) * 4;
             // The code for your filter will go here!
             var redVal = myCamera.pixels[index];
             var greenVal = myCamera.pixels[index + 1];
@@ -316,8 +313,11 @@ function anotheEffectForCamera() {
 
             noStroke();
 
-            fill(redVal, greenVal, blueVal, 150); // face becomes lit up, the rest is transparent
+            // fill(redVal, greenVal, blueVal, 150); // face becomes lit up, the rest is transparent
+            fill(redVal, greenVal, blueVal); // face becomes lit up, the rest is transparent
+
             // tint(255, 255, 255, 100);
+
 
             ellipse(x, y, w, w);
         }
@@ -328,7 +328,7 @@ function renderCamera() {
 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
@@ -348,8 +348,11 @@ function gotResultsCam() {
 }
 
 function renderVideos() {
-
-
+    // * Camera gets in the back of video
+    //   if (cameraVideo) { //under video
+    //     // console.log('camera VIdeo');
+    //     renderCamera()
+    // }
     if (playSimpleVideo) {
         // console.log('playing simple video');
         image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
@@ -389,14 +392,11 @@ function renderVideos() {
                 randomFrame();
             }
 
-            if (cameraVideo) { //under video
-                // console.log('camera VIdeo');
-                renderCamera()
-            }
-            // * Camera gets in the back of video
             // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
             image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-            tint(255, 255, 255); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
+            // tint(255, 255, 255); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
+
+            // tint(255, 255, 255, 100); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
 
             // * Camera gets in front of video
             if (cameraVideo) { //under video
@@ -425,7 +425,12 @@ function pixelEffect() {
     for (var y = 0; y < videos[whichVideo].height; y++) {
         for (var x = 0; x < videos[whichVideo].width; x++) {
 
-            var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
+            // for (var y = 0; y < videos[whichVideo].height; y+= 1) {
+            //     for (var x = 0; x < videos[whichVideo].width; x+= 1) {
+
+            // var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
+
+            var index = ((y * videos[whichVideo].width) + x) * 4;
 
             var r = videos[whichVideo].pixels[index + 0];
             var g = videos[whichVideo].pixels[index + 1];
@@ -648,13 +653,37 @@ function gotResults(err, results) {
             //NOTE:
             // Seed needs to be the reading of the elements in an array. 
             //After 3 tuns the array starts again
+            // https://regex101.com/
 
-            var initRegx = rnnSub; // The String the search in
+            // var initRegx = rnnSub; // The String the search in
+            var initRegx = 'hola". "adios.alklk jj ojoj ojoj'; // The String the search in
+
             // var regex = /(\W+)/; // The regex  
             // var resultsRegx = initRegx.match(regex); // Execute the search
-            var regex = initRegx.replace(/\b[a-z]{4,6}\b/gi, replacer);
+
+            //dividir en palabras, espacios
+            // si hay un punto, a azar dar enter o nada
+            // si hay comillas, en tres o 5 paavbras agregar otras comillas.
+
+            // var regex = initRegx.replace(/\b[^\saeiou]\b/gi, ''); //reemplaza consonantes sueltas por x FUNCIONA
+
+            // var regex = initRegx.replace(/\.(\s*)([a-z])/, \.\U \1 \2); //grupo uno mathea culquier cantidad de espacios y el grupo dos matchea letras despues de espacios y las hace uppercase...despues hacer uqe e grupo 1 me lo cambie por enter
+
+            // var regex = initRegx.replace(/\"\s*([Aa-zZ]+\s*){1,4}/, \"\1\"); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
+            var regex = initRegx.replace(/\"\s*([A-Za-z.]+\s*){1,4}/, '" "'); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
+
+            // hacer que al azar eliga desplegar entre 5 y 10 palabras
+
+            // al azar, elegir entre 1 y 3 cosas y despues cortar
+
+
+
+
+            // var regex = initRegx.replace(/\b[a-z]{4,6}\b/gi, replacer);
+            //
 
             var words = initRegx.split(regex);
+
             console.log('Total words: ' + words.length);
             // console.log('resultRegx: ' + resultsRegx);
             console.log('words in regx: ' + words);
@@ -733,6 +762,8 @@ function gotResults(err, results) {
 
 //--------------------------------------------------------- REPLACER ARTIFICAL EDITOR
 
+
+
 function replacer(match) {
     var len = match.length;
     // Four letter words become uppercase
@@ -754,6 +785,84 @@ function replacer(match) {
 
 
 //--------------------------------------------------------- TEXT DISPLAY
+
+function txtLoaded(textToLoad) {
+
+    console.log('TEXT READY');
+    // Here we pass in a line break to retain formatting
+    var txt = join(textToLoad, '\n');
+
+    // var sentenceDelim = '.:;?!';
+    // var sentences = splitTokens(txt, sentenceDelim); //gives me 
+    // var totalSentences = sentences.length;
+
+    // console.log('SENTENCES ' + txt);
+    // console.log('SENTENCES ' + totalSentences);
+
+
+    return txt;
+}
+
+function extraText() {
+    // console.log('texto importado:' + textToLoad );
+    // TERMINAL TEXT
+    let posXtextT = windowWidth - (windowWidth - 100);
+    let posYtextT = windowHeight - 700;
+    let w = 450;
+    let h = 600;
+    let color = 'rgba(100%,0%,100%,0.5)';
+
+    textAlign(CENTER);
+
+    // textFont("Arial");
+    textFont('Staatliches');
+
+    textSize(35);
+    fill(color);
+    noStroke();
+    textLeading(45);
+
+    var txt = join(textToLoad, '\n');
+
+    var sentenceDelim = '.:;?!';
+    var sentences = splitTokens(txt, sentenceDelim); //gives me array
+    totalSentences = sentences.length;
+
+    // console.log('SENTENCES ' + txt);
+    // console.log('SENTENCES ' + totalSentences);
+
+    // var messageRegex = message.replace(/\,/gi, ',\n'); //replace , for enter
+
+    // Speed of the text being generated
+    if (textSpeed < totalSentences * 4) {
+        textSpeed += 0.2;
+    } else {
+        textSpeed = 0;
+        textSpeed += 0.3;
+    }
+
+    var startWriting = 0;
+    var right = startWriting + textSpeed;
+    // text(sentences[1].substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+
+    // text(sentences[1], posXtextT, posYtextT + 100, w, h);
+
+
+    if (keyPressed) {
+        text(sentences[count].substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+        console.log('dotdokedonede ' + count);
+    }
+}
+
+
+function keyPressed() {
+    count++;
+    if (count == totalSentences) {
+        count = 0;
+    }
+}
+
+// ---------------------------------------
 
 function DoText() {
     // TERMINAL TEXT
