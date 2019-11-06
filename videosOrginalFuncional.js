@@ -18,14 +18,14 @@ let offline = false; // disable text to test video
 
 let menu = true;
 let videoEffects = false;
-let randomFrameEffect = true;
+let randomFrameEffect = false;
 let playSimpleVideo = false;
-let oneVideo = true; // efects wonk work when false
+let oneVideo = false; // efects wonk work when false
 
 
 let bothCameraAndVideo = false;
 
-let cameraVideo = false; //estaba true
+let cameraVideo = true; //estaba true
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
 let cameraEffect = false; // estaba true
 
@@ -810,15 +810,16 @@ function extraText() {
     let posYtextT = windowHeight - 700;
     let w = 450;
     let h = 600;
-    let color = 'rgba(100%,0%,100%,0.5)';
+    // let color = '228, 0, 124';
 
-    textAlign(CENTER);
+    textAlign(LEFT);
 
-    // textFont("Arial");
+    textFont("Arial");
     textFont('Staatliches');
+    textFont('Press Start 2P');
 
     textSize(35);
-    fill(color);
+    fill(228, 0, 124); // rosa mexicano
     noStroke();
     textLeading(45);
 
@@ -850,7 +851,7 @@ function extraText() {
 
     if (keyPressed) {
         text(sentences[count].substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-        console.log('dotdokedonede ' + count);
+        console.log('COUNT LINES' + count);
     }
 }
 
