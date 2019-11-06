@@ -17,17 +17,17 @@
 let offline = false; // disable text to test video
 
 let menu = true;
-let videoEffects = false;
+let videoEffects = true;
 let randomFrameEffect = false;
-let playSimpleVideo = false;
-let oneVideo = false; // efects wonk work when false
+let playSimpleVideo = false; //random videos
+let oneVideo = true; // efects wonk work when false // just 1.mp4
 
 
 let bothCameraAndVideo = false;
 
 let cameraVideo = true; //estaba true
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
-let cameraEffect = false; // estaba true
+let cameraEffect = true; // estaba true
 
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -225,7 +225,9 @@ function setup() {
     }
 
     if (OnlyCamera || cameraVideo) {
-        myCamera.size(width / vScale, height / vScale);
+        v_Cam_Scale = 1;
+
+        myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
         myCamera.hide();
     }
 
@@ -273,19 +275,19 @@ function draw() {
         renderVideos();
     }
 
-    extraText();
+    // extraText();
 
 
     // ------------------ Display TEXT from Model
     if (resultsReady) {
         // DoTextHiperpoesia();
         // console.log(rnnSub);
-        // DoText();
+        DoText();
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
         }
 
-        // talk();
+        talk();
     }
 }
 
@@ -326,9 +328,11 @@ function anotheEffectForCamera() {
 
 function renderCamera() {
 
+    //coment for only see pixels
+
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
@@ -348,11 +352,11 @@ function gotResultsCam() {
 }
 
 function renderVideos() {
-    // * Camera gets in the back of video
-    //   if (cameraVideo) { //under video
-    //     // console.log('camera VIdeo');
-    //     renderCamera()
-    // }
+    // * Camera gets in the back of video 
+      if (cameraVideo) { //under video
+        // console.log('camera VIdeo');
+        renderCamera()
+    }
     if (playSimpleVideo) {
         // console.log('playing simple video');
         image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
@@ -398,11 +402,11 @@ function renderVideos() {
 
             // tint(255, 255, 255, 100); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
 
-            // * Camera gets in front of video
-            if (cameraVideo) { //under video
-                // console.log('camera VIdeo');
-                renderCamera()
-            }
+            // * Camera gets in front of video y por alguna razon no se ve
+            // if (cameraVideo) { //under video
+            //     // console.log('camera VIdeo');
+            //     renderCamera()
+            // }
 
 
 
