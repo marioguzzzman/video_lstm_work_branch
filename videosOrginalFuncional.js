@@ -23,7 +23,7 @@ let meta_experment = false;
 //SETTING WORKING FOR EXPERIMENTS
 let videoEffects = true;
 let randomFrameEffect = false;
-let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING
+let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING // currently appears as defacult is one video is false
 let oneVideo = true; // efects wonk work when false // just 1.mp4
 
 
@@ -41,7 +41,7 @@ let cameraEffect = false; // estaba true
 // let oneVideo = true; // efects wonk work when false // just 1.mp4
 
 // let cameraVideo = true; //estaba true
-// let OnlyCamera = false; // GETS ERROR FROM GENERATOR
+// let OnlyCamera = false; // GETS ERROR FROM GENERATOR // maybe because generator ins embeded into renderVIdeos()
 // let cameraEffect = true; // estaba true
 
 
@@ -111,6 +111,7 @@ let confidence = '';
 
 //ml5 result as subtitle text
 let rnnSub = '';
+let regexRnnSub;
 
 //parameters for "terminal" text
 let sourceText = ' ';
@@ -162,7 +163,7 @@ let otherSong;
 //------------------------------------------------------------- WEB SETTINGS ----------
 
 
-// p5.disableFriendlyErrors = true; // disables FES //to upgrade performance
+p5.disableFriendlyErrors = true; // disables FES //to upgrade performance
 
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------- PRE LOAD  ------------------------------------------------
@@ -245,7 +246,7 @@ function setup() {
     if (oneVideo) {
         videos[whichVideo].size(width / vScale, height / vScale);
         videos[whichVideo].hide();
-    } else if(playSimpleVideo) {
+    } else if (playSimpleVideo) {
         for (i = 0; i < videos.length; i++) {
             videos[i].size(width / vScale, height / vScale);
             videos[i].hide();
@@ -258,12 +259,14 @@ function setup() {
 
     if (offline) {
         // Don't use any model to classify any video
-    }
+    } else {
 
-    if (OnlyCamera || cameraVideo) {
-        myMobileNet.classify(myCamera, gotResultsCam);
+        // if (OnlyCamera || cameraVideo) { // just in case this is a problem
+        //     myMobileNet.classify(myCamera, gotResultsCam);
+        // }
+
+        myMobileNet.classify(videos[0], gotResults);
     }
-    myMobileNet.classify(videos[0], gotResults);
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -317,7 +320,7 @@ function anotheEffectForCamera() {
         for (var y = 0; y < myCamera.height; y += stepSize) {
             var index = ((y * myCamera.width) + x) * 4; //  get the index of the current pixel using its (x, y) coordinates.
 
-            // The code for your filter will go here!
+            // Filter and transformation code
             var redVal = myCamera.pixels[index];
             var greenVal = myCamera.pixels[index + 1];
             var blueVal = myCamera.pixels[index + 2];
@@ -332,7 +335,6 @@ function anotheEffectForCamera() {
 
             // tint(255, 255, 255, 100);
 
-
             ellipse(x, y, w, w);
         }
     }
@@ -341,6 +343,14 @@ function anotheEffectForCamera() {
 function renderCamera() {
 
     //coment for only see pixels
+
+    // change to ====
+    // if (cameraVideo && cameraEffect){
+    //     anotheEffectForCamera();
+    // } else {
+
+    //     the code in camera video
+    // }
 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
@@ -371,8 +381,9 @@ function renderVideos() {
     }
     if (playSimpleVideo) {
         // console.log('playing simple video');
-        image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS // CHECK ALL THIS
         videos[0].volume(0.3);
+
     } else {
         //PLAY VIDEOS IN RANDOM
         if (stage === 1) {
@@ -525,16 +536,17 @@ function pixelEffect() {
 
     // / -------- CODE to load pixels
     // vid.loadPixels();
-    // for (var y = 0; y < height; y += 8) {
-    //   for (var x = 0; x < width; x += 8) {
+    // var stepSize = 20; //stepSize = number of pixels to print.
+
+    // for (var y = 0; y < height; y += stepSize ) {
+    //   for (var x = 0; x < width; x += stepSize) {
     //     var offset = ((y*width)+x)*4;
     // * code for effect
+    // ellipse(x, y, w, w);
     //   }
     // }
 
 }
-
-// plays or pauses the video depending on current state
 
 function randomFrame() {
 
@@ -644,6 +656,8 @@ function gotResults(err, results) {
 
         // -----> CRNN ------> Generate TEXT content
 
+        let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
+
         rnn.generate({
 
             // seed: results[1].label, // this is the label result
@@ -653,7 +667,7 @@ function gotResults(err, results) {
 
             seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
             // length: 90, //length of characters
-            length: 100,
+            length: `${randomTxtLength}`,
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
 
 
@@ -670,8 +684,8 @@ function gotResults(err, results) {
             //After 3 tuns the array starts again
             // https://regex101.com/
 
-            // var initRegx = rnnSub; // The String the search in
-            var initRegx = 'hola". "adios.alklk jj ojoj ojoj'; // The String the search in
+            var initRegx = rnnSub; // The String the search in
+            // var initRegx = 'hola". "adios.alklk jj ojoj ojoj'; // The String the search in
 
             // var regex = /(\W+)/; // The regex  
             // var resultsRegx = initRegx.match(regex); // Execute the search
@@ -680,12 +694,12 @@ function gotResults(err, results) {
             // si hay un punto, a azar dar enter o nada
             // si hay comillas, en tres o 5 paavbras agregar otras comillas.
 
-            // var regex = initRegx.replace(/\b[^\saeiou]\b/gi, ''); //reemplaza consonantes sueltas por x FUNCIONA
+            regexRnnSub = initRegx.replace(/\b[^\saeiou]\b/gi, ''); //reemplaza consonantes sueltas por x FUNCIONA
 
             // var regex = initRegx.replace(/\.(\s*)([a-z])/, \.\U \1 \2); //grupo uno mathea culquier cantidad de espacios y el grupo dos matchea letras despues de espacios y las hace uppercase...despues hacer uqe e grupo 1 me lo cambie por enter
 
             // var regex = initRegx.replace(/\"\s*([Aa-zZ]+\s*){1,4}/, \"\1\"); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
-            var regex = initRegx.replace(/\"\s*([A-Za-z.]+\s*){1,4}/, '" "'); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
+            regexRnnSub = initRegx.replace(/\"\s*([A-Za-z.]+\s*){1,4}/, '" "'); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
 
             // hacer que al azar eliga desplegar entre 5 y 10 palabras
 
@@ -697,12 +711,12 @@ function gotResults(err, results) {
             // var regex = initRegx.replace(/\b[a-z]{4,6}\b/gi, replacer);
             //
 
-            var words = initRegx.split(regex);
+            var words = initRegx.split(regexRnnSub);
 
             console.log('Total words: ' + words.length);
             // console.log('resultRegx: ' + resultsRegx);
             console.log('words in regx: ' + words);
-            console.log('outputRegx: ' + regex);
+            console.log('outputRegx: ' + regexRnnSub);
 
             // let savedContext = 3; // amount of lines in page
             // let savedContext = []; // text file writen
@@ -723,9 +737,12 @@ function gotResults(err, results) {
             //--------------------INSERT TRANSLATE -----------------------
 
             if (translate) {
-                rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
+                // regex
+                regexRnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
+                // rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
             } else {
-                rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
+                regexRnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
+                // rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
             }
 
 
@@ -744,10 +761,7 @@ function gotResults(err, results) {
                     linesInPage = 0;
                 }
 
-            } else {
-                // do nothing 
             }
-
 
             // console.log('Lstm generated: ' + results.sample);
 
@@ -968,7 +982,10 @@ function DoText() {
     stroke(0);
     fill(255, 255, 64);
 
-    text(rnnSub, line, posYtextS, windowWidth - 100, 300);
+
+    text(regexRnnSub, line, posYtextS, windowWidth - 100, 300);
+
+    // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
 }
 
 //------------------------------------------WINDOW SIZE ELEMENTS
@@ -1023,7 +1040,9 @@ function touchStarted() {
 
 function talk() {
     myVoice.setVoice(voice);
-    myVoice.speak(rnnSub);
+    myVoice.speak(regexRnnSub);
+
+    // myVoice.speak(rnnSub);
 
     // SIEMPRE SUENA LA VOZ
     if (translate) {
