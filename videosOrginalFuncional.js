@@ -3,31 +3,46 @@
 //Setting random video play
 //Managing different efects for videos
 
-//RECORD TEXT
-//ADD WEBCAM
+// AUDIOS DOES NOT WORK
+//ADD WEBCAM MULTIPLE
 //ADD CODE TO CHANGE BETWEEN WEBCAM AND VIDEO WHEN RECOGNIZING A FACE
-//MODULATE SPANISH VOICE
+//MODULATE SPANISH VOICE // DOES NOT WORK NOW
 //ADD MENU
 //TODO increse sound length
-//AGREGAR RELOAD FUNCTION EVERY X SECONDS
 
 
 //------------------------------------------------------- TESTING 
 
 let offline = false; // disable text to test video
-
 let menu = true;
+
+
+let meta_gameOn = true;
+let meta_experment = false;
+
+//SETTING WORKING FOR EXPERIMENTS
 let videoEffects = true;
 let randomFrameEffect = false;
-let playSimpleVideo = false; //random videos
+let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING
 let oneVideo = true; // efects wonk work when false // just 1.mp4
 
 
-let bothCameraAndVideo = false;
+// let bothCameraAndVideo = false;
 
-let cameraVideo = true; //estaba true
+let cameraVideo = false; //estaba true
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR
-let cameraEffect = true; // estaba true
+let cameraEffect = false; // estaba true
+
+
+//SETTING WORKING FOR GAME ON
+// let videoEffects = true;
+// let randomFrameEffect = true;
+// let playSimpleVideo = false; //random videos
+// let oneVideo = true; // efects wonk work when false // just 1.mp4
+
+// let cameraVideo = true; //estaba true
+// let OnlyCamera = false; // GETS ERROR FROM GENERATOR
+// let cameraEffect = true; // estaba true
 
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -85,7 +100,6 @@ let page = []; // text file writen
 
 let resultsReady = false;
 
-// let inputTexts; // does not work
 
 //text displayed in "TERMINAL" text
 let rnn;
@@ -157,11 +171,8 @@ let otherSong;
 
 function preload() { // To add things that take time to load
 
-    // -------- DOES NOT WORK INPUT TEXTS
 
     textToLoad = loadStrings('subTexts.txt', txtLoaded);
-
-    // -------- DOES NOT WORK INPUT TEXTS
 
 
     myMobileNet = ml5.imageClassifier('MobileNet'); // put name of model aT the end
@@ -219,7 +230,7 @@ function setup() {
     //-------------VIDEO 
 
     if (videoEffects) {
-        vScale = 20;
+        vScale = 15;
     } else {
         vScale = 1;
     }
@@ -234,7 +245,7 @@ function setup() {
     if (oneVideo) {
         videos[whichVideo].size(width / vScale, height / vScale);
         videos[whichVideo].hide();
-    } else {
+    } else if(playSimpleVideo) {
         for (i = 0; i < videos.length; i++) {
             videos[i].size(width / vScale, height / vScale);
             videos[i].hide();
@@ -283,11 +294,12 @@ function draw() {
         // DoTextHiperpoesia();
         // console.log(rnnSub);
         DoText();
+        talk();
+
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
         }
 
-        talk();
     }
 }
 
@@ -353,7 +365,7 @@ function gotResultsCam() {
 
 function renderVideos() {
     // * Camera gets in the back of video 
-      if (cameraVideo) { //under video
+    if (cameraVideo) { //under video
         // console.log('camera VIdeo');
         renderCamera()
     }
@@ -557,7 +569,6 @@ function playTheVideo() {
 
         if (oneVideo) {
 
-
             videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
 
         } else {
@@ -758,6 +769,7 @@ function gotResults(err, results) {
                 setTimeout(() => myMobileNet.classify(videos[whichVideo], gotResults), 5000); //setTimeout to slow the results. we also added an arow function
                 // 3000 is too slowed to be read
                 // 5000 was kind of ok
+
             }
 
         }); // end of generate
@@ -1014,8 +1026,6 @@ function talk() {
     myVoice.speak(rnnSub);
 
     // SIEMPRE SUENA LA VOZ
-
-
     if (translate) {
         myVoice.setRate(.73); // speed of speach
         myVoice.setPitch(.8);
@@ -1027,23 +1037,7 @@ function talk() {
         myVoice.setVolume(.4);
     }
 
-    // DOES NOT WORK
-
-    // if (keyIsDown(DOWN_ARROW)){
-    //     myVoice.setRate(.8); // speed of speach
-    //     myVoice.setPitch(.9);
-    //     myVoice.setVolume(.4);
-    // }else { //shutdown voice
-    //     myVoice.setRate(.8); // speed of speach
-    //     myVoice.setPitch(.9);
-    //     myVoice.setVolume(0);
-    // }
-
 }
-
-
-
-
 
 // -----------------------------HIPERPOESIA
 
