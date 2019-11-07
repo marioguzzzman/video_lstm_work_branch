@@ -111,7 +111,8 @@ let confidence = '';
 
 //ml5 result as subtitle text
 let rnnSub = '';
-let regexRnnSub;
+let regexRnnSub = '';
+let initRegx = '';
 
 //parameters for "terminal" text
 let sourceText = ' ';
@@ -138,7 +139,7 @@ var totalSentences;
 //--------------Connectors text LATIN GAMEON
 let entrance = ['Creo que esto es un ', 'A veces, cuando encuentro un ', 'Más tarde, yo pensaría que un ', 'Aunque no crea que esto es un ', 'Pero, si recorres el ', 'La última vez que ví un ', 'No podría crer que un ', 'Siento que ya he visto este ', 'Justo antes de este ', 'Antes de este ', 'Después de reconcer este ', 'También, este ', 'Más tarde, el ', 'Sobre todo, este ', ];
 
-let middle = [' ', ' ', ' ', ' ', ' ', ' ', ' ', '. ', ', ', '. ', ', ', ', pero ', ', sin embargo, ', ', en resumen,', ', pero también, ', ', además, ', ', me gustaría pensar que ', ' podemos discutir acerca de', ' Dudaba de mi, pero ', ' estaba ahí ', ];
+let middle = [' ', ' ', ' ', ' ', ' ', ' ', ' ', '. ', ', ', '. ', ', ', ', pero ', ', sin embargo, ', ', en resumen,', ', pero también, ', ', además, ', ', me gustaría pensar que ', ' podemos discutir acerca de', ' dudaba de mi, pero ', ' estaba ahí ', ];
 
 //--------------------------TEXT SEEDS ----------
 let startingSeeds = entrance[0];
@@ -648,43 +649,55 @@ function gotResults(err, results) {
         mbNetLabel1 = results[1].label;
         mbNetLabel2 = results[2].label;
 
+        mbNetLabel0 = mbNetLabel0.split(" "); //breaks label into words
 
-        toTranslate(mbNetLabel0); //--------------------------------> Translate main label 
-        console.log("see label: " + translatedRes);
-
-        // myDiv.html(mbNetLabel0); //Put sentence in DIV
+        toTranslate(mbNetLabel0[0]); //--------------------------------> Translate main label // only one word from label
+        console.log("Translated Label: " + translatedRes);
 
         // -----> CRNN ------> Generate TEXT content
 
-        let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
+        // let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
 
         rnn.generate({
-
             // seed: results[1].label, // this is the label result
             // seed: mbNetLabel0, // this is the hole sentence
 
             //----------------- SEEDS THAT APPEAR ON TEXT
-
             seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
-            // length: 90, //length of characters
-            length: `${randomTxtLength}`,
+            length: 100, //length of characters
+            // length: `${randomTxtLength}`,
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
-
-
         }, (err, results) => {
 
+            console.log("SAMPLE: " + results.sample);
+
+            rnnSub = results.sample; // ------> RESULTED SINGLE SEED TEXT
             console.log("rnnSub: " + rnnSub);
 
-            // rnnSub = results.sample; // ------> RESULTED SINGLE SEED TEXT
+            rnnSub = rnnSub.split(" "); //breaks label into words
 
-            //-------------------- CREATE CONTEXT -----------------------
+            let randomTxtLength = Math.floor(random(1, 3)); // esto funciona
+
+            // var rnnSub = "This is an amazing sentence.";
+            // var rnnSub = str.split(" ");
+            for (var i = 0; i < rnnSub.length - 10; i++) {
+                rnnSub[i - 1] += " ";
+            }
+            // console.log(rnnSub);
+            //["This ", "is ", "an ", "amazing ", "sentence."]
+
+            rnnSub = rnnSub.join(" + "); // THIS GETS DISPLAYED,but dont know if it reaches the display.
+
+
+
+            //-------------------- CREATE REGEX -----------------------
 
             //NOTE:
             // Seed needs to be the reading of the elements in an array. 
             //After 3 tuns the array starts again
             // https://regex101.com/
 
-            var initRegx = rnnSub; // The String the search in
+            // initRegx = rnnSub; // The String the search in
             // var initRegx = 'hola". "adios.alklk jj ojoj ojoj'; // The String the search in
 
             // var regex = /(\W+)/; // The regex  
@@ -694,29 +707,31 @@ function gotResults(err, results) {
             // si hay un punto, a azar dar enter o nada
             // si hay comillas, en tres o 5 paavbras agregar otras comillas.
 
-            regexRnnSub = initRegx.replace(/\b[^\saeiou]\b/gi, ''); //reemplaza consonantes sueltas por x FUNCIONA
+            regexRnnSub = rnnSub.replace(/.\b[^\saeiou]\b/gm, ' '); //reemplaza consonantes sueltas por x FUNCIONA
 
             // var regex = initRegx.replace(/\.(\s*)([a-z])/, \.\U \1 \2); //grupo uno mathea culquier cantidad de espacios y el grupo dos matchea letras despues de espacios y las hace uppercase...despues hacer uqe e grupo 1 me lo cambie por enter
 
             // var regex = initRegx.replace(/\"\s*([Aa-zZ]+\s*){1,4}/, \"\1\"); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
-            regexRnnSub = initRegx.replace(/\"\s*([A-Za-z.]+\s*){1,4}/, '" "'); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
+            // regexRnnSub = rnnSub.replace(/\"\s*([A-Za-z.]+\s*){1,4}/, '" "'); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
 
             // hacer que al azar eliga desplegar entre 5 y 10 palabras
 
             // al azar, elegir entre 1 y 3 cosas y despues cortar
 
 
-
-
             // var regex = initRegx.replace(/\b[a-z]{4,6}\b/gi, replacer);
             //
 
-            var words = initRegx.split(regexRnnSub);
 
-            console.log('Total words: ' + words.length);
-            // console.log('resultRegx: ' + resultsRegx);
-            console.log('words in regx: ' + words);
-            console.log('outputRegx: ' + regexRnnSub);
+            console.log("REGEXSUB: " + regexRnnSub);
+
+
+            // var words = initRegx.split(regexRnnSub);
+
+            // console.log('Total words: ' + words.length);
+            // // console.log('resultRegx: ' + resultsRegx);
+            // console.log('words in regx: ' + words);
+            // console.log('outputRegx: ' + regexRnnSub);
 
             // let savedContext = 3; // amount of lines in page
             // let savedContext = []; // text file writen
