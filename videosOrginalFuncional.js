@@ -20,39 +20,35 @@ let menu = true;
 let meta_gameOn = true;
 let meta_experment = false;
 
-//SETTING WORKING FOR EXPERIMENTS
-let videoEffects = true;
-let randomFrameEffect = false;
-let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING // currently appears as defacult is one video is false
-let oneVideo = true; // efects wonk work when false // just 1.mp4
-
-
-// let bothCameraAndVideo = false;
-
-let cameraVideo = false; //estaba true
-let OnlyCamera = false; // GETS ERROR FROM GENERATOR
-let cameraEffect = false; // estaba true
-
-
-//SETTING WORKING FOR GAME ON
+// //SETTING WORKING FOR EXPERIMENTS
 // let videoEffects = true;
-// let randomFrameEffect = true;
-// let playSimpleVideo = false; //random videos
+// let randomFrameEffect = false;
+// let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING // currently appears as defacult is one video is false
 // let oneVideo = true; // efects wonk work when false // just 1.mp4
 
-// let cameraVideo = true; //estaba true
-// let OnlyCamera = false; // GETS ERROR FROM GENERATOR // maybe because generator ins embeded into renderVIdeos()
-// let cameraEffect = true; // estaba true
+
+// // let bothCameraAndVideo = false;
+
+// let cameraVideo = false; //estaba true
+// let OnlyCamera = false; // GETS ERROR FROM GENERATOR
+// let cameraEffect = false; // estaba true
+
+
+// SETTING WORKING FOR GAME ON
+let videoEffects = true;
+let randomFrameEffect = true;
+let playSimpleVideo = false; //random videos
+let oneVideo = true; // efects wonk work when false // just 1.mp4
+
+let cameraVideo = false; //estaba true
+let OnlyCamera = false; // GETS ERROR FROM GENERATOR // maybe because generator ins embeded into renderVIdeos()
+let cameraEffect = false; // estaba true
 
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
 
 //ML5
 let myMobileNet;
-
-//DIVS
-// let myDiv;
-// let myDivGen;
 
 /////----------------------------------------------------- TRANSLATION MODULE
 
@@ -61,14 +57,31 @@ var exitLang = 'es';
 var translatedRes = '';
 
 var translateAPIKey = 'AIzaSyAGvEzCaMeaL_woHEsCo_w85802jZVuYnI';
-
+// 
 let translate = true;
 
 //----------------------------------------------------------- CAMERA --------
 
 // https://ml5js.github.io/ml5-examples/javascript/ImageClassification_Video/ // REVIEW
+//ls -ltrh /dev/video* // check cameras available in Linux
 
 let myCamera; //WEB CAM
+
+// https://github.com/ITPNYU/ICM-2015/blob/master/09_video_sound/02_capture/13_get_sources/sketch.js // get cameras available
+// Seriously.js
+// https://www.youtube.com/watch?v=jdKep6jo7b0&list=PLRqwX-V7Uu6aKKsDHZdDvN6oCJ2hRY_Ig&index=8
+
+// EFFECTS PIXEL MIRROR
+// https://www.youtube.com/watch?v=rNqaw8LT2ZU&list=PLRqwX-V7Uu6aKKsDHZdDvN6oCJ2hRY_Ig&index=4
+
+//PAINTING
+// https://www.youtube.com/watch?v=0V3uYA1hafk&list=PLRqwX-V7Uu6aKKsDHZdDvN6oCJ2hRY_Ig&index=6
+
+//SCAN
+// https://www.youtube.com/watch?v=YqVbuMPIRwY&list=PLRqwX-V7Uu6aKKsDHZdDvN6oCJ2hRY_Ig&index=7
+
+var capture;
+var options;
 
 
 //----------------------------------------------------------- VIDEO ----------
@@ -124,8 +137,6 @@ let textToLoad;
 let txt;
 var count = 0;
 var totalSentences;
-
-
 
 
 // //--------------Connectors text XIX CENTURY TRAVELER
@@ -227,48 +238,53 @@ function setup() {
     frameRate(30);
     pixelDensity(1);
 
-    // console.log('my Mobile: ', myMobileNet) // to test
+    //-------------CAMERA
 
-    //-------------VIDEO 
+    
 
-    if (videoEffects) {
-        vScale = 15;
-    } else {
-        vScale = 1;
-    }
+// console.log('my Mobile: ', myMobileNet) // to test
 
-    if (OnlyCamera || cameraVideo) {
-        v_Cam_Scale = 1;
+//-------------VIDEO 
 
-        myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
-        myCamera.hide();
-    }
+if (videoEffects) {
+    vScale = 15;
+} else {
+    vScale = 1;
+}
 
-    if (oneVideo) {
-        videos[whichVideo].size(width / vScale, height / vScale);
-        videos[whichVideo].hide();
-    } else if (playSimpleVideo) {
-        for (i = 0; i < videos.length; i++) {
-            videos[i].size(width / vScale, height / vScale);
-            videos[i].hide();
-        }
-    }
+if (OnlyCamera || cameraVideo) {
+    v_Cam_Scale = 1;
 
+    myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
+    myCamera.hide();
+}
 
-    //-------------  ML5
-    // myMobileNet.classify(myVideo, callback);
-
-    if (offline) {
-        // Don't use any model to classify any video
-    } else {
-
-        // if (OnlyCamera || cameraVideo) { // just in case this is a problem
-        //     myMobileNet.classify(myCamera, gotResultsCam);
-        // }
-
-        myMobileNet.classify(videos[0], gotResults);
+if (oneVideo) {
+    videos[whichVideo].size(width / vScale, height / vScale);
+    videos[whichVideo].hide();
+} else if (playSimpleVideo) {
+    for (i = 0; i < videos.length; i++) {
+        videos[i].size(width / vScale, height / vScale);
+        videos[i].hide();
     }
 }
+
+
+//-------------  ML5
+// myMobileNet.classify(myVideo, callback);
+
+if (offline) {
+    // Don't use any model to classify any video
+} else {
+
+    // if (OnlyCamera || cameraVideo) { // just in case this is a problem
+    //     myMobileNet.classify(myCamera, gotResultsCam);
+    // }
+
+    myMobileNet.classify(videos[0], gotResults);
+}
+}
+
 
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------- DRAW -----------------------------------------------------
@@ -298,7 +314,7 @@ function draw() {
         // DoTextHiperpoesia();
         // console.log(rnnSub);
         DoText();
-        talk();
+        // talk();
 
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
@@ -310,302 +326,6 @@ function draw() {
 // ------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------- END DRAW -------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
-
-function anotheEffectForCamera() {
-    // https://codeburst.io/instagram-filters-with-javascript-p5-js-83f28c9f7fda
-    myCamera.loadPixels();
-
-    var stepSize = 20; //stepSize = number of pixels to print.
-    var pixelSize = 20;
-    for (var x = 0; x < myCamera.width; x += stepSize) {
-        for (var y = 0; y < myCamera.height; y += stepSize) {
-            var index = ((y * myCamera.width) + x) * 4; //  get the index of the current pixel using its (x, y) coordinates.
-
-            // Filter and transformation code
-            var redVal = myCamera.pixels[index];
-            var greenVal = myCamera.pixels[index + 1];
-            var blueVal = myCamera.pixels[index + 2];
-
-            var bright = (redVal + greenVal + blueVal) / 3;
-            var w = map(bright, 0, 255, 0, stepSize);
-
-            noStroke();
-
-            // fill(redVal, greenVal, blueVal, 150); // face becomes lit up, the rest is transparent
-            fill(redVal, greenVal, blueVal); // face becomes lit up, the rest is transparent
-
-            // tint(255, 255, 255, 100);
-
-            ellipse(x, y, w, w);
-        }
-    }
-}
-
-function renderCamera() {
-
-    //coment for only see pixels
-
-    // change to ====
-    // if (cameraVideo && cameraEffect){
-    //     anotheEffectForCamera();
-    // } else {
-
-    //     the code in camera video
-    // }
-
-    if (cameraVideo) { //under video
-        // console.log('camera VIdeo');
-        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-        // filter(INVERT);
-        // filter(POSTERIZE, 3);
-        // filter(BLUR, 3);
-
-        if (cameraEffect) {
-            anotheEffectForCamera();
-        }
-
-    }
-}
-
-//--------------------------------------------------------- 
-//--------------------------------------------------------- RENDER VIDEOS
-
-function gotResultsCam() {
-
-}
-
-function renderVideos() {
-    // * Camera gets in the back of video 
-    if (cameraVideo) { //under video
-        // console.log('camera VIdeo');
-        renderCamera()
-    }
-    if (playSimpleVideo) {
-        // console.log('playing simple video');
-        image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS // CHECK ALL THIS
-        videos[0].volume(0.3);
-
-    } else {
-        //PLAY VIDEOS IN RANDOM
-        if (stage === 1) {
-
-            console.log('Stage 1');
-
-            if (frameCount % 50) {
-                console.log('pressing enter');
-
-                //pick random video from array
-                let azar = Math.floor(random(0, videos.length)); // esto funciona
-                whichVideo = azar; //for(random(videos.length)); //esto funciona
-
-                // whichVideo = (whichVideo+1)%videos.length;//floor(random(vid // esto es la pagina
-
-                console.log('video number: ' + whichVideo);
-
-                stage = 2;
-                playTheVideo();
-            }
-        }
-
-        if (videoEffects) {
-            if (randomFrameEffect) { // plays pixel + random
-                pixelEffect();
-                randomFrame();
-            } else {
-                pixelEffect();
-                //camera video positioned here is also behind video
-            }
-        } else {
-            if (randomFrameEffect) {
-                randomFrame();
-            }
-
-            // ----->>>>>>> VIDEO HERE! WITHOUT EFFECTS
-            image(videos[whichVideo], 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
-            // tint(255, 255, 255); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
-
-            // tint(255, 255, 255, 100); //add tranparency to video //https://p5js.org/reference/#/p5.Color/setAlpha
-
-            // * Camera gets in front of video y por alguna razon no se ve
-            // if (cameraVideo) { //under video
-            //     // console.log('camera VIdeo');
-            //     renderCamera()
-            // }
-
-
-
-        }
-
-    }
-
-}
-
-
-
-
-//--------------------------------------------------------- VIDEO FUNCTIONS
-
-function pixelEffect() {
-
-    // PIXELS // THIS WORKS
-    videos[whichVideo].loadPixels();
-
-    for (var y = 0; y < videos[whichVideo].height; y++) {
-        for (var x = 0; x < videos[whichVideo].width; x++) {
-
-            // for (var y = 0; y < videos[whichVideo].height; y+= 1) {
-            //     for (var x = 0; x < videos[whichVideo].width; x+= 1) {
-
-            // var index = (videos[whichVideo].width - x + 1 + (y * videos[whichVideo].width)) * 4;
-
-            var index = ((y * videos[whichVideo].width) + x) * 4;
-
-            var r = videos[whichVideo].pixels[index + 0];
-            var g = videos[whichVideo].pixels[index + 1];
-            var b = videos[whichVideo].pixels[index + 2];
-            var bright = (r + g + b) / 3;
-            var w = map(bright, 0, 255, 0, vScale);
-
-            noStroke();
-            fill(r, g, b);
-
-            ///----------------- XIX century traveler
-
-            // rectMode(CENTER); // not use, scrambles de visuals
-            rect(x * vScale, y * vScale, w, w);
-            // var rad = 100;
-
-            ///----------------- XIX century traveler -- END
-
-
-            ///----------------- just hiperpoesia
-            // if (keyIsDown(UP_ARROW)){
-            //     ellipse(x * vScale, y * vScale, w, w);
-
-            // } else 
-            // ellipse(x * vScale, y * vScale, mouseX, mouseX);
-
-            ///----------------- just hiperpoesia -- END
-        }
-    }
-
-    //-------------------- THIS WORKS
-
-    // OLD CODE WITH CIRCLES
-    // https://p5js.org/examples/dom-video-pixels.html
-
-    // const stepSize = 30;
-    // // const stepSize = round(constrain(mouseX / 8, 6, 32));
-
-    // for (let y = 0; y < videos[whichVideo].height; y += stepSize) {
-    //   for (let x = 0; x < videos[whichVideo].width; x += stepSize) {
-    //   console.log('x' + x);
-
-    // pixelColor = get(x, y);
-
-    //  console.log('pixel' + pixelColor );
-
-    // console.log( 'h: ' + height );
-    // console.log( 'w: ' + width );
-    // console.log( 'vh: ' + videos[whichVideo].height );
-    // console.log( 'vw: ' + videos[whichVideo].width );
-
-
-    //     const i = (y * videos[whichVideo].width + x * 4);
-
-    //     const darkness = (255 - videos[whichVideo].pixels[i * 4]) / 255;
-
-    //     const radius = stepSize * darkness;
-    //     // const radius = stepSize;
-
-
-    //     let r =  videos[whichVideo].pixels[0 + i];
-    //     let g =  videos[whichVideo].pixels[1 + i];
-    //     let b =  videos[whichVideo].pixels[2 + i];
-    //     let a =  videos[whichVideo].pixels[3 + i];
-
-    //     fill(r, g, b, a);
-    //     noStroke();
-    //     ellipse(x, y, radius, radius);
-    //   }
-
-    // }
-
-    /// finish loading pixels
-
-
-
-    // / -------- CODE to load pixels
-    // vid.loadPixels();
-    // var stepSize = 20; //stepSize = number of pixels to print.
-
-    // for (var y = 0; y < height; y += stepSize ) {
-    //   for (var x = 0; x < width; x += stepSize) {
-    //     var offset = ((y*width)+x)*4;
-    // * code for effect
-    // ellipse(x, y, w, w);
-    //   }
-    // }
-
-}
-
-function randomFrame() {
-
-    let playing = false;
-    // -------------------FIX THIS TO RUN RANDOM VIDEOS
-    // Plays random position based in framecount  
-
-    if (!playing) {
-        let timeToChangeFrame = Math.floor(random(videos[whichVideo].duration(), videos[whichVideo].duration() * 10)); // esto funciona //for(random(videos.length));
-
-        if (frameCount % timeToChangeFrame == 0 || keyCode == UP_ARROW) {
-
-            console.log('Enter play random position');
-            videos[whichVideo].time(random() * videos[whichVideo].duration() - 2); //solo el random del cuadro
-
-            console.log('Video: ' + whichVideo + 'frame: ' + frameCount);
-
-            playing = true;
-
-        }
-    }
-
-}
-
-function playTheVideo() {
-    // https://forum.processing.org/two/discussion/23870/p5js-problem-with-asynchronous-video-loading-playing
-    videoSound(); // now is set to 0
-
-
-    if (!randomFrameEffect) {
-        console.log('normal video effect');
-
-        if (oneVideo) {
-
-            videos[whichVideo].loop(); // video never goes to videoOver because it is looping and never ends.
-
-        } else {
-            console.log('multiple videos');
-            videos[whichVideo].play();
-            videos[whichVideo].onended(videoOver); //when video ends, call videoOver to return to first screen
-        }
-
-    } else {
-        console.log('playing random Frame');
-        // videos[whichVideo].time(random() * videos[whichVideo].duration() - 2);
-        videos[whichVideo].loop().time(5); // time sets a place for the video to be played. it is expressed in seconds
-    }
-}
-
-function videoOver() {
-    console.log("Pausing video now VIDEO OVER / Stage 1");
-    // videos[whichVideo].stop();// esto estaba comentado
-    // videos[whichVideo].rewind();
-    // videos[whichVideo].hide(); // esto estaba comentado
-    videos[whichVideo].pause(); // esto estaba comentado
-
-    stage = 1;
-}
 
 
 //--------------------------------------------------------- SOUND FOR VIDEO
@@ -631,179 +351,6 @@ function gotTranslation(result) {
     }
 }
 
-
-//--------------------------------------------------------- MOBILE NET + CRNN MODEL
-
-function gotResults(err, results) {
-
-    if (err) console.log(err); //just tell errors
-
-    if (results) {
-        resultsReady = true;
-
-        console.log('Results ready: ' + results); // see results 
-
-        //-----> ML5 ------>  Create a sentence
-        mbNetLabel0 = results[0].label;
-        mbNetConfidence = results[1].confidence;
-        mbNetLabel1 = results[1].label;
-        mbNetLabel2 = results[2].label;
-
-        mbNetLabel0 = mbNetLabel0.split(" "); //breaks label into words
-
-        toTranslate(mbNetLabel0[0]); //--------------------------------> Translate main label // only one word from label
-        console.log("Translated Label: " + translatedRes);
-
-        // -----> CRNN ------> Generate TEXT content
-
-        // let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
-
-        rnn.generate({
-            // seed: results[1].label, // this is the label result
-            // seed: mbNetLabel0, // this is the hole sentence
-
-            //----------------- SEEDS THAT APPEAR ON TEXT
-            seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
-            length: 100, //length of characters
-            // length: `${randomTxtLength}`,
-            temperature: 0.9 // bring closer to 1 in order to make it closer to seed
-        }, (err, results) => {
-
-            console.log("SAMPLE: " + results.sample);
-
-            rnnSub = results.sample; // ------> RESULTED SINGLE SEED TEXT
-            console.log("rnnSub: " + rnnSub);
-
-            rnnSub = rnnSub.split(" "); //breaks label into words
-
-            let randomTxtLength = Math.floor(random(1, 3)); // esto funciona
-
-            // var rnnSub = "This is an amazing sentence.";
-            // var rnnSub = str.split(" ");
-            for (var i = 0; i < rnnSub.length - 10; i++) {
-                rnnSub[i - 1] += " ";
-            }
-            // console.log(rnnSub);
-            //["This ", "is ", "an ", "amazing ", "sentence."]
-
-            rnnSub = rnnSub.join(" + "); // THIS GETS DISPLAYED,but dont know if it reaches the display.
-
-
-
-            //-------------------- CREATE REGEX -----------------------
-
-            //NOTE:
-            // Seed needs to be the reading of the elements in an array. 
-            //After 3 tuns the array starts again
-            // https://regex101.com/
-
-            // initRegx = rnnSub; // The String the search in
-            // var initRegx = 'hola". "adios.alklk jj ojoj ojoj'; // The String the search in
-
-            // var regex = /(\W+)/; // The regex  
-            // var resultsRegx = initRegx.match(regex); // Execute the search
-
-            //dividir en palabras, espacios
-            // si hay un punto, a azar dar enter o nada
-            // si hay comillas, en tres o 5 paavbras agregar otras comillas.
-
-            regexRnnSub = rnnSub.replace(/.\b[^\saeiou]\b/gm, ' '); //reemplaza consonantes sueltas por x FUNCIONA
-
-            // var regex = initRegx.replace(/\.(\s*)([a-z])/, \.\U \1 \2); //grupo uno mathea culquier cantidad de espacios y el grupo dos matchea letras despues de espacios y las hace uppercase...despues hacer uqe e grupo 1 me lo cambie por enter
-
-            // var regex = initRegx.replace(/\"\s*([Aa-zZ]+\s*){1,4}/, \"\1\"); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
-            // regexRnnSub = rnnSub.replace(/\"\s*([A-Za-z.]+\s*){1,4}/, '" "'); //si encuentra comilla busca hasta 4 palabras y pon una comilla al final
-
-            // hacer que al azar eliga desplegar entre 5 y 10 palabras
-
-            // al azar, elegir entre 1 y 3 cosas y despues cortar
-
-
-            // var regex = initRegx.replace(/\b[a-z]{4,6}\b/gi, replacer);
-            //
-
-
-            console.log("REGEXSUB: " + regexRnnSub);
-
-
-            // var words = initRegx.split(regexRnnSub);
-
-            // console.log('Total words: ' + words.length);
-            // // console.log('resultRegx: ' + resultsRegx);
-            // console.log('words in regx: ' + words);
-            // console.log('outputRegx: ' + regexRnnSub);
-
-            // let savedContext = 3; // amount of lines in page
-            // let savedContext = []; // text file writen
-
-            // context.push(results.sample + "\n");
-            // console.log('lineas x pagina:' + savedContext.length);
-
-            // if (savedContext.length == savedContext) {
-            //     writer.print(page);
-            //     writer.close();
-            //     savedContext.length = 0; // to clear array
-            //     savedContext = 0;
-            // }
-
-            //-------------------- CREATE CONTEXT -----------------------
-
-
-            //--------------------INSERT TRANSLATE -----------------------
-
-            if (translate) {
-                // regex
-                regexRnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
-                // rnnSub = `${startingSeeds}${translatedRes}${middleSeeds}${results.sample}`; // ------> LatinAmerican model RESULTED TEXT WITH MULTIPLE ENTRANCES
-            } else {
-                regexRnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
-                // rnnSub = `${startingSeeds}${mbNetLabel0}${middleSeeds}${results.sample}`; // ------> XIX travel literature model RESULTED TEXT WITH MULTIPLE ENTRANCES
-            }
-
-
-            //-------------------- WRITE INTO PAGE -----------------------
-
-            if (writingOutput) {
-                // writer.write(results.sample + "\n"); // writes to print just one text
-
-                page.push(results.sample + "\n");
-                // console.log('lineas x pagina:' + page.length);
-
-                if (page.length == linesInPage) {
-                    writer.print(page);
-                    writer.close();
-                    page.length = 0; // to clear array
-                    linesInPage = 0;
-                }
-
-            }
-
-            // console.log('Lstm generated: ' + results.sample);
-
-            startingSeeds = entrance[Math.floor(random(0, entrance.length))]; // select random seed form text
-            middleSeeds = middle[Math.floor(random(0, middle.length))]; // select random seed form text
-            // startingSeeds = startingSeeds + mbNetLabel0 + results.sample + 'I can see a ';
-
-            //DIV FOR TEXT
-            // myDivGen.html(rnnSub); // just create a div.  
-
-            // ------------- VIDEO
-            // ------------- clasiffy video with mobile net
-
-            if (OnlyCamera) {
-                setTimeout(() => myMobileNet.classify(cameraVideo, gotResults), 5000); //setTimeout to slow the results. we also added an arow function
-                // 3000 is too slowed to be read
-                // 5000 was kind of ok
-            } else {
-                setTimeout(() => myMobileNet.classify(videos[whichVideo], gotResults), 5000); //setTimeout to slow the results. we also added an arow function
-                // 3000 is too slowed to be read
-                // 5000 was kind of ok
-
-            }
-
-        }); // end of generate
-    } // end of results
-} //end of gotResults
 
 //--------------------------------------------------------- REPLACER ARTIFICAL EDITOR
 
@@ -925,7 +472,7 @@ function DoText() {
         textFont("Ubuntu Mono");
     }
 
-    textSize(17);
+    textSize(20);
     fill(color);
     noStroke();
     textLeading(30);
@@ -972,7 +519,25 @@ function DoText() {
     var startWriting = 0;
     // var left = startWriting - textSpeed ;
     var right = startWriting + textSpeed;
+
+//COUNTER TO SLOW APPEARANCES
+
+
+// if (frameCount % 100 || keyCode === DOWN_ARROW) { //time for the music to change
+
+    // fill(0);
+
+    // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+    
+// } else {
+
+
     text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+            console.log('Entered Frame Song: ' + frameCount);
+
+
+// }
+    // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
 
 
     //this is static text
@@ -986,17 +551,16 @@ function DoText() {
     // SUBTITLE TEXT
 
     posYtextS = windowHeight - 150;
-    line = 50;
+    line = 70;
     textAlign(CENTER);
     textFont("Verdana");
-    textSize(35);
+    textSize(47);
     textLeading(50); // pixels between each line
 
     fill(0, 0, 0, 5); //shadow for subtitle
     // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
     stroke(0);
     fill(255, 255, 64);
-
 
     text(regexRnnSub, line, posYtextS, windowWidth - 100, 300);
 
