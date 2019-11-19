@@ -240,49 +240,49 @@ function setup() {
 
     //-------------CAMERA
 
-    
 
-// console.log('my Mobile: ', myMobileNet) // to test
 
-//-------------VIDEO 
+    // console.log('my Mobile: ', myMobileNet) // to test
 
-if (videoEffects) {
-    vScale = 15;
-} else {
-    vScale = 1;
-}
+    //-------------VIDEO 
 
-if (OnlyCamera || cameraVideo) {
-    v_Cam_Scale = 1;
-
-    myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
-    myCamera.hide();
-}
-
-if (oneVideo) {
-    videos[whichVideo].size(width / vScale, height / vScale);
-    videos[whichVideo].hide();
-} else if (playSimpleVideo) {
-    for (i = 0; i < videos.length; i++) {
-        videos[i].size(width / vScale, height / vScale);
-        videos[i].hide();
+    if (videoEffects) {
+        vScale = 15;
+    } else {
+        vScale = 1;
     }
-}
+
+    if (OnlyCamera || cameraVideo) {
+        v_Cam_Scale = 1;
+
+        myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
+        myCamera.hide();
+    }
+
+    if (oneVideo) {
+        videos[whichVideo].size(width / vScale, height / vScale);
+        videos[whichVideo].hide();
+    } else if (playSimpleVideo) {
+        for (i = 0; i < videos.length; i++) {
+            videos[i].size(width / vScale, height / vScale);
+            videos[i].hide();
+        }
+    }
 
 
-//-------------  ML5
-// myMobileNet.classify(myVideo, callback);
+    //-------------  ML5
+    // myMobileNet.classify(myVideo, callback);
 
-if (offline) {
-    // Don't use any model to classify any video
-} else {
+    if (offline) {
+        // Don't use any model to classify any video
+    } else {
 
-    // if (OnlyCamera || cameraVideo) { // just in case this is a problem
-    //     myMobileNet.classify(myCamera, gotResultsCam);
-    // }
+        // if (OnlyCamera || cameraVideo) { // just in case this is a problem
+        //     myMobileNet.classify(myCamera, gotResultsCam);
+        // }
 
-    myMobileNet.classify(videos[0], gotResults);
-}
+        myMobileNet.classify(videos[0], gotResults);
+    }
 }
 
 
@@ -327,415 +327,11 @@ function draw() {
 // ------------------------------------------------- END DRAW -------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------
 
-
-//--------------------------------------------------------- SOUND FOR VIDEO
-
-function videoSound() {
-    videos[whichVideo].volume(0); // antes 0
-}
-
-//--------------------------------------------------------- TRANSLATION FUNCIONS
-
-function toTranslate(wordToTranslate) {
-    var full_translation = wordToTranslate;
-
-    // Translate the result to another language using Google translate API
-    var url = `https://www.googleapis.com/language/translate/v2/?key=${translateAPIKey}&target=${exitLang}&source=${entryLang}&q=${full_translation}`;
-
-    loadJSON(url, gotTranslation);
-}
-
-function gotTranslation(result) {
-    if (result.data.translations) {
-        translatedRes = result.data.translations[0].translatedText;
-    }
-}
-
-
-//--------------------------------------------------------- REPLACER ARTIFICAL EDITOR
-
-
-
-function replacer(match) {
-    var len = match.length;
-    // Four letter words become uppercase
-    if (len == 1) {
-        //   return match.toUpperCase();
-        // Five letter words become "five"
-        return "five";
-    } else if (len == 5) {
-        return "five";
-        // Six letter words turn into today's date
-    } else if (len == 6) {
-        return Date();
-    }
-
-    console.log('match: ' + match);
-}
-
-
-
-
-//--------------------------------------------------------- TEXT DISPLAY
-
-function txtLoaded(textToLoad) {
-
-    console.log('TEXT READY');
-    // Here we pass in a line break to retain formatting
-    var txt = join(textToLoad, '\n');
-
-    // var sentenceDelim = '.:;?!';
-    // var sentences = splitTokens(txt, sentenceDelim); //gives me 
-    // var totalSentences = sentences.length;
-
-    // console.log('SENTENCES ' + txt);
-    // console.log('SENTENCES ' + totalSentences);
-
-
-    return txt;
-}
-
-function extraText() {
-    // console.log('texto importado:' + textToLoad );
-    // TERMINAL TEXT
-    let posXtextT = windowWidth - (windowWidth - 100);
-    let posYtextT = windowHeight - 700;
-    let w = 450;
-    let h = 600;
-    // let color = '228, 0, 124';
-
-    textAlign(LEFT);
-
-    textFont("Arial");
-    textFont('Staatliches');
-    textFont('Press Start 2P');
-
-    textSize(35);
-    fill(228, 0, 124); // rosa mexicano
-    noStroke();
-    textLeading(45);
-
-    var txt = join(textToLoad, '\n');
-
-    var sentenceDelim = '.:;?!';
-    var sentences = splitTokens(txt, sentenceDelim); //gives me array
-    totalSentences = sentences.length;
-
-    // console.log('SENTENCES ' + txt);
-    // console.log('SENTENCES ' + totalSentences);
-
-    // var messageRegex = message.replace(/\,/gi, ',\n'); //replace , for enter
-
-    // Speed of the text being generated
-    if (textSpeed < totalSentences * 4) {
-        textSpeed += 0.2;
-    } else {
-        textSpeed = 0;
-        textSpeed += 0.3;
-    }
-
-    var startWriting = 0;
-    var right = startWriting + textSpeed;
-    // text(sentences[1].substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-
-    // text(sentences[1], posXtextT, posYtextT + 100, w, h);
-
-
-    if (keyPressed) {
-        text(sentences[count].substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-        console.log('COUNT LINES' + count);
-    }
-}
-
-
-function keyPressed() {
-    count++;
-    if (count == totalSentences) {
-        count = 0;
-    }
-}
-
-// ---------------------------------------
-
-function DoText() {
-    // TERMINAL TEXT
-    let posXtextT = windowWidth - (windowWidth - 100);
-    let posYtextT = windowHeight - 600;
-    let w = 325;
-    let h = 400;
-    let color = 250;
-
-    textAlign(LEFT);
-    if (offline) {
-        textFont("Arial");
-    } else {
-        textFont("Ubuntu Mono");
-    }
-
-    textSize(20);
-    fill(color);
-    noStroke();
-    textLeading(30);
-
-    if (translate) {
-        sourceText = 'Generando narrativa...' +
-            '\nElemento encontrado: ' +
-            translatedRes + //latinamerican model
-            '. \nEnviando a narrador.. ' +
-            // ' \nTambién he encontrado un ' +
-            // mbNetLabel1 +
-            '\nCreo estar ' +
-            mbNetConfidence +
-            ' segure...' +
-            '\nActualizando narrativa...';
-    } else {
-        sourceText = 'Generating narrative...' +
-            '\nElements found: ' +
-            mbNetLabel0 + // XIX travel model
-            '. \nSending to narrator.. ' +
-            ' \nAlso found a ' +
-            mbNetLabel1 +
-            ', I am ' +
-            mbNetConfidence +
-            ' sure of that...' +
-            '\nUpdating narrative...';
-    }
-
-    // Speed of the text being generated
-
-    if (textSpeed < sourceText.length) {
-        textSpeed += 0.3;
-    } else {
-        textSpeed = 0;
-        textSpeed += 0.3;
-    }
-
-    // ------------------------------- END OF TERMINAL TEXT
-
-
-    //CODE TO SIMULATE WRITING
-    // https://creative-coding.decontextualize.com/text-and-type/ 
-
-    var startWriting = 0;
-    // var left = startWriting - textSpeed ;
-    var right = startWriting + textSpeed;
-
-//COUNTER TO SLOW APPEARANCES
-
-
-// if (frameCount % 100 || keyCode === DOWN_ARROW) { //time for the music to change
-
-    // fill(0);
-
-    // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-    
-// } else {
-
-
-    text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-            console.log('Entered Frame Song: ' + frameCount);
-
-
-// }
-    // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-
-
-    //this is static text
-
-    // text(sourceText, posXtextT, posYtextT + 100, w, h);
-
-    // Add cursor
-    // fill(color + sin(frameCount * 0.1) * 128);
-    // text('_', posXtextT, posYtextT + 100, w, h);
-
-    // SUBTITLE TEXT
-
-    posYtextS = windowHeight - 150;
-    line = 70;
-    textAlign(CENTER);
-    textFont("Verdana");
-    textSize(47);
-    textLeading(50); // pixels between each line
-
-    fill(0, 0, 0, 5); //shadow for subtitle
-    // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
-    stroke(0);
-    fill(255, 255, 64);
-
-    text(regexRnnSub, line, posYtextS, windowWidth - 100, 300);
-
-    // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
-}
-
 //------------------------------------------WINDOW SIZE ELEMENTS
 
 // dynamically adjust the canvas to the window
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
-}
-
-
-//------------------------------------------ BACKGROUND SOUND
-//Use this function to enable sound in chrome.
-// https://p5js.org/reference/#/p5.sound/getAudioContext
-
-function touchStarted() {
-
-    // //Simple code
-    // if (getAudioContext().state !== 'running') {
-    //     getAudioContext().resume();
-    //   }
-    //   sounds[1].play();
-    //   sounds[1].setVolume(.5);
-
-
-    // COMPLEX CODE CHANGING SONGS
-    if (getAudioContext().state !== 'running') {
-        getAudioContext().resume();
-    }
-
-
-    if (frameCount % 100 || keyCode === DOWN_ARROW) { //time for the music to change
-
-        otherSong = Math.floor(random(0, sounds.length));
-
-        sounds[otherSong].play();
-        sounds[otherSong].setVolume(.5); //antes 5
-
-        // console.log('Entered Frame Song: ' + frameCount);
-        // console.log('\nSong: ' + otherSong);
-
-    } else {
-        sounds[1].play();
-        sounds[1].setVolume(.7); //antes 7
-        // console.log('First loop song');
-    }
-    // sound1.loop();
-}
-
-
-
-//--------------------------------------------------------- TALK
-
-function talk() {
-    myVoice.setVoice(voice);
-    myVoice.speak(regexRnnSub);
-
-    // myVoice.speak(rnnSub);
-
-    // SIEMPRE SUENA LA VOZ
-    if (translate) {
-        myVoice.setRate(.73); // speed of speach
-        myVoice.setPitch(.8);
-        myVoice.setVolume(.4);
-    } else {
-        voice = 'Google UK English Male';
-        myVoice.setRate(.8); // speed of speach
-        myVoice.setPitch(.9);
-        myVoice.setVolume(.4);
-    }
-
-}
-
-// -----------------------------HIPERPOESIA
-
-
-function DoTextHiperpoesia() {
-
-    // TERMINAL TEXT
-    posXtextT = windowWidth - (windowWidth - 600);
-    posYtextT = windowHeight - 600;
-    w = 400;
-    h = 400;
-
-    posXtextTM = windowWidth - (windowWidth - 100);
-    posYtextTM = windowHeight - 200;
-
-    // color = 255,105,180;
-
-    textAlign(LEFT);
-    textFont("Ubuntu Mono");
-
-    textSize(25);
-    if (keyIsDown(LEFT_ARROW)) {
-
-        fill(255);
-        let mario = 'mario guzman (2019)'
-
-        if (textSpeed < mario.length) {
-            textSpeed += 0.1;
-        } else {
-            textSpeed = 0;
-            textSpeed += 0.1;
-        }
-
-        var startWriting = 0;
-        // var left = startWriting - textSpeed ;
-        var right = startWriting + textSpeed;
-        text(mario.substring(startWriting, right + 1), posXtextTM, posYtextTM + 100, w, h);
-
-
-    } else {
-        fill(0);
-
-        noStroke();
-        textLeading(30);
-
-
-        let sourceText = 'Generating narrative...' +
-            '\nElements found: ' +
-            mbNetLabel0 +
-            '. \nSending to narrator.. ' +
-            ' \nAlso found a ' +
-            mbNetLabel1 +
-            ', I am ' +
-            mbNetConfidence +
-            ' sure of that...' +
-            '\nUpdating narrative...';
-
-        // Speed of the text being generated
-
-        if (textSpeed < rnnSub.length) {
-            textSpeed += 0.3;
-        } else {
-            textSpeed = 0;
-            textSpeed += 0.3;
-        }
-
-        // ------------------------------- END OF TERMINAL TEXT
-
-
-        //CODE TO SIMULATE WRITING
-        // https://creative-coding.decontextualize.com/text-and-type/ 
-
-        var startWriting = 0;
-        // var left = startWriting - textSpeed ;
-        var right = startWriting + textSpeed;
-        text(rnnSub.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-    }
-
-    //this is static text
-    // text(sourceText, posXtextT, posYtextT + 100, w, h);
-
-    // Add cursor
-    // fill(color + sin(frameCount * 0.1) * 128);
-    // text('_', posXtextT, posYtextT + 100, w, h);
-
-    // SUBTITLE TEXT
-
-    posYtextS = windowHeight - 150;
-    line = 50;
-    textAlign(LEFT);
-    textFont("Ubuntu Mono");
-    textSize(35);
-    textLeading(50); // pixels between each line
-
-    fill(0, 0, 0, 5); //shadow for subtitle
-    // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
-    stroke(0);
-    fill(255, 255, 64);
-
-    // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
 }
 
 // ------------------------------- MENU
@@ -751,6 +347,123 @@ function menuComands() {
         text(menu, windowWidth / 2, windowHeight / 2 + 100, 350, 400);
     }
 }
+
+
+
+// ---------------------------------------
+
+// function DoText() {
+//     // TERMINAL TEXT
+//     let posXtextT = windowWidth - (windowWidth - 100);
+//     let posYtextT = windowHeight - 600;
+//     let w = 325;
+//     let h = 400;
+//     let color = 250;
+
+//     textAlign(LEFT);
+//     if (offline) {
+//         textFont("Arial");
+//     } else {
+//         textFont("Ubuntu Mono");
+//     }
+
+//     textSize(20);
+//     fill(color);
+//     noStroke();
+//     textLeading(30);
+
+//     if (translate) {
+//         sourceText = 'Generando narrativa...' +
+//             '\nElemento encontrado: ' +
+//             translatedRes + //latinamerican model
+//             '. \nEnviando a narrador.. ' +
+//             // ' \nTambién he encontrado un ' +
+//             // mbNetLabel1 +
+//             '\nCreo estar ' +
+//             mbNetConfidence +
+//             ' segure...' +
+//             '\nActualizando narrativa...';
+//     } else {
+//         sourceText = 'Generating narrative...' +
+//             '\nElements found: ' +
+//             mbNetLabel0 + // XIX travel model
+//             '. \nSending to narrator.. ' +
+//             ' \nAlso found a ' +
+//             mbNetLabel1 +
+//             ', I am ' +
+//             mbNetConfidence +
+//             ' sure of that...' +
+//             '\nUpdating narrative...';
+//     }
+
+//     // Speed of the text being generated
+
+//     if (textSpeed < sourceText.length) {
+//         textSpeed += 0.3;
+//     } else {
+//         textSpeed = 0;
+//         textSpeed += 0.3;
+//     }
+
+//     // ------------------------------- END OF TERMINAL TEXT
+
+
+//     //CODE TO SIMULATE WRITING
+//     // https://creative-coding.decontextualize.com/text-and-type/ 
+
+//     var startWriting = 0;
+//     // var left = startWriting - textSpeed ;
+//     var right = startWriting + textSpeed;
+
+// //COUNTER TO SLOW APPEARANCES
+
+
+// // if (frameCount % 100 || keyCode === DOWN_ARROW) { //time for the music to change
+
+//     // fill(0);
+
+//     // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+
+// // } else {
+
+
+//     text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+//             console.log('Entered Frame Song: ' + frameCount);
+
+
+// // }
+//     // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+
+
+//     //this is static text
+
+//     // text(sourceText, posXtextT, posYtextT + 100, w, h);
+
+//     // Add cursor
+//     // fill(color + sin(frameCount * 0.1) * 128);
+//     // text('_', posXtextT, posYtextT + 100, w, h);
+
+//     // SUBTITLE TEXT
+
+//     posYtextS = windowHeight - 150;
+//     line = 70;
+//     textAlign(CENTER);
+//     textFont("Verdana");
+//     textSize(47);
+//     textLeading(50); // pixels between each line
+
+//     fill(0, 0, 0, 5); //shadow for subtitle
+//     // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
+//     stroke(0);
+//     fill(255, 255, 64);
+
+//     text(regexRnnSub, line, posYtextS, windowWidth - 100, 300);
+
+//     // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
+// }
+
+
+
 
 
 // ------------------------------------------------------------------------------------------------------------
