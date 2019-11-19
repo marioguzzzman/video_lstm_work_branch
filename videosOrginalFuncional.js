@@ -135,12 +135,13 @@ let textSpeed = 0;
 //TEXTS 
 let textToLoad;
 let txt;
-var count = 0;
 var totalSentences;
 
-let subtitle = false;
-let waiting = 0;
 let terminal = false;
+var showTerminal = 0;
+
+let subtitle = false;
+let showSubtitle = 0;
 
 
 // //--------------Connectors text XIX CENTURY TRAVELER
