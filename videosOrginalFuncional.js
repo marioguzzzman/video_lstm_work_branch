@@ -138,6 +138,10 @@ let txt;
 var count = 0;
 var totalSentences;
 
+let subtitle = false;
+let waiting = 0;
+let terminal = false;
+
 
 // //--------------Connectors text XIX CENTURY TRAVELER
 // let entrance = [ 'I think this is a ', 'Sometimes when I find a ', 'Later on, I whould think of this ', 'Although I don\'t believe that this is a ', 'But, if you wander through the ', 'Last time I saw a ', 'I couldn\'t believe a ', 'I feel I already saw a ', 'Just after a ', 'Before this ', 'After encountering this ', 'Also, this ', 'Later on, the ', 'Above all, this ', ];
