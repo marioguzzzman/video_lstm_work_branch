@@ -3,6 +3,9 @@
 
 function gotResults(err, results) {
 
+
+    console.log('ENTER RESULTS'); // see results 
+
     if (err) console.log(err); //just tell errors
 
     if (results) {
@@ -23,7 +26,7 @@ function gotResults(err, results) {
 
         // -----> CRNN ------> Generate TEXT content
 
-        // let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
+        let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
 
         rnn.generate({
             // seed: results[1].label, // this is the label result
@@ -31,8 +34,8 @@ function gotResults(err, results) {
 
             //----------------- SEEDS THAT APPEAR ON TEXT
             seed: `${startingSeeds}${mbNetLabel0} `, // this is the whole sentence that becomes seed
-            length: 100, //length of characters
-            // length: `${randomTxtLength}`,
+            // length: 100, //length of characters
+            length: `${randomTxtLength}`,
             temperature: 0.9 // bring closer to 1 in order to make it closer to seed
         }, (err, results) => {
 
@@ -171,6 +174,5 @@ function gotResults(err, results) {
         }); // end of generate
     } // end of results
 } //end of gotResults
-
 
 

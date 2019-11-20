@@ -133,16 +133,17 @@ let textSpeed = 0;
 
 
 //TEXTS 
+//TEXTS 
 let textToLoad;
 let txt;
 var totalSentences;
+let count = 0;
 
 let terminal = false;
 var showTerminal = 0;
 
 let subtitle = false;
-let showSubtitle = 0;
-
+showSubtitle = 0;
 
 // //--------------Connectors text XIX CENTURY TRAVELER
 // let entrance = [ 'I think this is a ', 'Sometimes when I find a ', 'Later on, I whould think of this ', 'Although I don\'t believe that this is a ', 'But, if you wander through the ', 'Last time I saw a ', 'I couldn\'t believe a ', 'I feel I already saw a ', 'Just after a ', 'Before this ', 'After encountering this ', 'Also, this ', 'Later on, the ', 'Above all, this ', ];
@@ -170,7 +171,7 @@ var myVoice = new p5.Speech(); // new P5.Speech object // OFFLINE
 let voice = 'Google español de Estados Unidos';
 
 //List of voices
-// 'Google Deutsch', 'Google US English', 'Google UK English Female', 'Google UK English Male', 'Google español', 'Google español de Estados Unidos', 'Google français', 'Google हिन्दी', 'Google Bahasa Indonesia', 'Google italiano', 'Google 日本語', 'Google 한국의', 'Google Nederlands', 'Google polski', 'Google português do Brasil', 'Google русский', 'Google 普通话（中国大陆）', 'Google 粤語（香港', 'Google 國語（臺灣'
+// 'Google Deutsch', 'Google US English', 'Google UK English Female', 'Google UK English Male', 'Google español', 'Google español de Estados Unidos', 'Google français', 'Google हिन्दी', 'Google Bahasa Indonesia', 'Google italiano', 'Google 日本語', 'Google 한국의', 'Google Nederlands', 'Google polski', 'Google português do Brasil', 'Google русский', 'Google 普通话（中国大陆）', 'Google 粤語（香港', 'Google 國語（臺灣'
 
 
 //BACKGROUND MUSIC
