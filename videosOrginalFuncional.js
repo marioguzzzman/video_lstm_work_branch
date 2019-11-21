@@ -303,6 +303,8 @@ function setup() {
 
 
 function draw() {
+
+
     background(0, 50); //antes 50
     menuComands();
 
@@ -365,11 +367,11 @@ function draw() {
     // switchCameraAndVIdeo();
 
 
-    if (OnlyCamera) {
-    renderCamera();
-    } else {
+    // if (OnlyCamera) {
+    // renderCamera();
+    // } else {
     renderVideos();
-    }
+    // }
 
     // extraText();
 
@@ -378,14 +380,21 @@ function draw() {
     if (resultsReady) {
         // DoTextHiperpoesia();
         // console.log(rnnSub);
+
+        //cuadradito para subtitulos
+        fill(0, 10);
+        rect(0, windowHeight - 160, windowWidth, 200);
+
         DoText();
         // talk();
+
 
         if (writingOutput) {
             writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
         }
 
     }
+
 }
 
 // ------------------------------------------------------------------------------------------------------------
