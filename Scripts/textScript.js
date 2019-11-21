@@ -49,9 +49,9 @@ function doTerminal() {
 
     let posXtextT = windowWidth - (windowWidth - 100);
     let posYtextT = windowHeight - 600;
-    let w = 325;
+    let w = 500;
     let h = 400;
-    let color = 250;
+    let color = 255;
 
     textAlign(LEFT);
     if (offline) {
@@ -60,7 +60,7 @@ function doTerminal() {
         textFont("Ubuntu Mono");
     }
 
-    textSize(20);
+    textSize(33);
     fill(color);
     noStroke();
     textLeading(30);
@@ -141,15 +141,22 @@ function DoSubtitle() {
     line = 70;
     textAlign(CENTER);
     textFont("Verdana");
-    textSize(47);
+    textSize(52);
     textLeading(50); // pixels between each line
+
+    
+    // fill(0, 70);
+    // rect(posYtextS, windowWidth - 140, 300);
 
     fill(0, 0, 0, 5); //shadow for subtitle
     // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
     stroke(0);
-    fill(255, 255, 64);
+    // fill(255, 255, 64);
+    fill(255, 255, 120);
 
-    text(regexRnnSub, line, posYtextS, windowWidth - 100, 300);
+
+
+    text(regexRnnSub, line, posYtextS, windowWidth - 140, 300);
 
     // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
 }
@@ -171,7 +178,7 @@ function extraText() {
     textFont('Staatliches');
     textFont('Press Start 2P');
 
-    textSize(35);
+    textSize(60);
     fill(228, 0, 124); // rosa mexicano
     noStroke();
     textLeading(45);
