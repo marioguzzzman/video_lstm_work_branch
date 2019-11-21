@@ -1,0 +1,40 @@
+let entrance = [
+    'Creo que esto es un ',
+    'A veces, cuando encuentro un ',
+    'Más tarde, yo pensaría que un ',
+    'Aunque no crea que esto es un ',
+    'Pero, si recorres el ',
+    'La última vez que ví un ',
+    'No podría crer que un ',
+    'Siento que ya he visto este ',
+    'Justo antes de este ',
+    'Antes de este ',
+    'Después de reconcer este ',
+    'También, este ',
+    'Más tarde, el ',
+    'Sobre todo, este ',
+
+];
+
+let middle = [
+    ' ',
+    ' ',
+    ' ',
+    ' ',
+    ' ',
+    ' ',
+    ' ',
+    '. ',
+    ', ',
+    '. ',
+    ', ',
+    ', pero ',
+    ', sin embargo, ',
+    ', en resumen,',
+    ', pero también, ',
+    ', además, ',
+    ', me gustaría pensar que ',
+    ' podemos discutir acerca de',
+    ' Dudaba de mi, pero ',
+    ' estaba ahí '
+];
