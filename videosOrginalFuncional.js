@@ -382,7 +382,7 @@ function draw() {
         // console.log(rnnSub);
 
         //cuadradito para subtitulos
-        fill(0, 10);
+        fill(0, 95);
         rect(0, windowHeight - 160, windowWidth, 200);
 
         DoText();
