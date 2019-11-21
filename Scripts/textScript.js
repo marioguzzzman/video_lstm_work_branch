@@ -5,6 +5,46 @@ function randomize() {
 
 }
 
+function DoText() {
+
+    //subtitute for millis
+
+    terminal = true;
+    showTerminal++;
+
+    console.log('Counting: ' + count);
+
+    if (terminal && !subtitle) {
+        doTerminal();
+        showTerminal++;
+        // terminal = false;
+    }
+
+    if (showTerminal == 400) { // maybe poner el final del texto producido.
+        terminal = false;
+        subtitle = true;
+    }
+
+    if (subtitle) {
+        DoSubtitle();
+        showSubtitle++;
+    }
+
+    if (showSubtitle == 1000) { // maybe poner el final del texto producido.
+        terminal = true;
+        subtitle = false;
+
+        showSubtitle = 0;
+        showTerminal = 0;
+    }
+
+    // TERMINAL TEXT
+    // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
+    // // SUBTITLE TEXT
+    // DoSubtitle();
+
+}
+
 function doTerminal() {
 
     let posXtextT = windowWidth - (windowWidth - 100);
@@ -37,6 +77,8 @@ function doTerminal() {
             '\nActualizando narrativa...';
     } else {
 
+        //MAKE THIS SENTENCE MORE VARIABLE
+
         if (translate) {
             sourceText = 'Generando narrativa...' +
                 '\nElemento encontrado: ' +
@@ -62,29 +104,6 @@ function doTerminal() {
         }
     }
 
-    // // Speed of the text being generated
-
-    // if (textSpeed < sourceText.length) {
-    //     textSpeed += 0.3;
-    // } else {
-    //     textSpeed = 0;
-    //     textSpeed += 0.3;
-    // }
-
-    // ------------------------------- END OF TERMINAL TEXT
-
-    //CODE TO SIMULATE WRITING
-    // https://creative-coding.decontextualize.com/text-and-type/ 
-
-    // var startWriting = 0;
-    // // var left = startWriting - textSpeed ;
-    // var right = startWriting + textSpeed;
-
-    // var count = 0;
-
-    // var random = Math.floor(random(150, 300));
-
-
     var startWriting = 0;
     // var left = startWriting - textSpeed ;
     var right = startWriting + textSpeed;
@@ -99,49 +118,20 @@ function doTerminal() {
     }
 
     text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-    console.log('narrative tur');
-    terminal = false;
 
 
-}
+    // ------------------------------- END OF TERMINAL TEXT
 
+    //CODE TO SIMULATE WRITING
+    // https://creative-coding.decontextualize.com/text-and-type/ 
 
-function DoText() {
+    // var startWriting = 0;
+    // // var left = startWriting - textSpeed ;
+    // var right = startWriting + textSpeed;
 
-    //COUNTER TO SLOW APPEARANCES
+    // var count = 0;
 
-    console.log('wmxlksmxl');
-
-    count++;
-    console.log(count);
-
-    var tiempoTerminal = 0;
-
-    if (count > tiempoTerminal) {
-        doTerminal();
-    }
-    if (count == tiempoTerminal + 350) {
-        count = 0;
-
-    }
-
-    // TERMINAL TEXT
-
-
-    // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-
-
-    //this is static text
-
-    // text(sourceText, posXtextT, posYtextT + 100, w, h);
-
-    // Add cursor
-    // fill(color + sin(frameCount * 0.1) * 128);
-    // text('_', posXtextT, posYtextT + 100, w, h);
-
-    // SUBTITLE TEXT
-    DoSubtitle();
-
+    // var random = Math.floor(random(150, 300));
 }
 
 function DoSubtitle() {
@@ -219,7 +209,7 @@ function extraText() {
 }
 
 
-function keyPressed() {
+function keyPressed() { // make extratext advance by pressing keys
     count++;
     if (count == totalSentences) {
         count = 0;
@@ -266,5 +256,5 @@ function replacer(match) {
 
     console.log('match: ' + match);
 
-    
+
 }

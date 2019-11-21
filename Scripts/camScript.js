@@ -19,7 +19,7 @@ function anotheEffectForCamera() {
             noStroke();
 
             // fill(redVal, greenVal, blueVal, 150); // face becomes lit up, the rest is transparent
-            fill(redVal, greenVal, blueVal); // face becomes lit up, the rest is transparent
+            // fill(redVal, greenVal, blueVal); // face becomes lit up, the rest is transparent
 
             // tint(255, 255, 255, 100);
 
@@ -42,7 +42,7 @@ function renderCamera() {
 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        // image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
+        image(myCamera, 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS
         // filter(INVERT);
         // filter(POSTERIZE, 3);
         // filter(BLUR, 3);
