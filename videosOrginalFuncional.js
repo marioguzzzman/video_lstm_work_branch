@@ -83,6 +83,12 @@ let myCamera; //WEB CAM
 var capture;
 var options;
 
+let cameraON = false;
+var showCamera = 0;
+
+let videoON = false;
+let showVideo = 0;
+
 
 //----------------------------------------------------------- VIDEO ----------
 
@@ -133,7 +139,6 @@ let textSpeed = 0;
 
 
 //TEXTS 
-//TEXTS 
 let textToLoad;
 let txt;
 var totalSentences;
@@ -143,7 +148,7 @@ let terminal = false;
 var showTerminal = 0;
 
 let subtitle = false;
-showSubtitle = 0;
+let showSubtitle = 0;
 
 // //--------------Connectors text XIX CENTURY TRAVELER
 // let entrance = [ 'I think this is a ', 'Sometimes when I find a ', 'Later on, I whould think of this ', 'Although I don\'t believe that this is a ', 'But, if you wander through the ', 'Last time I saw a ', 'I couldn\'t believe a ', 'I feel I already saw a ', 'Just after a ', 'Before this ', 'After encountering this ', 'Also, this ', 'Later on, the ', 'Above all, this ', ];
@@ -306,10 +311,64 @@ function draw() {
         text('click to start audio', width / 2, height / 2);
     }
 
+    // cameraON = true;
+    // showCamera++;
+
+    // console.log('camera: ' + showCamera++);
+
+    // if (cameraON && !videoON) {
+    //     renderCamera();
+    //     // renderVideos();
+    //     // myCamera.hide();
+
+    //     turnOffCamera();
+
+
+    //     showCamera++;
+    //     console.log('render camera');
+
+    //     // terminal = false;
+
+    //     if (showCamera == 200) {
+    //         cameraON = false;
+    //         videoON = true;
+    //         console.log('render camera is 200');
+
+
+    //     }
+    // }
+
+
+
+    // if (videoON) {
+    //     renderVideos();
+    //     // renderCamera();
+
+    //     showVideo++;
+    //     console.log('render video');
+
+    // }
+
+    // if (showVideo == 200) {
+    //     console.log('turn of camera');
+
+    //     turnOffCamera();
+
+    //     cameraON = true;
+    //     videoON = false;
+
+    //     videoON = 0;
+    //     showCamera = 0;
+    // }
+
+
+    // switchCameraAndVIdeo();
+
+
     if (OnlyCamera) {
-        renderCamera();
+    renderCamera();
     } else {
-        renderVideos();
+    renderVideos();
     }
 
     // extraText();
