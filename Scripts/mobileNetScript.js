@@ -26,7 +26,7 @@ function gotResults(err, results) {
 
         // -----> CRNN ------> Generate TEXT content
 
-        let randomTxtLength = Math.floor(random(1, 100)); // esto funciona
+        let randomTxtLength = Math.floor(random(1, 90)); // esto funciona
 
         rnn.generate({
             // seed: results[1].label, // this is the label result
