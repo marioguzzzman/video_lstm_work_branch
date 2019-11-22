@@ -1,10 +1,33 @@
-
 function renderVideos() {
-    // * Camera gets in the back of video 
+
+    if (resultsReady) {
+        // DoTextHiperpoesia();
+        // console.log(rnnSub);
+
+        //cuadradito para acentuar subtitulos
+        fill(0, 95);
+        rect(0, windowHeight - 160, windowWidth, 200);
+
+        DoText();
+        // talk();
+
+
+        if (writingOutput) {
+            writer = createWriter(month() + "/" + day() + "/" + year() + "_" + 'latinPage' + "_" + ".txt"); // texto en donde escribir   
+        }
+
+        renderCamera(); // FUNCIONA PERO SIN TEXTO
+
+
+    }
+
+
+    // // * Camera gets in the back of video 
     if (cameraVideo) { //under video
         // console.log('camera VIdeo');
-        renderCamera()
+        // renderCamera(); // no tiene texto
     }
+
     if (playSimpleVideo) {
         // console.log('playing simple video');
         image(videos[0].play(), 0, 0, width, height); //size and position of video // COMENTED FOR PIXELS // CHECK ALL THIS
@@ -36,9 +59,23 @@ function renderVideos() {
             if (randomFrameEffect) { // plays pixel + random
                 pixelEffect();
                 randomFrame();
+
+                 // * Camera gets in the back of video 
+                //  if (cameraVideo) { //under video
+                //     // console.log('camera VIdeo');
+                //     renderCamera();
+                // }
+
+                
             } else {
                 pixelEffect();
                 //camera video positioned here is also behind video
+
+                // // * Camera gets in the back of video 
+                // if (cameraVideo) { //under video
+                //     // console.log('camera VIdeo');
+                //     renderCamera();
+                // }
             }
         } else {
             if (randomFrameEffect) {
@@ -231,4 +268,3 @@ function videoOver() {
 
     stage = 1;
 }
-
