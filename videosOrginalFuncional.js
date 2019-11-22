@@ -40,9 +40,9 @@ let randomFrameEffect = true;
 let playSimpleVideo = false; //random videos
 let oneVideo = true; // efects wonk work when false // just 1.mp4
 
-let cameraVideo = false; //estaba true
+let cameraVideo = true; //estaba true
 let OnlyCamera = false; // GETS ERROR FROM GENERATOR // maybe because generator ins embeded into renderVIdeos()
-let cameraEffect = false; // estaba true
+let cameraEffect = true; // estaba true
 
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
@@ -245,7 +245,9 @@ function preload() { // To add things that take time to load
 function setup() {
     noCursor();
 
-    createCanvas(windowWidth, windowHeight);
+    // createCanvas(windowWidth, windowHeight);
+    createCanvas(1920, 1080);
+
     frameRate(30);
     pixelDensity(1);
 
@@ -266,7 +268,9 @@ function setup() {
     if (OnlyCamera || cameraVideo) {
         v_Cam_Scale = 1;
 
-        myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
+        // myCamera.size(width / v_Cam_Scale, height / v_Cam_Scale);
+        myCamera.size(1920 / v_Cam_Scale, 1080 / v_Cam_Scale);
+
         myCamera.hide();
     }
 
@@ -331,6 +335,7 @@ function draw() {
 
     //     // terminal = false;
 
+    
     //     if (showCamera == 200) {
     //         cameraON = false;
     //         videoON = true;
@@ -373,6 +378,20 @@ function draw() {
     renderVideos();
     // }
 
+    // showCamera++;
+    // console.log('camera: ' + showCamera++);
+// 
+        // if (showCamera == 700) {
+            // renderCamera(); // FUNCIONA PERO SIN TEXTO
+
+            // cameraON = false;
+            // videoON = true;
+            // console.log('render camera is 200');
+
+
+        // }
+
+
     // extraText();
 
 
@@ -381,7 +400,7 @@ function draw() {
         // DoTextHiperpoesia();
         // console.log(rnnSub);
 
-        //cuadradito para subtitulos
+        //cuadradito para acentuar subtitulos
         fill(0, 95);
         rect(0, windowHeight - 160, windowWidth, 200);
 
@@ -425,119 +444,6 @@ function menuComands() {
 
 
 // ---------------------------------------
-
-// function DoText() {
-//     // TERMINAL TEXT
-//     let posXtextT = windowWidth - (windowWidth - 100);
-//     let posYtextT = windowHeight - 600;
-//     let w = 325;
-//     let h = 400;
-//     let color = 250;
-
-//     textAlign(LEFT);
-//     if (offline) {
-//         textFont("Arial");
-//     } else {
-//         textFont("Ubuntu Mono");
-//     }
-
-//     textSize(20);
-//     fill(color);
-//     noStroke();
-//     textLeading(30);
-
-//     if (translate) {
-//         sourceText = 'Generando narrativa...' +
-//             '\nElemento encontrado: ' +
-//             translatedRes + //latinamerican model
-//             '. \nEnviando a narrador.. ' +
-//             // ' \nTambién he encontrado un ' +
-//             // mbNetLabel1 +
-//             '\nCreo estar ' +
-//             mbNetConfidence +
-//             ' segure...' +
-//             '\nActualizando narrativa...';
-//     } else {
-//         sourceText = 'Generating narrative...' +
-//             '\nElements found: ' +
-//             mbNetLabel0 + // XIX travel model
-//             '. \nSending to narrator.. ' +
-//             ' \nAlso found a ' +
-//             mbNetLabel1 +
-//             ', I am ' +
-//             mbNetConfidence +
-//             ' sure of that...' +
-//             '\nUpdating narrative...';
-//     }
-
-//     // Speed of the text being generated
-
-//     if (textSpeed < sourceText.length) {
-//         textSpeed += 0.3;
-//     } else {
-//         textSpeed = 0;
-//         textSpeed += 0.3;
-//     }
-
-//     // ------------------------------- END OF TERMINAL TEXT
-
-
-//     //CODE TO SIMULATE WRITING
-//     // https://creative-coding.decontextualize.com/text-and-type/ 
-
-//     var startWriting = 0;
-//     // var left = startWriting - textSpeed ;
-//     var right = startWriting + textSpeed;
-
-// //COUNTER TO SLOW APPEARANCES
-
-
-// // if (frameCount % 100 || keyCode === DOWN_ARROW) { //time for the music to change
-
-//     // fill(0);
-
-//     // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-
-// // } else {
-
-
-//     text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-//             console.log('Entered Frame Song: ' + frameCount);
-
-
-// // }
-//     // text(sourceText.substring(startWriting, right + 1), posXtextT, posYtextT + 100, w, h);
-
-
-//     //this is static text
-
-//     // text(sourceText, posXtextT, posYtextT + 100, w, h);
-
-//     // Add cursor
-//     // fill(color + sin(frameCount * 0.1) * 128);
-//     // text('_', posXtextT, posYtextT + 100, w, h);
-
-//     // SUBTITLE TEXT
-
-//     posYtextS = windowHeight - 150;
-//     line = 70;
-//     textAlign(CENTER);
-//     textFont("Verdana");
-//     textSize(47);
-//     textLeading(50); // pixels between each line
-
-//     fill(0, 0, 0, 5); //shadow for subtitle
-//     // text('I can tell you that' + rnnSub, line + 2, posYtextS + 2, windowWidth, 300);
-//     stroke(0);
-//     fill(255, 255, 64);
-
-//     text(regexRnnSub, line, posYtextS, windowWidth - 100, 300);
-
-//     // text(rnnSub, line, posYtextS, windowWidth - 100, 300);
-// }
-
-
-
 
 
 // ------------------------------------------------------------------------------------------------------------
