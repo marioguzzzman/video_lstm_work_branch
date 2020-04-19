@@ -1,0 +1,384 @@
+https://ml5js.org/reference/api-ImageClassifier/
+python3 -m http.server
+http://localhost:8000/  //works best with this. Does not work with Firefox
+
+
+
+// TODO
+Ajust picth from voice
+add menu
+Include music
+clean text to create full words
+select videos
+how to select videos
+look for certain videos
+
+VIDEO 
+
+https://p5js.org/examples/dom-video.html
+https://creative-coding.decontextualize.com/video/ 
+http://www.decontextualize.com/
+https://p5js.org/reference/#/p5/createVideo
+https://forum.processing.org/two/discussion/23870/p5js-problem-with-asynchronous-video-loading-playing
+
+TEXT
+
+https://ml5js.org/reference/api-charRNN/
+https://github.com/opencog/opencog
+https://github.com/opencog/learn/
+https://github.com/opencog/learn/tree/master/run
+bájate nonbreaking_prefixes y split-sentences.pl
+
+
+SOUND
+
+view-source:http://ability.nyu.edu/p5.js-speech/examples/01simple.html
+//BACKGROUND MUSIC
+// https://generative.fm/
+
+CONCEPT
+
+https://en.wikipedia.org/wiki/Heterotopia_(space)
+
+juxtapose in a single space several incompatible spatial elements
+encapsulate  spatio-temporal discontinuities or intensities
+presuppose an ambivalent system of opening/closing, entry/ exit, distance/penetration
+have a specific operation  in relation to other spaces as, for example, illusion or compensation
+
+https://futurism.media/franz-von-paula-gruithuisen-s-venus-science-fiction
+German astronomer Franz von Paula Gruithuisen, became a prominent figure in the nineteenth century, and influenced a generation of sci-fi writers to ponder space exploration to Venus. 
+
+The fascinating story of Franz von Paula Gruithuisen, a German astronomer who became prominent early in the nineteenth century, has inspired sci-fi writers to ponder exploring distant worlds like Mars and Venus. His attempts at explaining the wonders of space were filled with promise of mystery and awe. He was a fairly good observer who concentrated on the moon and the planets, but his imagination was, somewhat vivid. For instance, he discovered what he believed to be an artificial structure on the moon and described it as a collection of dark, gigantic artistic ramparts.  
+
+
+
+
+https://en.wikipedia.org/wiki/Body_without_organs
+Deleuze first mentions the phrase in a chapter of The Logic of Sense called "The Schizophrenic and the Little Girl", which contrasts two distinct and peripheral ways of encountering the world. The Little Girl (whose exemplar is Alice), explores a world of 'surfaces': the shifting realm of social appearances and nonsense words which nevertheless seem to function. The Schizophrenic (whose exemplar is Artaud) is by contrast an explorer of 'depths', one who rejects the surface entirely and returns instead to the body.
+
+For the Schizophrenic, words collapse, not into nonsense, but into the bodies that produce and hear them. Deleuze refers to "a new dimension of the schizophrenic body, an organism without parts which operates entirely by insufflation, respiration, evaporation and fluid transmission (the superior body or body without organs of Antonin Artaud)."[3] This body is also described as "howling", speaking a "language without articulation" that has more to do with the primal act of making sound than it does with communicating specific words.[4]
+
+//--------------------------------------------------------
+
+Heterotopian 
+
+is it possible to embed an organism with the joined memories of humans and AI?
+AI appears to have a mind but not a body, and humans have perceptions that connected to the world may become overwhalmed. 
+
+
+
+
+
+maybe I can project into a body that is changing, being different. maked with GAN
+
+
+mirrors, loops
+
+Also de mirror is interesting
+
+thinking about buiding or helping each other understand our world. what does the AI can tell me about the data 
+
+
+//----------------------- CONCEPT ------------------------------
+
+Dear friends, I am very happy to invite you all this Firday in ACUD, Berlin to explore a new experiment on literature + machine leaning that I've been working on during my stay in the beautiful School of MA.
+
+I've benn training a neural network on XIX century travel literature to become a generative storyteller that may help me to make sense of 
+
+The question that drives the work is: can a neural network, trained in XIX century travel literature, lluminate the experience of a contemporary traveler who is sometimes lost in time and space?
+
+
+Dear friends, I am super thrilled to invite you this Friday to ACUD, Berlin for the final show of the beautiful School of Machines. I've been developing an experiment on literature + machine learning to become a generative storyteller and answer this question:
+ Can a neural network, trained in XIX century travel literature, illuminate the experience of a contemporary traveler, sometimes lost in time and space?
+
+
+
+
+
+
+
+///TODO
+Change the name of the videos
+
+
+
+///NOTES FOR TRAINING TEXT TRAINING LOG
+1. Join all texts
+cat * > TEXT.txt
+2. cleaning the text
+https://www.textfixer.com/tools/remove-line-breaks.php
+no all worked, but need ot keep trying to automate this process.
+https://stackoverflow.com/questions/3134791/how-do-i-remove-newlines-from-a-text-file
+
+TUTORIAL SPELL
+
+https://github.com/ml5js/training-lstm
+
+Setup
+
+- make dir
+- download the repository = git@github.com:ml5js/training-lstm.git
+- enter the repo and = mkdir data
+- move input into data 
+
+Training the model
+
+- install spell
+- login
+- upload the file to spell (rememeber it has to be called input) = spell upload data/input.txt 
+- then add the name for the place to store it = NAMEOFFOLDERINSPELL
+- go ahead and run the python training file in spell = spell run --mount uploads/NAMEOFFOLDERINSPELL: data "python train.py --data_dir=./data"
+- its going to ask to commit = git add . + git commit -m "data added"
+- now download our model = spell cp runs/NUMBER OF THE RUN/models
+- check them out in data FOLDERNAME
+
+Using the model
+- borrow and modify = https://github.com/ml5js/ml5-examples
+https://ml5js.github.io/ml5-examples/p5js/CharRNN/CharRNN_Interactive/
+
+comands
+
+ --dropout 0.25
+
+
+1.  Model =  Cri-cri Songs  
+    Size = 153.4 kB
+    Run = 89
+    Time = 11m 15s
+    Status = sucessful
+    Output =
+
+2.  Model =  XIX century travel 
+    Size = 8.4Mb
+    Run = 104
+    Time = 6h 37m 52s 
+    Status = not sucessful
+
+spell run --machine-type K80 --mount uploads/travel_training:data "python train.py --data_dir=./data --rnn_size 512 --num_layers 3 --batch_size 64 --seq_length 128"
+
+3. Model =  XIX century travel 
+    Size = 4Mb
+    Run = 111
+    Time = 
+    Status = 
+    Folder name = travel2
+    Output = K/“äzöFúDœÆœÆÆÆě@ě(óÆ[N@…EïÆÆ…ÆÆD(œ°EIÆÆDD@NÆÆÆÆ…ÆÆÆÆDäDEéÆÆÆÆ@@óÆóÆÆ@@ÆÆ…êÆÆÆÆD]@…êÆÆÆÆ…êÆě@@ó“œ7êÆ
+
+spell run --machine-type K80 --mount uploads/travel2:data "python train.py --data_dir=./data --rnn_size 512 --num_layers 3 --batch_size 64 --num_epochs 50 --save_checkpoints ./checkpoints --seq_length 128"
+
+4. Model =  XIX century travel 
+    Size = 4Mb
+    Run = 112
+    Time = 6h 50m 28s
+    Status = Failed
+    Folder name = travel3
+    Output ={°ô{ mI¾{ô¾)‘Iêé)‘IêaL¾¾{œI½” I¾u{¾{{é){mI¾{”nI¾- ‘éê{¾é{wI.-’’ö¾)é{{{{{{”{ I¾ŏ{éï)é)I{çI¾;àIGIïSç¾
+
+spell run --machine-type K80 --mount uploads/travel3:data "python train.py --data_dir=./data --rnn_size 512 --num_layers 3 --batch_size 64 --num_epochs 100 --save_checkpoints ./checkpoints --seq_length 128"
+
+spell cp runs/112/models_112
+- check them out in data FOLDERNAME
+
+5. Model =  XIX century travel 
+    Size = 4Mb
+    Run = 113
+    Time = 
+    Status = 
+    Folder name = travel4
+    Output =
+
+spell run --machine-type K80 --mount uploads/travel4:data "python train.py --data_dir=./data --rnn_size 512 --num_layers 3 --batch_size 64 --num_epochs 500 --save_checkpoints ./checkpoints --seq_length 128"
+
+spell run --mount uploads/NAMEOFFOLDERINSPELL: data "python train.py --data_dir=./data"
+
+spell cp runs/113/models
+
+6. Model =  XIX century travel 
+    Size = 4Mb
+    Run = 121
+    Time = 
+    Status = 
+    Folder name = travel6
+    Output =
+
+Correct for the size of the file = 
+spell run --machine-type K80 --mount uploads/travel6:data "python train.py --data_dir=./data --rnn_size 256 --num_layers 2 --batch_size 32 --num_epochs 1000 --save_checkpoints ./checkpoints --seq_length 64"
+
+spell cp runs/121/models
+
+
+7.  Model =  XIX century travel 
+    Size = 4Mb
+    Run = 122
+    Time = 1h 12m 42s
+  * Status = good  / estable
+    Folder name = travel7
+    Output = the meaning of life is the same morning with which the surface of the governor of the traveller as far as a very special b
+
+standar
+spell run --machine-type K80 --mount uploads/travel7:data "python train.py --data_dir=./data"
+
+spell cp runs/122/models
+
+
+8. Model =  XIX century travel   ****** USING THIS ONE
+    Size = 3.9Mb
+    Run = 124
+    Time = 1h 8m 54s
+    Status = good
+    Folder name = travel8
+    Output = the meaning of life is continued by the appearance of the colour of the sun and the rest the columbia the governor in the
+
+New clean input + standar
+spell run --machine-type K80 --mount uploads/travel8:data "python train.py --data_dir=./data"
+
+
+spell cp runs/124/models
+
+9. Model =  XIX century travel 
+    Size = 8Mb
+    Run = 128
+    Time = 2h 29m 7s
+  * Status = good
+    Folder name = travel9
+    Output = the meaning of life is long thing they traversed this of the water of the summit of the chalt of the Orinoco is the shadow
+
+Long imput + standar
+spell run --machine-type K80 --mount uploads/travel9:data "python train.py --data_dir=./data"
+
+spell cp runs/128/models
+
+10. Model =  XIX century travel 
+    Size = 8Mb
+    Run = 129
+    Time = 28m 24s
+  * Status = ok, seems surprisingly good
+    Folder name = travel10
+    Output = the meaning of life is a bit of any statement, and the same probably recent very little town and rushes and salt-work of
+
+Long imput + recomended + 5 epochs
+spell run --machine-type K80 --mount uploads/travel10:data "python train.py --data_dir=./data --rnn_size 512 --num_layers 2 --seq_length 128 --batch_size 64 --num_epochs 5 --save_checkpoints ./checkpoints"
+
+spell cp runs/129/models
+
+
+
+
+
+
+Training a LSTM network and using the model in ml5js
+Multi-layer Recurrent Neural Networks (LSTM, RNN) for character-level language models in Python using Tensorflow and modified to work with tensorflow.js and ml5js
+
+Based on char-rnn-tensorflow.
+
+Requirements
+Set up a python environment with tensorflow installed. More detailed instructions here. You can also follow this video tutorial about Python virtualenv.
+
+If you are familiar with Docker, you can also use this container (soon!)
+
+Usage
+1) Download this repository
+Start by downloading or cloning this repository:
+
+git clone https://github.com/ml5js/training-lstm.git
+cd training-lstm
+2) Collect data
+LSTMs work well when you want predict sequences or patterns from your inputs. Try to gather as much input data as you can. The more the better.
+
+Once your data is ready, create a new folder in the root of this project and inside that folder you should have one file called input.txt that contains all your training data.
+
+(A quick tip to concatenate many small disparate .txt files into one large training file: ls *.txt | xargs -L 1 cat >> input.txt)
+
+2) Train
+Run the training script with the default settings:
+
+python train.py --data_dir=./folder_with_my_custom_data
+Or you can specify the hyperparameters you want depending on the training set, size of your data, etc:
+
+python train.py --data_dir=./folder_with_my_custom_data --rnn_size 128 --num_layers 2 --seq_length 64 --batch_size 32 --num_epochs 1000 --save_model ./models --save_checkpoints ./checkpoints
+
+Ejemplo:
+python train.py --data_dir=./data --rnn_size 128 --num_layers 2 --seq_length 64 --batch_size 32 --num_epochs 1000 --save_model ./models --save_checkpoints ./checkpoints
+
+This will train your model and save a JavaScript version in a folder called ./models, if you don't specify a different path.
+
+You can also run the script called run.sh:
+
+bash run.sh
+This file contains the same parameters as the one's described before:
+
+# This are the hyperparameters you can change to fit your data
+python train.py --data_dir=./bronte \
+--rnn_size 128 \
+--num_layers 2 \
+--seq_length 50 \
+--batch_size 50 \
+--num_epochs 50 \
+--save_checkpoints ./checkpoints \
+--save_model ./models
+3) Use it!
+Once the model is ready, you'll just need to point to it in your ml5 sketch:
+
+const lstm = new ml5.charRNN('./models/your_new_model');
+That's it!
+
+Hyperparameters
+Given the size of the training dataset, here are some hyperparameters that might work:
+
+2 MB:
+rnn_size 256 (or 128)
+layers 2
+seq_length 64
+batch_size 32
+dropout 0.25
+5-8 MB:
+rnn_size 512
+layers 2 (or 3)
+seq_length 128
+batch_size 64
+dropout 0.25
+10-20 MB:
+rnn_size 1024
+layers 2 (or 3)
+seq_length 128 (or 256)
+batch_size 128
+dropout 0.25
+25+ MB:
+rnn_size 2048
+layers 2 (or 3)
+seq_length 256 (or 128)
+batch_size 128
+dropout 0.25
+
+
+
+
+// PROJECT NOTES FOR GAME ONE
+
+Training the model
+
+- install spell
+- login
+- upload the file to spell (rememeber it has to be called input) = spell upload data/input.txt 
+- then add the name for the place to store it = NAMEOFFOLDERINSPELL
+- go ahead and run the python training file in spell = spell run --mount uploads/NAMEOFFOLDERINSPELL: data "python train.py --data_dir=./data"
+- its going to ask to commit = git add . + git commit -m "data added"
+- now download our model = spell cp runs/NUMBER OF THE RUN/models
+- check them out in data FOLDERNAME
+
+8. Model =  latinoamerican literature 
+    Size = 5.6Mb
+    Run = 
+    Time = 
+    Status = 
+    Folder name = LATIN
+    Output = the meaning of life is long thing they traversed this of the water of the summit of the chalt of the Orinoco is the shadow
+
+Long imput + standar
+spell run --machine-type K80 --mount uploads/LATIN:data "python train.py --data_dir=./data"
+
+spell run --mount uploads/LATIN:data "python train.py --data_dir=./data"
+
+spell cp runs/8/models
+
+

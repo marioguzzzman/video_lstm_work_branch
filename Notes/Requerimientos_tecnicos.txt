@@ -1,0 +1,23 @@
+Requerimientos Técnicos:
+ 
+A. Hardware:
+ 
+1. MacOS 10.12.6 (Sierra) o Mojave 
+-32 GB of memory
+-Puede ser una laptop o una mac mini, aunque quizás sea mejor contar con una pantalla y un teclado para monitorear y poder resetear el programa si es necesario (después de un tiempo -hay que testear cuanto, pero calculo 45 min a una hora- el cache del browser se sobrecarga y hay que resetarlo -F5 y esperar un par de minutos ó sólo volver a cargar la página-, te cuento porque es algo que muy probablemente ocurra.
+2. Conexión a internet de preferencia, por estabilidad, a través de cable de red.
+3. Base 50 x 50 x 100 com (aprox. Sólo para ir pensando)
+4. Cámara web: Se me ocurre que para que puedan verse mejor los rostros de las personas, aunque alterados, sería interesante tener una cámara con este tipo de luz.
+5. Headphones: el audio por acá seria constante. 
+6. Parlantes; Pienso que cada tanto puede largar algunas frases a los parlantes exteriores, pero no todo el tiempo. Por un lado para que haya variaciones, pero también para que conviva felizmente con otras obras probablemente sonoras en el área.
+ 
+ B .Software: 
+-Teamviewer + ID + password 
+ 
+Todo esto lo puedo instalar yo después de tener la computadora en línea con TeamViewer
+-Xcode
+-Homebrew
+-Python 3
+-Pip
+-Tensor Flow
+-Keras
