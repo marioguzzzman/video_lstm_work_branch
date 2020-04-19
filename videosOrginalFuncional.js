@@ -246,7 +246,9 @@ function setup() {
     noCursor();
 
     // createCanvas(windowWidth, windowHeight);
-    createCanvas(1920, 1080);
+    //createCanvas(1920, 1080); // orginal
+    createCanvas(1200, 728); // for ELO magazine vol. 4
+
 
     frameRate(30);
     pixelDensity(1);
