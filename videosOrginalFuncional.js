@@ -21,28 +21,28 @@ let meta_gameOn = true;
 let meta_experment = false;
 
 // //SETTING WORKING FOR EXPERIMENTS
-// let videoEffects = true;
-// let randomFrameEffect = false;
-// let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING // currently appears as defacult is one video is false
-// let oneVideo = true; // efects wonk work when false // just 1.mp4
-
+//need to activate both videos and camera code
+let videoEffects = true;
+let randomFrameEffect = true;
+let playSimpleVideo = false; //random videos // currently not working, do not know why, probably come changes in for loop // FIX // PROBLEM WITH VOLUME OR SOMETHING // currently appears as defacult is one video is false
+let oneVideo = true; // efects wonk work when false // just 1.mp4
 
 // // let bothCameraAndVideo = false;
 
-// let cameraVideo = false; //estaba true
-// let OnlyCamera = false; // GETS ERROR FROM GENERATOR
-// let cameraEffect = false; // estaba true
+let cameraVideo = false; //estaba true
+let OnlyCamera = false; // GETS ERROR FROM GENERATOR
+let cameraEffect = false; // estaba true
 
 
 // SETTING WORKING FOR GAME ON
-let videoEffects = true;
-let randomFrameEffect = true;
-let playSimpleVideo = false; //random videos
-let oneVideo = true; // efects wonk work when false // just 1.mp4
+// let videoEffects = true;
+// let randomFrameEffect = true;
+// let playSimpleVideo = false; //random videos
+// let oneVideo = true; // efects wonk work when false // just 1.mp4
 
-let cameraVideo = true; //estaba true
-let OnlyCamera = false; // GETS ERROR FROM GENERATOR // maybe because generator ins embeded into renderVIdeos()
-let cameraEffect = true; // estaba true
+// let cameraVideo = true; //estaba true
+// let OnlyCamera = false; // GETS ERROR FROM GENERATOR // maybe because generator ins embeded into renderVIdeos()
+// let cameraEffect = true; // estaba true
 
 
 /////////------------------------------------------------- MOBILE NET VIDEO ----------
