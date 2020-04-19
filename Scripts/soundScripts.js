@@ -41,6 +41,7 @@ function touchStarted() {
 
 function videoSound() {
     videos[whichVideo].volume(0); // antes 0
+    print('volume video 0');
 }
 
 

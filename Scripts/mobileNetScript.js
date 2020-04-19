@@ -46,7 +46,7 @@ function gotResults(err, results) {
 
             rnnSub = rnnSub.split(" "); //breaks label into words
 
-            let randomTxtLength = Math.floor(random(1, 3)); // esto funciona
+           // let randomTxtLength = Math.floor(random(1, 3)); // esto funciona
 
             // var rnnSub = "This is an amazing sentence.";
             // var rnnSub = str.split(" ");

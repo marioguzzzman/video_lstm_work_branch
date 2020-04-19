@@ -60,7 +60,8 @@ function doTerminal() {
         textFont("Ubuntu Mono");
     }
 
-    textSize(33);
+   // textSize(33); //for proyector
+    textSize(23); //for screen 
     fill(color);
     noStroke();
     textLeading(30);
@@ -69,26 +70,26 @@ function doTerminal() {
     if (offline) {
         sourceText = 'Generando narrativa...' +
             '\nElemento encontrado: ' +
-            '. \nEnviando a narrador.. ' +
+            //'. \nEnviando a narrador... ' +
             // ' \nTambién he encontrado un ' +
             // mbNetLabel1 +
-            '\nCreo estar ' +
-            ' segure...' +
-            '\nActualizando narrativa...';
+            //'\nCreo estar ' +
+            //' segure...' +
+            '\nActualizando narrativa... ';
     } else {
 
         //MAKE THIS SENTENCE MORE VARIABLE
 
         if (translate) {
-            sourceText = 'Generando narrativa...' +
+            sourceText = 'Generando narrativa... ' +
                 '\nElemento encontrado: ' +
                 translatedRes + //latinamerican model
-                '. \nEnviando a narrador.. ' +
+                //'. \nEnviando a narrador... ' +
                 // ' \nTambién he encontrado un ' +
                 // mbNetLabel1 +
-                '\nCreo estar ' +
-                mbNetConfidence +
-                ' segure...' +
+                //'\nCreo estar ' +
+                //mbNetConfidence +
+                //' segure...' +
                 '\nActualizando narrativa...';
         } else {
             sourceText = 'Generating narrative...' +
@@ -97,9 +98,9 @@ function doTerminal() {
                 '. \nSending to narrator.. ' +
                 ' \nAlso found a ' +
                 mbNetLabel1 +
-                ', I am ' +
-                mbNetConfidence +
-                ' sure of that...' +
+               // ', I am ' +
+               // mbNetConfidence +
+               // ' sure of that...' +
                 '\nUpdating narrative...';
         }
     }
@@ -141,7 +142,10 @@ function DoSubtitle() {
     line = 70;
     textAlign(CENTER);
     textFont("Verdana");
-    textSize(52);
+
+    // textSize(52); // for proyection
+    textSize(42); // for screen
+
     textLeading(50); // pixels between each line
 
     
