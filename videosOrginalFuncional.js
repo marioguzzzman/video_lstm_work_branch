@@ -111,7 +111,7 @@ let pixelColor;
 //------------------------------------------------------------- TEXT ----------
 //To merge all text files
 // cat * > merged-file
-let writingOutput = true;
+let writingOutput = false;
 let writer;
 let linesInPage = 5; // amount of lines in page
 let page = []; // text file writen
