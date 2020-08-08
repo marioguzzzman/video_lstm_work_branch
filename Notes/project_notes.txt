@@ -104,11 +104,12 @@ Change the name of the videos
 
 ///NOTES FOR TRAINING TEXT TRAINING LOG
 1. Join all texts
-cat * > TEXT.txt
+cat * > input.txt
 2. cleaning the text
 https://www.textfixer.com/tools/remove-line-breaks.php
 no all worked, but need ot keep trying to automate this process.
 https://stackoverflow.com/questions/3134791/how-do-i-remove-newlines-from-a-text-file
+tr -d "\n\r" < input.txt
 
 TUTORIAL SPELL
 
